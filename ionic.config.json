@@ -2,5 +2,7 @@
   "name": "project",
   "app_id": "805beff5",
   "type": "ionic-angular",
-  "integrations": {}
+  "integrations": {
+    "cordova": {}
+  }
 }

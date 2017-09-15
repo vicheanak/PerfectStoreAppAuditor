@@ -33,26 +33,22 @@
    <ion-item>
       <ion-input type="text" placeholder="ពិន្ទុ"></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-input type="text" placeholder="យោបល់បន្ថែម"></ion-input>
-    </ion-item>
+
   </ion-card-content>
 </ion-card>
 
-
+<input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
 <ion-card>
   <ion-item>
   <h2>ឈុតព្យួរផលិតផល</h2>
   </ion-item>
   <!-- <img src="../../assets/img/u1-s-h.jpg"> -->
-  <img src="../../assets/img/take-photo.png">
+  <img (click)="getPicture1()" src="{{imgSrc1}}">
   <ion-card-content>
   <ion-item>
       <ion-input type="text" placeholder="ពិន្ទុ"></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-input type="text" placeholder="យោបល់បន្ថែម"></ion-input>
-    </ion-item>
+
   </ion-card-content>
 </ion-card>
 
@@ -61,14 +57,12 @@
   <h2>ឈុតសម្រាប់តាំងលើធ្វើរ</h2>
   </ion-item>
   <!-- <img src="../../assets/img/u1-s-s.jpg"> -->
-  <img src="../../assets/img/take-photo.png">
+  <img (click)="getPicture2()" src="{{imgSrc1}}">
   <ion-card-content>
     <ion-item>
       <ion-input type="text" placeholder="ពិន្ទុ"></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-input type="text" placeholder="យោបល់បន្ថែម"></ion-input>
-    </ion-item>
+
   </ion-card-content>
 </ion-card>
 
