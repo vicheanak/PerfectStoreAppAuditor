@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "angularfire2": "file:node_modules/angularfire2/angularfire2.d.ts",
+    "firebase": "registry:npm/firebase#3.0.5+20160723033700",
+    "firebase.app.module": "file:node_modules/angularfire2/firebase.app.module.d.ts"
+  }
+}

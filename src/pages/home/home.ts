@@ -1,15 +1,30 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-    cardItems: any[];
+        cardItems: any[];
+        items: FirebaseListObservable<any[]>;
+        displayName; 
 
 
-    constructor(public navCtrl: NavController) {
+    constructor(public navCtrl: NavController, afDB: AngularFireDatabase, private afAuth: AngularFireAuth) {
+         afAuth.authState.subscribe(user => {
+      if (!user) {
+        this.displayName = null;        
+        return;
+      }
+      this.displayName = user.displayName;      
+    });
+        this.items = afDB.list('/cuisines');
+        this.items.push('new item');
+
         this.cardItems = [
             {
                 storename: 'ឡុង ចិន្តា',
@@ -75,6 +90,16 @@ export class HomePage {
                 content: 'Your scientists were so preoccupied with whether or not they could, that they didn\'t stop to think if they should.'
             }
         ];
+  }
+
+  signInWithFacebook() {
+    this.afAuth.auth
+      .signInWithPopup(new firebase.auth.FacebookAuthProvider())
+      .then(res => console.log(res));
+  }
+
+  signOut() {
+    this.afAuth.auth.signOut();
   }
 
   viewStore(item) {
