@@ -2,29 +2,21 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
+import { HttpModule } from '@angular/http';
 
-import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
-import { AngularFireAuthModule } from 'angularfire2/auth';
 
-// AF2 Settings
-export const firebaseConfig = {
-  apiKey: "AIzaSyA6SoCcKgD20s37uD12NZByx_GBgc3ge6U",
-  authDomain: "unilever-perfect-store.firebaseapp.com",
-  databaseURL: "https://unilever-perfect-store.firebaseio.com",
-  storageBucket: "unilever-perfect-store.appspot.com",
-  messagingSenderId: "862565397588"
-};
 
 import { Camera } from '@ionic-native/camera';
 
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
+import {RewardsPage} from '../pages/rewards/rewards';
 import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { RewardServicesProvider } from '../providers/reward-services/reward-services';
 
 
 @NgModule({
@@ -33,13 +25,12 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     AboutPage,
     ContactPage,
     HomePage,
+    RewardsPage,
     TabsPage
   ],
   imports: [
     BrowserModule,
-    AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireDatabaseModule,
-    AngularFireAuthModule,
+    HttpModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -48,13 +39,15 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     AboutPage,
     ContactPage,
     HomePage,
+    RewardsPage,
     TabsPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Camera,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    RewardServicesProvider
   ]
 })
 export class AppModule {}

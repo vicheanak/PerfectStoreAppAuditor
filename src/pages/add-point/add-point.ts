@@ -13,78 +13,91 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
  */
 
 @IonicPage()
-        @Component({
-selector: 'page-add-point',
-templateUrl: 'add-point.html',
+@Component({
+  selector: 'page-add-point',
+  templateUrl: 'add-point.html',
 })
 export class AddPointPage {
-        isReadyToSave: boolean;
-        imgSrc1: String;
-        imgSrc2: String;
-         @ViewChild('imgSrc11') imgSrc11;
-         @ViewChild('imgSrc22') imgSrc22;
-         @ViewChild('fileInput') fileInput;
+  isReadyToSave: boolean;
+  imgSrc1: String;
+  imgSrc2: String;
+  @ViewChild('imageFile1') imageFile1;
+  @ViewChild('imageFile2') imageFile2;
+  //@ViewChild('fileInput') fileInput;
 
-       constructor(public navCtrl: NavController,  public alertCtrl: AlertController, public navParams: NavParams, public camera: Camera) {
-               this.imgSrc1 = '../../assets/img/take-photo.png';
-               this.imgSrc2 = '../../assets/img/take-photo.png';
-       }
-
-
-
-       processWebImage(event) {
-               let reader = new FileReader();
-               reader.onload = (readerEvent) => {
-
-                       let imageData = (readerEvent.target as any).result;
-                       this.imgSrc1 = imageData;
-
-               };
-
-               reader.readAsDataURL(event.target.files[0]);
-       }
+  constructor(public navCtrl: NavController,  public alertCtrl: AlertController, public navParams: NavParams, public camera: Camera) {
+    this.imgSrc1 = '../../assets/img/take-photo.png';
+    this.imgSrc2 = '../../assets/img/take-photo.png';
+  }
 
 
-       getPicture1() {
-               if (Camera['installed']()) {
-                       this.camera.getPicture({
-destinationType: this.camera.DestinationType.DATA_URL,
-targetWidth: 96,
-targetHeight: 96
-}).then((data) => {
+
+  processWebImage1(event) {
+    console.log('img1');
+    let reader = new FileReader();
+    reader.onload = (readerEvent) => {
+
+      let imageData = (readerEvent.target as any).result;
+      this.imgSrc1 = imageData;
+
+    };
+
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
+  processWebImage2(event) {
+    console.log('img2');
+    let reader = new FileReader();
+    reader.onload = (readerEvent) => {
+
+      let imageData = (readerEvent.target as any).result;
+      this.imgSrc2 = imageData;
+
+    };
+
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
+  getPicture1() {
+    if (Camera['installed']()) {
+      this.camera.getPicture({
+        destinationType: this.camera.DestinationType.DATA_URL,
+        targetWidth: 96,
+        targetHeight: 96
+      }).then((data) => {
         this.imgSrc1 = 'data:image/jpg;base64,' + data;
-        }, (err) => {
+      }, (err) => {
         alert('Unable to take photo');
-        })
-} else {
-        this.fileInput.nativeElement.click();
-}
-}
+      })
+    } else {
+      this.imageFile1.nativeElement.click();
+    }
+  }
 
-getPicture2() {
-        if (Camera['installed']()) {
-                this.camera.getPicture({
-destinationType: this.camera.DestinationType.DATA_URL,
-targetWidth: 96,
-targetHeight: 96
-}).then((data) => {
+  getPicture2() {
+    if (Camera['installed']()) {
+      this.camera.getPicture({
+        destinationType: this.camera.DestinationType.DATA_URL,
+        targetWidth: 96,
+        targetHeight: 96
+      }).then((data) => {
         this.imgSrc2 = 'data:image/jpg;base64,' + data;
-        }, (err) => {
+      }, (err) => {
         alert('Unable to take photo');
-        })
-} else {
-        this.fileInput.nativeElement.click();
-}
-}
+      })
+    } else {
+      this.imageFile2.nativeElement.click();
+    }
+  }
 
-ionViewDidLoad() {
-        console.log('ionViewDidLoad AddPointPage');
-}
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad AddPointPage');
+  }
 
-toStoreDetail(){
-        this.navCtrl.setPages([
-                        { page: HomePage }
-        ]);
-}
+  toStoreDetail(){
+    this.navCtrl.setPages([
+      { page: HomePage }
+    ]);
+  }
 
 }

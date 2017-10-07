@@ -17,16 +17,20 @@
     </ion-card-content>
     <ion-row no-padding>
       <ion-col text-right>
-        <button ion-button clear small icon-start (click)="viewStore(item)">
-          <ion-icon name='eye'></ion-icon> 
-         មើល
-       </button>
-       <button ion-button clear small icon-start (click)="addPoint(item)">
-         <ion-icon name='star'></ion-icon> 
-        រាប់ពិន្ទុ
+       <button ion-button clear small icon-start (click)="viewClaimReward(item)">
+        <ion-icon name='md-color-palette'></ion-icon>
+        រង្វាន់
       </button>
-    </ion-col>
-  </ion-row>
+      <button ion-button clear small icon-start (click)="viewStore(item)">
+        <ion-icon name='eye'></ion-icon>
+        មើល
+      </button>
+      <button ion-button clear small icon-start (click)="addPoint(item)">
+       <ion-icon name='star'></ion-icon>
+       រាប់ពិន្ទុ
+     </button>
+   </ion-col>
+ </ion-row>
 
 </ion-card>
 
