@@ -17,6 +17,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { RewardServicesProvider } from '../providers/reward-services/reward-services';
+import { StorePointServicesProvider } from '../providers/store-point-services/store-point-services';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { RewardServicesProvider } from '../providers/reward-services/reward-serv
     SplashScreen,
     Camera,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    RewardServicesProvider
+    RewardServicesProvider,
+    StorePointServicesProvider
   ]
 })
 export class AppModule {}

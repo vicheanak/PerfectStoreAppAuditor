@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { HomePage } from '../home/home';
-import { Camera, CameraOptions } from '@ionic-native/camera';
+import { Camera } from '@ionic-native/camera';
+import {StorePointServicesProvider} from '../../providers/store-point-services/store-point-services';
 
 
 
@@ -21,16 +22,23 @@ export class AddPointPage {
   isReadyToSave: boolean;
   imgSrc1: String;
   imgSrc2: String;
+  imgData1: String;
+  imgData2: String;
   @ViewChild('imageFile1') imageFile1;
   @ViewChild('imageFile2') imageFile2;
-  //@ViewChild('fileInput') fileInput;
 
-  constructor(public navCtrl: NavController,  public alertCtrl: AlertController, public navParams: NavParams, public camera: Camera) {
+  constructor(public navCtrl: NavController,  public alertCtrl: AlertController, public navParams: NavParams, public camera: Camera, public storePointsServices: StorePointServicesProvider) {
     this.imgSrc1 = '../../assets/img/take-photo.png';
     this.imgSrc2 = '../../assets/img/take-photo.png';
   }
 
 
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad AddPointPage');
+    this.storePointsServices.getStorePoints().subscribe((data)=> {
+      console.log('Store Points', data);
+    });
+  }
 
   processWebImage1(event) {
     console.log('img1');
@@ -59,11 +67,16 @@ export class AddPointPage {
   }
 
   getPicture1() {
+    //const options: CameraOptions = {
+      //quality: 100,
+      //destinationType: this.camera.DestinationType.DATA_URL,
+      //encodingType: this.camera.EncodingType.JPEG,
+      //mediaType: this.camera.MediaType.PICTURE
+    //}
     if (Camera['installed']()) {
       this.camera.getPicture({
         destinationType: this.camera.DestinationType.DATA_URL,
-        targetWidth: 96,
-        targetHeight: 96
+        quality: 50
       }).then((data) => {
         this.imgSrc1 = 'data:image/jpg;base64,' + data;
       }, (err) => {
@@ -78,8 +91,7 @@ export class AddPointPage {
     if (Camera['installed']()) {
       this.camera.getPicture({
         destinationType: this.camera.DestinationType.DATA_URL,
-        targetWidth: 96,
-        targetHeight: 96
+        quality: 50
       }).then((data) => {
         this.imgSrc2 = 'data:image/jpg;base64,' + data;
       }, (err) => {
@@ -90,14 +102,25 @@ export class AddPointPage {
     }
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AddPointPage');
-  }
 
-  toStoreDetail(){
-    this.navCtrl.setPages([
-      { page: HomePage }
-    ]);
+  save(){
+    this.imgData1 = this.imgSrc1.substr(this.imgSrc1.indexOf('base64,') + 'base64,'.length);
+    this.imgData2 = this.imgSrc2.substr(this.imgSrc2.indexOf('base64,') + 'base64,'.length);
+
+    let data = {
+      points: 2000,
+      imageUrl: this.imgData1,
+      storeIdStorePoints: 1,
+      userIdStorePoints: 1,
+      displayIdStorePoints: 1
+    };
+
+    this.storePointsServices.createStorePoints(data).subscribe((data)=> {
+      console.log('Store Points', data);
+    });
+    //this.navCtrl.setPages([
+    //{ page: HomePage }
+    //]);
   }
 
 }
