@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HttpModule } from '@angular/http';
+import { IonicStorageModule } from '@ionic/storage';
 
 
 
@@ -10,7 +11,7 @@ import { Camera } from '@ionic-native/camera';
 
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
-import { HomePage } from '../pages/home/home';
+import { HomePage, LoginModal } from '../pages/home/home';
 import {RewardsPage} from '../pages/rewards/rewards';
 import { TabsPage } from '../pages/tabs/tabs';
 
@@ -18,6 +19,9 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { RewardServicesProvider } from '../providers/reward-services/reward-services';
 import { StorePointServicesProvider } from '../providers/store-point-services/store-point-services';
+import { UserProvider } from '../providers/user/user';
+import { UsersStoresProvider } from '../providers/users-stores/users-stores';
+import { StoresProvider } from '../providers/stores/stores';
 
 
 @NgModule({
@@ -26,13 +30,15 @@ import { StorePointServicesProvider } from '../providers/store-point-services/st
     AboutPage,
     ContactPage,
     HomePage,
+    LoginModal,
     RewardsPage,
     TabsPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -40,6 +46,7 @@ import { StorePointServicesProvider } from '../providers/store-point-services/st
     AboutPage,
     ContactPage,
     HomePage,
+    LoginModal,
     RewardsPage,
     TabsPage
   ],
@@ -49,7 +56,10 @@ import { StorePointServicesProvider } from '../providers/store-point-services/st
     Camera,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     RewardServicesProvider,
-    StorePointServicesProvider
+    StorePointServicesProvider,
+    UserProvider,
+    UsersStoresProvider,
+    StoresProvider
   ]
 })
 export class AppModule {}

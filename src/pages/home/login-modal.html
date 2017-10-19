@@ -1,0 +1,78 @@
+<!-- <ion-header>
+  <ion-navbar>
+    <ion-title>កំណត់</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="dismiss()">
+        <ion-icon name="ios-close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header> -->
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Perfect Store
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <form #loginForm="ngForm" (ngSubmit)="login()" autocomplete="off">
+    <ion-row>
+      <ion-col>
+        <ion-list inset>
+          <ion-item>
+            <ion-input placeholder="ឈ្មោះ" name="username" id="loginField" type="text" required [(ngModel)]="username" #email></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input placeholder="លេខសំងាត់" name="password" id="passwordField" type="password" required [(ngModel)]="password"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+        <button ion-button class="submit-btn" full type="submit" [disabled]="!loginForm.form.valid">បញ្ជូន
+        </button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>
+<!--
+<ion-content>
+
+  <ion-item-group>
+    <ion-item-divider color="light">កំណត់សកម្មភាព</ion-item-divider>
+    <ion-list radio-group>
+      <ion-item>
+        <ion-label>ដំណើរការ</ion-label>
+        <ion-radio checked="true" value="go"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>ផ្អាក</ion-label>
+        <ion-radio value="rust"></ion-radio>
+      </ion-item>
+    </ion-list>
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider color="light">ជុំថ្មី</ion-item-divider>
+    <ion-list radio-group>
+      <ion-item>
+        <ion-label>បាទ/ចាស</ion-label>
+        <ion-radio checked="true" value="go"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>ទេ</ion-label>
+        <ion-radio value="rust"></ion-radio>
+      </ion-item>
+    </ion-list>
+  </ion-item-group>
+  <div padding>
+    <button ion-button block (click)="dismiss()">បញ្ជូន</button>
+  </div>
+
+</ion-content> -->
