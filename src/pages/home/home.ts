@@ -99,7 +99,7 @@ export class HomePage {
           else{
             this.usersStores.getUsersStores(this.userData.id).subscribe((stores)=>{
               this.stores = stores;
-              console.log('this.stores ====> ', this.stores);
+              console.log('store ----> ', stores);
             });
           }
         });

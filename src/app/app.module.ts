@@ -22,6 +22,7 @@ import { StorePointServicesProvider } from '../providers/store-point-services/st
 import { UserProvider } from '../providers/user/user';
 import { UsersStoresProvider } from '../providers/users-stores/users-stores';
 import { StoresProvider } from '../providers/stores/stores';
+import { StoreImagesProvider } from '../providers/store-images/store-images';
 
 
 @NgModule({
@@ -59,7 +60,8 @@ import { StoresProvider } from '../providers/stores/stores';
     StorePointServicesProvider,
     UserProvider,
     UsersStoresProvider,
-    StoresProvider
+    StoresProvider,
+    StoreImagesProvider
   ]
 })
 export class AppModule {}
