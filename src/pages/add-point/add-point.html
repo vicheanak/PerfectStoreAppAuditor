@@ -18,15 +18,15 @@
   </ion-card>
 
 
-  <input type="file" #imageFile1 style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage1($event)" />
+  <!-- <input type="file" #imageFile1 style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage1($event)" /> -->
   <ion-item-group>
     <ion-item-divider color="primary">
     ឈុតចាំបាច់សម្រាប់តាំង
   </ion-item-divider>
     <!-- Card Display -->
-    <!-- <ion-card>
+   <!--  <ion-card>
       <ion-item>
-        ឈុតចាំបាច់សំរាប់តាំង
+        ឈុតចាំបាច់សំរាប់តាំងprocessWebImage1
         <button item-end ion-button small round icon-only color="danger" (click)="save()">
           <ion-icon name="md-close"></ion-icon>
         </button>
@@ -43,7 +43,7 @@
       </ion-item>
     </ion-card> -->
     <!-- Card Display -->
-    <ion-card>
+    <!-- <ion-card>
       <ion-item>
         ឈុតចាំបាច់សំរាប់តាំង
         <button item-end ion-button small round icon-only color="danger" (click)="removeCard(2)">
@@ -60,7 +60,7 @@
           <ion-label range-right>1800</ion-label>
         </ion-range>
       </ion-item>
-    </ion-card>
+    </ion-card> -->
     <div #container></div>
      <!-- <ion-card *ngFor="let card of cardDisplays" [innerHtml]="card | sanitizeHtml">
 
