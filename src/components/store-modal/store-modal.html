@@ -1,7 +1,10 @@
+<style>
+
+</style>
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Take Photo
+      ថតរូប ដាក់ពិន្ទុ
     </ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="dismiss()">
@@ -10,16 +13,16 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
+<ion-content>
 
   <ion-card>
     <ion-item>
       ឈុតចាំបាច់សំរាប់តាំង
     </ion-item>
-    <!-- <input type="file" #imgFile style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" /> -->
+    <input type="file" #imgFile style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
     <img src="{{imgSrc}}" (click)="getPicture()">
     <div padding class="flex-container">
-      <h1 class="points" color="flex-center">{{points}}</h1>
+      <h1 class="points" color="flex-center">{{points}} ពិន្ទុ</h1>
     </div>
     <ion-item>
       <ion-range min="0" step="10" snaps="true" [(ngModel)]="points">

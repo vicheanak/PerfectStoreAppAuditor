@@ -16,7 +16,7 @@ import { Storage } from '@ionic/storage';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+ @IonicPage()
  @Component({
    selector: 'page-add-point',
    templateUrl: 'add-point.html',
@@ -33,7 +33,7 @@ import { Storage } from '@ionic/storage';
    points: any = 0;
    randomString: String;
 
-
+   storeDisplays: any[];
 
 
    alerts = [];
@@ -62,88 +62,51 @@ import { Storage } from '@ionic/storage';
        this.store = store;
        console.log('store', this.store);
      });
+
+     this.storeDisplays = [
+     {
+       uId: Math.random().toString(36).substr(2, 5),
+       displayId: 1,
+       imageUrl: '../../assets/img/u1.jpg',
+       name: 'ឈុត២ជួរ',
+       points: 3600
+     },
+     {
+       uId: Math.random().toString(36).substr(2, 5),
+       displayId: 2,
+       imageUrl: '../../assets/img/u2.jpg',
+       name: 'ឈុត៣ជួរ',
+       points: 1800
+     }
+     ];
    }
 
 
-   removeCard(id){
-     console.log('remove card');
+   remove(uId){
+     // console.log('remove card');
+
+     const index = this.storeDisplays.findIndex(sd => sd.uId == uId);
+     console.log('uId', uId);
+     console.log('index', index);
+     this.storeDisplays.splice(index, 1);
    }
 
    showStoraModal(){
-      let modal = this.modalCtrl.create(StoreModalComponent, {userId: '112'});
-      modal.onDidDismiss((data) => {
-        console.log('dismiss', data);
-      });
-      modal.present();
+     let modal = this.modalCtrl.create(StoreModalComponent, {userId: '112'});
+     modal.onDidDismiss((data) => {
+       console.log('dismiss', data);
+       if (data){
+         this.storeDisplays.push({
+           uId: Math.random().toString(36).substr(2, 5),
+           displayId: 3,
+           imageUrl: data.imageUrl,
+           name: 'ឈុតទី៥',
+           points: data.points
+         });
+       }
+     });
+     modal.present();
    }
-
-
-   // processWebImage(event) {
-   //   console.log('img2');
-   //   let reader = new FileReader();
-   //   reader.onload = (readerEvent) => {
-
-   //     let imageData = (readerEvent.target as any).result;
-   //     this.imgSrc2 = imageData;
-
-   //   };
-
-   //   reader.readAsDataURL(event.target.files[0]);
-   // }
-
-   // getPicture() {
-   //   if (Camera['installed']()) {
-   //     this.camera.getPicture({
-   //       destinationType: this.camera.DestinationType.DATA_URL,
-   //       quality: 50
-   //     }).then((data) => {
-   //       this.imgSrc1 = 'data:image/jpg;base64,' + data;
-   //     }, (err) => {
-   //       alert('Unable to take photo');
-   //     })
-   //   } else {
-   //     this.imageFile1.nativeElement.click();
-   //   }
-   // }
-
-
-
-   // save(){
-   //   this.imgData1 = this.imgSrc1.substr(this.imgSrc1.indexOf('base64,') + 'base64,'.length);
-   //   this.imgData2 = this.imgSrc2.substr(this.imgSrc2.indexOf('base64,') + 'base64,'.length);
-
-   //   let data = {
-   //     points: 2000,
-   //     imageUrl: this.imgData1,
-   //     storeIdStorePoints: 1,
-   //     userIdStorePoints: 1,
-   //     displayIdStorePoints: 1
-   //   };
-
-   //   this.storePointsServices.createStorePoints(data).subscribe((data)=> {
-   //     console.log('Store Points', data);
-   //   });
-   //   //this.navCtrl.setPages([
-   //   //{ page: HomePage }
-   //   //]);
-   // }
 
  }
 
-
-// @Component({
-//   selector: 'take-picture-modal',
-//   templateUrl: 'take-picture-modal.html'
-// })
-
-// export class TakePictureModal {
-
-//   constructor(public navCtrl: NavController, public params: NavParams, public viewCtrl: ViewController) {
-
-//   }
-
-//   dismiss(){
-//     this.viewCtrl.dismiss();
-//   }
-
-// }

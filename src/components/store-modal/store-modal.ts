@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ViewController } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 
@@ -15,14 +15,16 @@ import { Camera } from '@ionic-native/camera';
  export class StoreModalComponent {
 
    text: string;
-   imgSrc: string;
+   imgSrc: string = '../../assets/img/take-photo.png';
+   points: number = 0;
+   @ViewChild('imgFile') imgFile;
 
    constructor(
      public camera: Camera,
      public viewCtrl: ViewController
      ) {
      console.log('Hello StoreModalComponent Component');
-     this.text = 'Hello World';
+     this.points = 0;
    }
 
    processWebImage(event) {
@@ -48,8 +50,37 @@ import { Camera } from '@ionic-native/camera';
          alert('Unable to take photo');
        })
      } else {
-       // this.imageFile1.nativeElement.click();
+       this.imgFile.nativeElement.click();
      }
+   }
+
+   save(){
+     // this.imgData1 = this.imgSrc1.substr(this.imgSrc1.indexOf('base64,') + 'base64,'.length);
+     // this.imgData2 = this.imgSrc2.substr(this.imgSrc2.indexOf('base64,') + 'base64,'.length);
+
+     // let data = {
+     //   points: 2000,
+     //   imageUrl: this.imgData1,
+     //   storeIdStorePoints: 1,
+     //   userIdStorePoints: 1,
+     //   displayIdStorePoints: 1
+     // };
+
+     // this.storePointsServices.createStorePoints(data).subscribe((data)=> {
+     //   console.log('Store Points', data);
+     // });
+     //this.navCtrl.setPages([
+     //{ page: HomePage }
+     //]);
+
+      this.viewCtrl.dismiss({
+       imageUrl: this.imgSrc,
+       points: this.points
+     });
+   }
+
+   dismiss(){
+     this.viewCtrl.dismiss();
    }
 
  }

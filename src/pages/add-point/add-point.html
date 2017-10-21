@@ -25,23 +25,18 @@
       ឈុតចាំបាច់សម្រាប់តាំង
     </ion-item-divider>
   <input type="file" #imageFile1 style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage1($event)" />
-    <ion-card>
+
+    <ion-card *ngFor="let storeDisplay of storeDisplays">
       <ion-item>
-        ឈុតចាំបាច់សំរាប់តាំង
-        <button item-end ion-button small round icon-only color="danger" (click)="save()">
+        {{storeDisplay.name}}
+        <button item-end ion-button small round icon-only color="danger" (click)="remove(storeDisplay.uId)">
           <ion-icon name="md-close"></ion-icon>
         </button>
       </ion-item>
-      <img src="../../assets/img/uu1.jpg">
+      <img src="{{storeDisplay.imageUrl}}">
       <div padding class="flex-container">
-        <h1 class="points" color="flex-center">{{points}}</h1>
+        <h1 class="points" color="flex-center">{{storeDisplay.points}} ពិន្ទុ</h1>
       </div>
-      <ion-item>
-        <ion-range min="0" step="10" snaps="true" [(ngModel)]="points">
-          <ion-label range-left class="small-text">0</ion-label>
-          <ion-label range-right>1800</ion-label>
-        </ion-range>
-      </ion-item>
     </ion-card>
 
      <div padding class="flex-container">
