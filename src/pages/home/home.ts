@@ -127,7 +127,6 @@ export class HomePage {
     modal.onDidDismiss(data => {
       this.usersStores.getUsersStores(data.id).subscribe((stores)=>{
         this.stores = stores;
-
       });
     });
     modal.present();
@@ -194,8 +193,10 @@ export class LoginModal {
       }
       else{
         this.userData = data;
-        this.storage.set('userdata', JSON.stringify(this.userData));
-        this.viewCtrl.dismiss(this.userData);
+        this.storage.set('userdata', JSON.stringify(this.userData)).then(()=>{
+          this.viewCtrl.dismiss(this.userData);
+        });
+
       }
 
     });

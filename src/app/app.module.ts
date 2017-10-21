@@ -14,6 +14,8 @@ import { ContactPage } from '../pages/contact/contact';
 import { HomePage, LoginModal } from '../pages/home/home';
 import {RewardsPage} from '../pages/rewards/rewards';
 import { TabsPage } from '../pages/tabs/tabs';
+// import {TakePictureModal} from '../pages/add-point/add-point';
+import {StoreModalComponent} from '../components/store-modal/store-modal'
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -27,41 +29,46 @@ import { StoreImagesProvider } from '../providers/store-images/store-images';
 
 @NgModule({
   declarations: [
-    MyApp,
-    AboutPage,
-    ContactPage,
-    HomePage,
-    LoginModal,
-    RewardsPage,
-    TabsPage
+  MyApp,
+  AboutPage,
+  ContactPage,
+  HomePage,
+  LoginModal,
+  RewardsPage,
+  TabsPage,
+  StoreModalComponent
   ],
   imports: [
-    BrowserModule,
-    HttpModule,
-    IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+  BrowserModule,
+  HttpModule,
+  IonicModule.forRoot(MyApp),
+  IonicStorageModule.forRoot({
+    name: '__mydb',
+    driverOrder: ['sqlite', 'websql', 'indexeddb']
+  })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
-    AboutPage,
-    ContactPage,
-    HomePage,
-    LoginModal,
-    RewardsPage,
-    TabsPage
+  MyApp,
+  AboutPage,
+  ContactPage,
+  HomePage,
+  LoginModal,
+  RewardsPage,
+  TabsPage,
+  StoreModalComponent
   ],
   providers: [
-    StatusBar,
-    SplashScreen,
-    Camera,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    RewardServicesProvider,
-    StorePointServicesProvider,
-    UserProvider,
-    UsersStoresProvider,
-    StoresProvider,
-    StoreImagesProvider
+  StatusBar,
+  SplashScreen,
+  Camera,
+  {provide: ErrorHandler, useClass: IonicErrorHandler},
+  RewardServicesProvider,
+  StorePointServicesProvider,
+  UserProvider,
+  UsersStoresProvider,
+  StoresProvider,
+  StoreImagesProvider
   ]
 })
 export class AppModule {}
