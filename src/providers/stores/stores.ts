@@ -11,7 +11,8 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class StoresProvider {
 
- getApiUrl : string = "http://localhost:3000/stores";
+ // getApiUrl : string = "http://localhost:3000/stores";
+ getApiUrl : string = "https://api.unilever.store/stores";
 
   constructor(public http: Http) {
     console.log('Hello RewardServicesProvider Provider');

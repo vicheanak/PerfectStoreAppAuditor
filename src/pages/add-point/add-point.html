@@ -8,6 +8,7 @@
 
 
 <ion-content>
+
   <ion-card>
 
     <ion-card-header>
@@ -21,8 +22,8 @@
   <!-- <input type="file" #imageFile1 style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage1($event)" /> -->
   <ion-item-group>
     <ion-item-divider color="primary">
-    ឈុតចាំបាច់សម្រាប់តាំង
-  </ion-item-divider>
+      ឈុតចាំបាច់សម្រាប់តាំង
+    </ion-item-divider>
     <!-- Card Display -->
    <!--  <ion-card>
       <ion-item>
@@ -61,14 +62,18 @@
         </ion-range>
       </ion-item>
     </ion-card> -->
-    <div #container></div>
+    <!-- <div #container></div> -->
+    <div *ngFor="let salert of alerts">
+      <ng-container *ngComponentOutlet="salert.component"></ng-container>
+    </div>
+
      <!-- <ion-card *ngFor="let card of cardDisplays" [innerHtml]="card | sanitizeHtml">
 
-    </ion-card> -->
-    <!-- Add -->
-    <div padding class="flex-container">
+     </ion-card> -->
+     <!-- Add -->
+     <div padding class="flex-container">
       <div class="flex-center">
-        <button color="primary" ion-button round icon-only full (click)="addNewDisplay()">
+        <button color="primary" ion-button round icon-only full (click)="changeComponent()">
           <ion-icon name="ios-add"></ion-icon>
         </button>
       </div>

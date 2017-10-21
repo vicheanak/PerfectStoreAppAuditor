@@ -11,8 +11,10 @@ import 'rxjs/add/operator/map';
   @Injectable()
   export class UserProvider {
 
-    auditorUrl : string = "http://localhost:3000/auth_auditor";
-    isAuditorUrl : string = "http://localhost:3000/is_auditor/";
+    // auditorUrl : string = "http://localhost:3000/auth_auditor";
+    // isAuditorUrl : string = "http://localhost:3000/is_auditor/";
+    auditorUrl : string = "https://api.unilever.store/auth_auditor";
+    isAuditorUrl : string = "https://api.unilever.store/is_auditor/";
 
     constructor(public http: Http) {
 
