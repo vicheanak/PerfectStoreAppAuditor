@@ -15,44 +15,6 @@ import { Storage } from '@ionic/storage';
  * Ionic pages and navigation.
  */
 
- @IonicPage()
-
- @Pipe({
-   name: 'sanitizeHtml'
- })
- export class SanitizeHtmlPipe implements PipeTransform{
-   constructor(private _sanitizer: DomSanitizer){
-
-   }
-
-   transform(v:string):SafeHtml{
-     return this._sanitizer.bypassSecurityTrustHtml(v);
-   }
- }
-
- @Component({
-   selector: 'alert-success',
-   template: `
-   <button color="primary" ion-button round  full>
-   Success
-   </button>
-   `,
- })
- export class AlertSuccessComponent {
-
- }
-
- @Component({
-   selector: 'alert-danger',
-   template: `
-   <button color="danger" ion-button round full>
-   Danger
-   </button>
-   `,
- })
- export class AlertDangerComponent {
-
- }
 
  @Component({
    selector: 'card-display-component',
@@ -106,11 +68,10 @@ import { Storage } from '@ionic/storage';
      reader.onload = (readerEvent) => {
        let imageData = (readerEvent.target as any).result;
        this.imgSrc = imageData;
-       this.storage.set('storageImage', JSON.stringify({id: this.comId, image: imageData}));
+       // this.storage.set('storageImage', JSON.stringify({id: this.comId, image: imageData}));
      };
-     setTimeout(()=>{
-       reader.readAsDataURL(event.target.files[0]);
-     }, 3000);
+     reader.readAsDataURL(event.target.files[0]);
+
 
    };
 
@@ -139,6 +100,7 @@ import { Storage } from '@ionic/storage';
    }
  }
 
+@IonicPage()
  @Component({
    selector: 'page-add-point',
    templateUrl: 'add-point.html',
@@ -158,7 +120,7 @@ import { Storage } from '@ionic/storage';
    @ViewChild('imageFile2') imageFile2;
    @ViewChild('container', { read: ViewContainerRef }) container: ViewContainerRef;
 
-   alert = AlertSuccessComponent;
+
 
    alerts = [];
 

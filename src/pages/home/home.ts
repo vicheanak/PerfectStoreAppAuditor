@@ -122,7 +122,14 @@ export class HomePage {
 
   showLogin() {
     console.log('config is clicked');
+
     let modal = this.modalCtrl.create(LoginModal, {userId: '112'});
+    modal.onDidDismiss(data => {
+      this.usersStores.getUsersStores(data.id).subscribe((stores)=>{
+        this.stores = stores;
+
+      });
+    });
     modal.present();
   }
 
@@ -188,7 +195,7 @@ export class LoginModal {
       else{
         this.userData = data;
         this.storage.set('userdata', JSON.stringify(this.userData));
-        this.viewCtrl.dismiss();
+        this.viewCtrl.dismiss(this.userData);
       }
 
     });

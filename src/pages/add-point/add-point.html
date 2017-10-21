@@ -82,41 +82,15 @@
   <input type="file" #imageFile1 style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage1($event)" />
   <ion-item-group>
     <ion-item-divider color="primary">ឈុតផ្យួរផលិតផល</ion-item-divider>
-    <!-- <ion-card>
-      <ion-item>
-        <h2>ឈុតចាំបាច់សំរាប់តាំង</h2>
-        <button item-end ion-button small round color="danger" (click)="save()">លុប</button>
-      </ion-item>
-      <img src="../../assets/img/uu1.jpg">
-      <div padding class="flex-container">
-        <h1 class="points" color="flex-center">{{points}}</h1>
-      </div>
-      <ion-item>
-        <ion-range min="0" step="10" snaps="true" [(ngModel)]="points">
-          <ion-label range-left class="small-text">0</ion-label>
-          <ion-label range-right>1800</ion-label>
-        </ion-range>
-      </ion-item>
-    </ion-card> -->
 
   </ion-item-group>
 
   <input type="file" #imageFile2 style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage2($event)" />
   <ion-item-group>
     <ion-item-divider color="primary">ឈុតសម្រាប់តាំងលើធ្នើរ</ion-item-divider>
-   <!--  <ion-card>
-      <ion-item>
-        <h2>ឈុតចាំបាច់សំរាប់តាំង</h2>
-      </ion-item>
-      <img src="../../assets/img/uu1.jpg">
-      <ion-card-content>
-        <ion-item>
-          <ion-input type="text" placeholder="ពិន្ទុ"></ion-input>
-        </ion-item>
 
-      </ion-card-content>
-    </ion-card> -->
   </ion-item-group>
+
   <div padding>
     <button ion-button round padding block (click)="save()">បញ្ជូន</button>
   </div>
