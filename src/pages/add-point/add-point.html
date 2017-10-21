@@ -24,7 +24,7 @@
     <ion-item-divider color="primary">
       ឈុតចាំបាច់សម្រាប់តាំង
     </ion-item-divider>
-  <input type="file" #imageFile1 style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage1($event)" />
+    <input type="file" #imageFile1 style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage1($event)" />
 
     <ion-card *ngFor="let storeDisplay of storeDisplays">
       <ion-item>
@@ -34,12 +34,15 @@
         </button>
       </ion-item>
       <img src="{{storeDisplay.imageUrl}}">
-      <div padding class="flex-container">
-        <h1 class="points" color="flex-center">{{storeDisplay.points}} ពិន្ទុ</h1>
-      </div>
+      <ion-item>
+        <div padding class="flex-container">
+          <h1 class="points" color="flex-center">{{storeDisplay.points}} ពិន្ទុ</h1>
+        </div>
+      </ion-item>
+
     </ion-card>
 
-     <div padding class="flex-container">
+    <div padding class="flex-container">
       <div class="flex-center">
         <button color="primary" ion-button round icon-only full (click)="showStoraModal()">
           <ion-icon name="ios-add"></ion-icon>

@@ -14,16 +14,16 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-
   <ion-card>
     <ion-item>
       ឈុតចាំបាច់សំរាប់តាំង
     </ion-item>
-    <input type="file" #imgFile style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
     <img src="{{imgSrc}}" (click)="getPicture()">
-    <div padding class="flex-container">
-      <h1 class="points" color="flex-center">{{points}} ពិន្ទុ</h1>
-    </div>
+    <ion-item>
+        <div padding class="flex-container">
+          <h1 class="points" color="flex-center">{{points}} ពិន្ទុ</h1>
+        </div>
+      </ion-item>
     <ion-item>
       <ion-range min="0" step="10" snaps="true" [(ngModel)]="points">
         <ion-label range-left class="small-text">0</ion-label>
@@ -35,5 +35,5 @@
   <div padding>
     <button ion-button round padding block (click)="save()">បញ្ជូន</button>
   </div>
-
+<input type="file" #imgFile style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
 </ion-content>

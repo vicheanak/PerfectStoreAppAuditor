@@ -30,12 +30,9 @@ import { Camera } from '@ionic-native/camera';
    processWebImage(event) {
      let reader = new FileReader();
      reader.onload = (readerEvent) => {
-
        let imageData = (readerEvent.target as any).result;
        this.imgSrc = imageData;
-
      };
-
      reader.readAsDataURL(event.target.files[0]);
    }
 

@@ -1,8 +1,6 @@
 import { Component} from '@angular/core';
-
 import { IonicPage, NavController, NavParams, AlertController, ViewController, ModalController } from 'ionic-angular';
 import { HomePage } from '../home/home';
-import { Camera } from '@ionic-native/camera';
 import {StorePointServicesProvider} from '../../providers/store-point-services/store-point-services';
 import {StoreImagesProvider} from '../../providers/store-images/store-images';
 import {StoreModalComponent} from '../../components/store-modal/store-modal';
@@ -35,9 +33,7 @@ import { Storage } from '@ionic/storage';
 
    storeDisplays: any[];
 
-
    alerts = [];
-
 
    constructor(public navCtrl: NavController,
      public alertCtrl: AlertController,
@@ -45,6 +41,7 @@ import { Storage } from '@ionic/storage';
      public storePointsServices: StorePointServicesProvider,
      public storeImage: StoreImagesProvider,
      public modalCtrl: ModalController,
+     public storage: Storage
      ) {
 
    }
@@ -83,11 +80,7 @@ import { Storage } from '@ionic/storage';
 
 
    remove(uId){
-     // console.log('remove card');
-
      const index = this.storeDisplays.findIndex(sd => sd.uId == uId);
-     console.log('uId', uId);
-     console.log('index', index);
      this.storeDisplays.splice(index, 1);
    }
 
@@ -96,16 +89,24 @@ import { Storage } from '@ionic/storage';
      modal.onDidDismiss((data) => {
        console.log('dismiss', data);
        if (data){
-         this.storeDisplays.push({
-           uId: Math.random().toString(36).substr(2, 5),
+         const random =  Math.random().toString(36).substr(2, 5)
+         const storeDis = {
+           uId: random,
            displayId: 3,
            imageUrl: data.imageUrl,
            name: 'ឈុតទី៥',
            points: data.points
-         });
+         };
+         this.storeDisplays.push(storeDis);
+         this.storage.set(random, storeDis);
        }
      });
      modal.present();
+   }
+
+   save(){
+
+     console.log(this.storeDisplays);
    }
 
  }
