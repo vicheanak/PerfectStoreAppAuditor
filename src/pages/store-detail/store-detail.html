@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>SKINCARE GOLD</ion-title>
+    <ion-title>{{store?.STORE_TYPE?.name}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,35 +15,44 @@
 
 <ion-content>
   <ion-card>
+    <ion-card-header>
 
-   <ion-card-content>
-    <ion-card-title>
+     <div padding class="flex-container">
+      <h1 class="points" color="flex-center">{{store?.name}}</h1>
+    </div>
+  </ion-card-header>
 
-      <ion-row>
-        <ion-col col-6>ហាក់ ស្រ៊ុន</ion-col>
-        <ion-col col-6><ion-icon name="ios-call"></ion-icon> 091221221</ion-col>
-      </ion-row>
-    </ion-card-title>
-    <ion-grid>
-      <ion-row>
-        <ion-col col-6><ion-icon name="ios-contact"></ion-icon> haksrun091221221</ion-col>
-        <ion-col col-6><ion-icon name="ios-lock"></ion-icon> 123456</ion-col>
-      </ion-row>
-    </ion-grid>
-
-    <ion-list>
+  <ion-card-content>
+    <ion-list no-lines>
      <ion-item>
-      ពិន្ទុនៅសល់ <ion-badge clear item-end>260k</ion-badge>
+      សន្សំ
+      <span item-end>
+        {{storeEarned?.total_earned}} ពិន្ទុ
+      </span>
+    </ion-item>
+    <ion-item>
+      ប្តូររង្វាន់
+      <span item-end>
+        {{storeSpent?.total_spent}} ពិន្ទុ
+      </span>
+    </ion-item>
+    <ion-item>
+      នៅសល់
+      <span item-end>
+        {{storeRemaining?.total_remaining}} ពិន្ទុ
+      </span>
     </ion-item>
   </ion-list>
-
-
 </ion-card-content>
 </ion-card>
-<ion-list padding>
- <button color="{{sp.edit ? '' : 'light'}}" (click)=pointDetail() ion-item *ngFor="let sp of storePoints">
-  <h2>{{sp.points}} Pts</h2>
-  <ion-note item-end>{{sp.date}}</ion-note>
-</button>
+<ion-list>
+  <button ion-item (click)="pointDetail()" *ngFor="let sp of storePoints">
+    {{sp?.total_points}} ពិន្ទុ
+    <ion-note item-end>{{sp?.STORE_IMAGE?.capturedAt | date:'short'}}</ion-note>
+  </button>
+ <!-- <button ion-item color="{{sp.edit ? '' : 'light'}}" (click)="pointDetail()" *ngFor="let sp of storePoints">
+  {{sp?.total_points}} ពិន្ទុ
+  <ion-note item-end>{{sp?.STORE_IMAGE?.capturedAt | date:'short'}}</ion-note>
+</button> -->
 </ion-list>
 </ion-content>

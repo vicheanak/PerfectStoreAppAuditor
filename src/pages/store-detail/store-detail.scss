@@ -1,7 +1,10 @@
 page-store-detail {
-//  ion-note {
-//   font-size: 14px;
-//   align-self: flex-start;
-//   margin-top: 14px;
-// }
+ .flex-container{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+ }
+ .flex-center{
+   max-width: 50%;
+ }
 }

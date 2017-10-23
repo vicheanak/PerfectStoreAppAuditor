@@ -7,23 +7,22 @@ import 'rxjs/add/operator/map';
 
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
- */
-@Injectable()
-export class RewardServicesProvider {
+  */
+  @Injectable()
+  export class RewardServicesProvider {
 
-  // getApiUrl : string = "http://localhost:3000/rewards/";
-  getApiUrl : string = "http://192.168.8.103:3000/rewards/";
-  // getApiUrl : string = "https://api.unilever.store/rewards";
+    // getApiUrl : string = "http://localhost:3000/rewards/";
+    // getApiUrl : string = "https://api.unilever.store/rewards";
+    getApiUrl : string = "http://192.168.8.103:3000/rewards/";
+    constructor(public http: Http) {
 
-  constructor(public http: Http) {
+    }
 
-  }
-
-  getRewards() {
-    return  this.http.get(this.getApiUrl)
+    getRewards() {
+      return  this.http.get(this.getApiUrl)
       .map((res : Response ) =>{
         console.log('map --> ', res.json());
       });
-  }
+    }
 
-}
+  }

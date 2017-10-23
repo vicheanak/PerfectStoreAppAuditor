@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { StorePointServicesProvider} from '../../providers/store-point-services/store-point-services';
+import {StoresProvider} from '../../providers/stores/stores';
+import { DatePipe } from '@angular/common';
 /**
  * Generated class for the StoreDetailPage page.
  *
@@ -15,111 +17,49 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class StoreDetailPage {
   storePoints: any[];
+  storeId: any;
+  store: any;
+  storeSpent: any;
+  storeEarned: any;
+  storeRemaining: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public stores: StoresProvider,
+    public storePointsServices: StorePointServicesProvider,
+    ) {
+    // this.storeId = this.navParams.get('store');
+    this.storeId = 1;
+
+    this.stores.getStore(this.storeId).subscribe((store) => {
+      this.store = store;
+    });
+
+    this.storePointsServices.getStoreEarned(this.storeId).subscribe((data) => {
+      console.log('Earned ==> ', data);
+      this.storeEarned = data;
+    });
+
+    this.storePointsServices.getStoreSpent(this.storeId).subscribe((data) => {
+      console.log('Spent ==> ', data);
+      this.storeSpent = data;
+    });
+
+    this.storePointsServices.getStoreRemaining(this.storeId).subscribe((data) => {
+      console.log('Remaining ==> ', data);
+      this.storeRemaining = data;
+    })
+
+    this.storePointsServices.getStoreSum(this.storeId).subscribe((data) => {
+      console.log('store storePoints ==> ', data);
+      this.storePoints = data;
+    });
+
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad StoreDetailPage');
-    this.storePoints = [
-            {
-                date: '28/09/2017',
-                points: 3600,
-                edit: true
-            },
-            {
-                date: '20/09/2017',
-                points: 4000,
-                edit: true
-            },
-            {
-                date: '10/09/2017',
-                points: 2500,
-                edit: false
-            },
-            {
-                date: '28/08/2017',
-                points: 3100,
-                edit: false
-            },
-            {
-                date: '27/08/2017',
-                points: 4000,
-                edit: false
-            },
-            {
-                date: '26/07/2017',
-                points: 2500,
-                edit: false
-            },
-            {
-                date: '25/07/2017',
-                points: 3100,
-                edit: false
-            }
-            ,
-            {
-                date: '24/06/2017',
-                points: 4000,
-                edit: false
-            },
-            {
-                date: '23/06/2017',
-                points: 2500,
-                edit: false
-            },
-            {
-                date: '22/05/2017',
-                points: 3100,
-                edit: false
-            },
-            {
-                date: '21/05/2017',
-                points: 4000,
-                edit: false
-            },
-            {
-                date: '20/04/2017',
-                points: 2500,
-                edit: false
-            },
-            {
-                date: '19/04/2017',
-                points: 3100,
-                edit: false
-            },
-            {
-                date: '18/03/2017',
-                points: 4000,
-                edit: false
-            },
-            {
-                date: '17/03/2017',
-                points: 2500,
-                edit: false
-            },
-            {
-                date: '16/02/2017',
-                points: 3100,
-                edit: false
-            },
-            {
-                date: '15/02/2017',
-                points: 4000,
-                edit: false
-            },
-            {
-                date: '14/01/2017',
-                points: 2500,
-                edit: false
-            },
-            {
-                date: '13/01/2017',
-                points: 3100,
-                edit: false
-            }
-
-        ];
   }
 
   pointDetail(){

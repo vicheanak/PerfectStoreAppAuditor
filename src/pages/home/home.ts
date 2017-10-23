@@ -69,9 +69,9 @@ export class HomePage {
     modal.present();
   }
 
-  viewStore(item) {
+  viewStore(store) {
     this.navCtrl.push('StoreDetailPage', {
-      item: item
+      store: store
     });
   }
 
