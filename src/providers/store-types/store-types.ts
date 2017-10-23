@@ -7,7 +7,7 @@ export class StoreTypesProvider {
 
   // getApiUrl : string = "http://localhost:3000/store_types/";
   // getApiUrl : string = "https://api.unilever.store/store_types/";
-  getApiUrl : string = "http://192.168.8.101:3000/store_types/";
+  getApiUrl : string = "http://192.168.8.103:3000/store_types/";
 
   constructor(public http: Http) {
 

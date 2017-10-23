@@ -95,4 +95,5 @@
     <plugin name="cordova-plugin-filepath" spec="^1.1.0" />
     <engine name="android" spec="~6.2.3" />
     <allow-navigation href="http://192.168.8.101:8100" />
+    <allow-navigation href="http://192.168.8.103:8100" />
 </widget>

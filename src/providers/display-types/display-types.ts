@@ -7,7 +7,7 @@ export class DisplayTypesProvider {
 
   // getApiUrl : string = "http://localhost:3000/display_types/";
   // getApiUrl : string = "https://api.unilever.store/display_types/";
-  getApiUrl : string = "http://192.168.8.101:3000/display_types/";
+  getApiUrl : string = "http://192.168.8.103:3000/display_types/";
 
   constructor(public http: Http) {
 
