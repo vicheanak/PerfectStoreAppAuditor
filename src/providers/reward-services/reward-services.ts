@@ -12,10 +12,11 @@ import 'rxjs/add/operator/map';
 export class RewardServicesProvider {
 
   // getApiUrl : string = "http://localhost:3000/rewards";
-  getApiUrl : string = "https://api.unilever.store/rewards";
+  getApiUrl : string = "http://192.168.8.101:3000/rewards";
+  // getApiUrl : string = "https://api.unilever.store/rewards";
 
   constructor(public http: Http) {
-    console.log('Hello RewardServicesProvider Provider');
+
   }
 
   getRewards() {

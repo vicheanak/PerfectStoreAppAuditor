@@ -12,47 +12,54 @@
   <ion-card>
 
     <ion-card-header>
-      {{store?.STORE?.name}} - {{store?.STORE?.STORE_TYPE?.name}}
+      {{store?.name}} - {{store?.STORE_TYPE.name}}
     </ion-card-header>
-    <img src="{{storeImageUrl}}">
+    <img src="{{imageUrl}}" *ngIf="imageUrl" (click)="getPicture()">
+    <!-- <img src="{{pathForImage(imageUrl)}}" *ngIf="imageUrl" (click)="getPicture()"> -->
+    <div padding class="flex-container" *ngIf="imageUrl == null">
+      <button color="light" class="flex-center" ion-button icon-start round padding icon-only (click)="getPicture()">
+       <ion-icon name="camera"></ion-icon>
+     </button>
+   </div>
+
+ </ion-card>
+
+
+
+ <ion-item-group *ngFor="let dt of displayTypesArr;">
+  <ion-item-divider color="primary">
+    {{dt.name}}
+  </ion-item-divider>
+
+  <ion-card *ngFor="let store of dt.storeDisplays">
+    <ion-item>
+      {{store?.displayName}}
+      <button item-end ion-button small round icon-only color="danger" (click)="remove(dt, store)">
+        <ion-icon name="md-close"></ion-icon>
+      </button>
+    </ion-item>
+    <!-- <img src="{{pathForImage(store?.imageUrl)}}" (click)="showDisplayModal(store)"> -->
+    <img src="{{store?.imageUrl}}" (click)="showDisplayModal(store, dt)">
+    <ion-item>
+      <div padding class="flex-container">
+        <h1 class="points" color="flex-center">{{store?.points}} ពិន្ទុ</h1>
+      </div>
+    </ion-item>
 
   </ion-card>
 
-
-
-  <ion-item-group>
-    <ion-item-divider color="primary">
-      ឈុតចាំបាច់សម្រាប់តាំង
-    </ion-item-divider>
-    <input type="file" #imageFile1 style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage1($event)" />
-
-    <ion-card *ngFor="let storeDisplay of storeDisplays">
-      <ion-item>
-        {{storeDisplay.name}}
-        <button item-end ion-button small round icon-only color="danger" (click)="remove(storeDisplay.uId)">
-          <ion-icon name="md-close"></ion-icon>
-        </button>
-      </ion-item>
-      <img src="{{storeDisplay.imageUrl}}">
-      <ion-item>
-        <div padding class="flex-container">
-          <h1 class="points" color="flex-center">{{storeDisplay.points}} ពិន្ទុ</h1>
-        </div>
-      </ion-item>
-
-    </ion-card>
-
-    <div padding class="flex-container">
-      <div class="flex-center">
-        <button color="primary" ion-button round icon-only full (click)="showStoraModal()">
-          <ion-icon name="ios-add"></ion-icon>
-        </button>
-      </div>
+  <!-- <div padding class="flex-container"> -->
+    <div padding>
+      <button color="light" ion-button round icon-left full (click)="showActionSheet(dt)">
+        <ion-icon name="md-add"></ion-icon>{{dt.name}}
+      </button>
     </div>
-  </ion-item-group>
+  <!-- </div> -->
+</ion-item-group>
 
 
-  <div padding>
-    <button ion-button round padding block (click)="save()">បញ្ជូន</button>
-  </div>
+<div padding>
+  <button ion-button round padding block (click)="save()">បញ្ជូន</button>
+</div>
 </ion-content>
+<input type="file" #imgFile style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />

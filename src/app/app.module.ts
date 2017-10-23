@@ -8,6 +8,10 @@ import { IonicStorageModule } from '@ionic/storage';
 
 
 import { Camera } from '@ionic-native/camera';
+import { File } from '@ionic-native/file';
+import { Transfer } from '@ionic-native/transfer';
+import { FilePath } from '@ionic-native/file-path';
+
 
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
@@ -25,6 +29,9 @@ import { UserProvider } from '../providers/user/user';
 import { UsersStoresProvider } from '../providers/users-stores/users-stores';
 import { StoresProvider } from '../providers/stores/stores';
 import { StoreImagesProvider } from '../providers/store-images/store-images';
+import { DisplaysProvider } from '../providers/displays/displays';
+import { DisplayTypesProvider } from '../providers/display-types/display-types';
+import { StoreTypesProvider } from '../providers/store-types/store-types';
 
 
 @NgModule({
@@ -68,7 +75,14 @@ import { StoreImagesProvider } from '../providers/store-images/store-images';
   UserProvider,
   UsersStoresProvider,
   StoresProvider,
-  StoreImagesProvider
+  StoreImagesProvider,
+  File,
+  Transfer,
+  Camera,
+  FilePath,
+    DisplaysProvider,
+    DisplayTypesProvider,
+    StoreTypesProvider
   ]
 })
 export class AppModule {}

@@ -1,12 +1,32 @@
-import { Component} from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ViewController, ModalController } from 'ionic-angular';
-import { HomePage } from '../home/home';
-import {StorePointServicesProvider} from '../../providers/store-point-services/store-point-services';
-import {StoreImagesProvider} from '../../providers/store-images/store-images';
-import {StoreModalComponent} from '../../components/store-modal/store-modal';
+import { Component, ViewChild} from '@angular/core';
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  ActionSheetController,
+  AlertController,
+  ViewController,
+  ModalController,
+  ToastController,
+  LoadingController,
+  Platform,
+  Loading } from 'ionic-angular';
 
-import { Storage } from '@ionic/storage';
+  import { Camera } from '@ionic-native/camera';
+  import { File } from '@ionic-native/file';
+  import { Transfer, TransferObject } from '@ionic-native/transfer';
+  import { FilePath } from '@ionic-native/file-path';
 
+  import { HomePage } from '../home/home';
+  import { StorePointServicesProvider} from '../../providers/store-point-services/store-point-services';
+  import { StoreImagesProvider } from '../../providers/store-images/store-images';
+  import { StoreModalComponent } from '../../components/store-modal/store-modal';
+  import { StoreTypesProvider } from '../../providers/store-types/store-types';
+  import { DisplayTypesProvider } from '../../providers/display-types/display-types';
+  import { DisplaysProvider } from '../../providers/displays/displays';
+  import { StoresProvider } from '../../providers/stores/stores';
+  import { Storage } from '@ionic/storage';
+  declare var cordova: any;
 /**
  * Generated class for the AddPointPage page.
  *
@@ -30,6 +50,17 @@ import { Storage } from '@ionic/storage';
    store: any;
    points: any = 0;
    randomString: String;
+   isNew: boolean;
+   displayTypesArr: any;
+   storeTypesArr: any;
+   displaysArr: any;
+   selectedDisplayType: any;
+   selectedDisplay: any;
+   imageUrl: any;
+   readPlatform;
+   loading: Loading;
+   @ViewChild('imgFile') imgFile;
+
 
    storeDisplays: any[];
 
@@ -41,73 +72,304 @@ import { Storage } from '@ionic/storage';
      public storePointsServices: StorePointServicesProvider,
      public storeImage: StoreImagesProvider,
      public modalCtrl: ModalController,
-     public storage: Storage
+     public storage: Storage,
+     public storeTypes: StoreTypesProvider,
+     public displays: DisplaysProvider,
+     public displayTypes: DisplayTypesProvider,
+     public actionSheetCtrl: ActionSheetController,
+     public stores: StoresProvider,
+     public camera: Camera,
+     public viewCtrl: ViewController,
+     public toastCtrl: ToastController,
+     public loadingCtrl: LoadingController,
+     public platform: Platform,
+     private file: File,
+     private filePath: FilePath,
+     private transfer: Transfer
      ) {
-
+     // this.storage.clear();
+     this.storeDisplays = [];
    }
 
 
    ionViewDidLoad() {
+     this.storeData();
+     // this.storePointsServices.getStorePoints().subscribe((data)=> {
 
-     this.storePointsServices.getStorePoints().subscribe((data)=> {
-       console.log('Store Points', data);
-     });
-     // this.storeId = this.navParams.data.item.STORE.id;
-     this.storeId = 1;
-     this.storeImage.getStoreImage(this.storeId).subscribe((store)=>{
-       this.storeImageUrl = 'http://' + store.imageUrl;
-       this.store = store;
-       console.log('store', this.store);
-     });
+       //   console.log('Store Points', data);
+       // });
+       // this.storeId = this.navParams.data.item.STORE.id;
+       this.storeId = 1;
+       console.log(this.storeId);
+       this.stores.getStore(this.storeId).subscribe((store) => {
+         this.store = store;
+         console.log(this.store);
+       });
 
-     this.storeDisplays = [
-     {
-       uId: Math.random().toString(36).substr(2, 5),
-       displayId: 1,
-       imageUrl: '../../assets/img/u1.jpg',
-       name: 'ឈុត២ជួរ',
-       points: 3600
-     },
-     {
-       uId: Math.random().toString(36).substr(2, 5),
-       displayId: 2,
-       imageUrl: '../../assets/img/u2.jpg',
-       name: 'ឈុត៣ជួរ',
-       points: 1800
      }
-     ];
-   }
+
+     storeData(){
+       this.storeTypes.allStoreTypes().subscribe((storeTypes) => {
+         this.displayTypes.allDisplayTypes().subscribe((displayTypes)=>{
+           this.displays.allDisplays().subscribe((displays) => {
+             this.storeTypesArr = storeTypes;
+             this.displayTypesArr = displayTypes;
+             for (let i = 0; i < this.displayTypesArr.length; i ++){
+               this.displayTypesArr[i]['storeDisplays'] = [];
+             }
+             this.displaysArr = displays;
+           });
+         });
+       });
+     }
+
+     ionViewDidEnter(){
+
+       // this.storage.clear();
+       this.storage.forEach((value, key) => {
+         const localKey = 'storeId-'+this.storeId+'==';
+         if (key.indexOf(localKey) > -1){
+           this.storage.get(key).then(res => {
+             const resStore = JSON.parse(res);
+             this.storeDisplays.push(resStore);
+           });
+         }
+       });
+     }
 
 
-   remove(uId){
-     const index = this.storeDisplays.findIndex(sd => sd.uId == uId);
-     this.storeDisplays.splice(index, 1);
-   }
+     remove(dt, d){
+       const storeDisplaysIndex = dt.storeDisplays.findIndex(sd => sd.uId == d.uId);
+       dt.storeDisplays.splice(storeDisplaysIndex, 1);
+     }
 
-   showStoraModal(){
-     let modal = this.modalCtrl.create(StoreModalComponent, {userId: '112'});
-     modal.onDidDismiss((data) => {
-       console.log('dismiss', data);
-       if (data){
-         const random =  Math.random().toString(36).substr(2, 5)
-         const storeDis = {
-           uId: random,
-           displayId: 3,
-           imageUrl: data.imageUrl,
-           name: 'ឈុតទី៥',
-           points: data.points
-         };
-         this.storeDisplays.push(storeDis);
-         this.storage.set(random, storeDis);
+     showActionSheet(dt){
+       let buttonOptions = [];
+       this.selectedDisplayType = dt;
+       for (let d of dt.DISPLAYs){
+         buttonOptions.push({
+           text: d.name,
+           handler: () => {
+             this.showDisplayModal(d, dt);
+           }
+         });
        }
-     });
-     modal.present();
-   }
 
-   save(){
+       buttonOptions.push({
+         text: 'បិទផ្ទាំង',
+         role: 'cancel'
+       });
 
-     console.log(this.storeDisplays);
-   }
+       let actionSheet = this.actionSheetCtrl.create({
+         title: 'ជ្រើសរើសឈុត',
+         buttons: buttonOptions
+       });
 
- }
+       actionSheet.present();
+     }
+
+     showDisplayModal(display, dt){
+       this.selectedDisplay = display;
+       this.selectedDisplayType = dt;
+
+       this.isNew = false;
+
+       if (!display.uId){
+         this.isNew = true;
+       }
+
+       let modal = this.modalCtrl.create(StoreModalComponent, {display: display, isNew: this.isNew});
+       modal.onDidDismiss((data) => {
+         console.log('Data Returned', data);
+         if (data){
+           if (this.isNew == true){
+             const random =  Math.random().toString(36).substr(2, 5)
+             const displayData = {
+               id: data.id,
+               uId: random,
+               displayName: this.selectedDisplay.name,
+               imageUrl: data.imageUrl,
+               points: data.points,
+               capturedAt: new Date()
+             };
+             this.selectedDisplayType.storeDisplays.push(displayData);
+           }
+           else{
+             const storeDisplaysIndex =  this.selectedDisplayType.storeDisplays.findIndex(sd => sd.uId == data.uId);
+             this.selectedDisplayType.storeDisplays[storeDisplaysIndex] = data;
+           }
+         }
+       });
+       modal.present();
+     }
+
+     save(){
+       this.loading = this.loadingCtrl.create({
+         content: 'បញ្ជូនទិន្ន័យ',
+       });
+       // this.loading.present();
+       console.log('displayTypesArr ==> ', this.displayTypesArr);
+       // console.log('imageUrl ==> ', this.imageUrl);
+       // this.loading.dismissAll();
+       // this.navCtrl.pop();
+
+     }
+
+     processWebImage(event) {
+       let reader = new FileReader();
+       reader.onload = (readerEvent) => {
+         let imageData = (readerEvent.target as any).result;
+         this.imageUrl = imageData;
+       };
+       reader.readAsDataURL(event.target.files[0]);
+     }
+
+     getPicture() {
+       if (Camera['installed']()) {
+         let actionSheet = this.actionSheetCtrl.create({
+           title: 'ជ្រើសរើសប្រភពរូបភាព',
+           buttons: [
+           {
+             text: 'ពីរូបទូរស័ព្ទ',
+             handler: () => {
+               this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY);
+             }
+           },
+           {
+             text: 'ពីកាមេរ៉ា',
+             handler: () => {
+               this.takePicture(this.camera.PictureSourceType.CAMERA);
+             }
+           },
+           {
+             text: 'បោះបង់',
+             role: 'cancel'
+           }
+           ]
+         });
+         actionSheet.present();
+       } else {
+         this.imgFile.nativeElement.click();
+       }
+     }
+
+     public takePicture(sourceType) {
+       // Create options for the Camera Dialog
+       var options = {
+         quality: 50,
+         sourceType: sourceType,
+         saveToPhotoAlbum: true,
+         correctOrientation: true,
+         destinationType: this.camera.DestinationType.FILE_URI
+       };
+       // this.loading = this.loadingCtrl.create({
+         //   content: 'Uploading...',
+         // });
+         // this.loading.present();
+         // Get the data of an image
+         this.camera.getPicture(options).then((imagePath) => {
+           // this.imgSrc = 'data:image/jpg;base64,' + imageData;
+           if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
+             this.readPlatform = 'android';
+             this.filePath.resolveNativePath(imagePath)
+             .then(filePath => {
+               let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
+               let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
+               this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
+             });
+           } else {
+             this.readPlatform = 'other';
+             var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
+             var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
+             this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
+           }
+         }, (err) => {
+           this.presentToast('Error while selecting image.');
+         });
+       }
+
+
+       // Create a new name for the image
+       private createFileName() {
+         var d = new Date(),
+         n = d.getTime(),
+         newFileName =  n + ".jpg";
+         return newFileName;
+       }
+
+       // Copy the image to a local folder
+       private copyFileToLocalDir(namePath, currentName, newFileName) {
+         this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
+           this.imageUrl = newFileName;
+         }, error => {
+           this.presentToast('Error while storing file.');
+         });
+       }
+
+       // Always get the accurate path to your apps folder
+       public pathForImage(img) {
+         if (img === null) {
+           return '';
+         } else {
+           return cordova.file.dataDirectory + img;
+         }
+       }
+
+       private presentToast(text) {
+         let toast = this.toastCtrl.create({
+           message: text,
+           duration: 3000,
+           position: 'top'
+         });
+         toast.present();
+       }
+
+       public uploadImage() {
+         // Destination URL
+         var url = "http://192.168.8.101:3000/store_points_upload";
+
+         // File for Upload
+         var targetPath = this.pathForImage(this.imageUrl);
+
+         // File name only
+         var filename = this.imageUrl;
+
+         var options = {
+           fileKey: "file",
+           fileName: filename,
+           chunkedMode: false,
+           mimeType: "multipart/form-data",
+           params : {'fileName': filename}
+         };
+
+         const fileTransfer: TransferObject = this.transfer.create();
+
+         this.loading = this.loadingCtrl.create({
+           content: 'Uploading...',
+         });
+
+         this.loading.present();
+
+         // Use the FileTransfer to upload the image
+         fileTransfer.upload(targetPath, url, options).then(data => {
+           this.loading.dismissAll();
+           let sdata = {
+             points: 2000,
+             fileName: filename,
+             storeIdStorePoints: 1,
+             userIdStorePoints: 1,
+             displayIdStorePoints: 1
+           };
+           this.storePointsServices.createStorePoints(sdata).subscribe((sdata)=> {
+
+           });
+
+           this.presentToast('Image succesful uploaded.');
+         }, err => {
+           this.loading.dismissAll();
+           this.presentToast('Error while uploading file.');
+         });
+       }
+
+     }
 
