@@ -12,8 +12,8 @@ import 'rxjs/add/operator/map';
   export class UsersStoresProvider {
 
     // getApiUrl : string = "http://localhost:3000/users_stores/users/";
-    // getApiUrl : string = "https://api.unilever.store/users_stores/users/";
-    getApiUrl : string = "http://192.168.8.103:3000/users_stores/users/";
+    getApiUrl : string = "https://api.unilever.store/users_stores/users/";
+    // getApiUrl : string = "http://192.168.8.103:3000/users_stores/users/";
 
     constructor(public http: Http) {
 

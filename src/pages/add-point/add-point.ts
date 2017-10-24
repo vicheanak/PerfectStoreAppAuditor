@@ -221,8 +221,8 @@ import {
              });
 
              // Destination URL
-             var url = "http://192.168.8.103:3000/store_points_upload";
-             // var url = "https://api.unilever.store/store_points_upload/";
+             // var url = "http://192.168.8.103:3000/store_points_upload";
+             var url = "https://api.unilever.store/store_points_upload/";
 
              let targetPaths = [];
              let storeDisplaysList = [];
@@ -254,10 +254,10 @@ import {
              }
 
              // uploadArr.map(i => fileTransfer.upload(i.targetPath, url, i.option));
-             // this.loading = this.loadingCtrl.create({
-               //   content: 'Uploading...',
-               // });
-               // this.loading.present();
+             this.loading = this.loadingCtrl.create({
+               content: 'Uploading...',
+             });
+             this.loading.present();
 
                var sImgTargetPath = this.pathForImage(this.imageUrl);
 
@@ -301,7 +301,8 @@ import {
                      }))
                      ).subscribe((res) => {
                        this.loading.dismissAll();
-                       this.presentToast('Image succesful uploaded.');
+                       this.presentToast('បញ្ជូនរូបភាពរួចរាល់');
+                       this.navCtrl.pop();
                      });
 
                    });
@@ -494,7 +495,8 @@ import {
 
                                  public uploadImage() {
                                    // Destination URL
-                                   var url = "http://192.168.8.101:3000/store_points_upload";
+                                   // var url = "http://192.168.8.101:3000/store_points_upload";
+                                   var url = "https://api.unilever.store/store_points_upload";
 
                                    // File for Upload
                                    var targetPath = this.pathForImage(this.imageUrl);

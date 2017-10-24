@@ -13,10 +13,10 @@ import 'rxjs/add/operator/map';
 
     // auditorUrl : string = "http://localhost:3000/auth_auditor/";
     // isAuditorUrl : string = "http://localhost:3000/is_auditor/";
-    // auditorUrl : string = "https://api.unilever.store/auth_auditor";
-    // isAuditorUrl : string = "https://api.unilever.store/is_auditor/";
-    auditorUrl : string = "http://192.168.8.103:3000/auth_auditor/";
-    isAuditorUrl : string = "http://192.168.8.103:3000/is_auditor/";
+    auditorUrl : string = "https://api.unilever.store/auth_auditor";
+    isAuditorUrl : string = "https://api.unilever.store/is_auditor/";
+    // auditorUrl : string = "http://192.168.8.103:3000/auth_auditor/";
+    // isAuditorUrl : string = "http://192.168.8.103:3000/is_auditor/";
 
     constructor(public http: Http) {
 

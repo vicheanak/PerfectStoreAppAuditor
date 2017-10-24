@@ -133,7 +133,7 @@ import {
        this.storeTypes.allStoreTypes().subscribe((storeTypes) => {
          this.displayTypes.allDisplayTypes().subscribe((displayTypes)=>{
            this.displays.allDisplays().subscribe((displays) => {
-             this.storePointsServices.getStorePointsByStore(this.storePoint.storeIdStorePoints).subscribe((storePointsData) =>
+             this.storePointsServices.getStorePointsByStore(this.storePoint.storeImageIdStorePoints).subscribe((storePointsData) =>
              {
                // this.storePointsList = storePointsData;
                this.storeTypesArr = storeTypes;
@@ -234,8 +234,8 @@ import {
        });
 
        // Destination URL
-       var url = "http://192.168.8.103:3000/store_points_upload";
-       // var url = "https://api.unilever.store/store_points_upload/";
+       // var url = "http://192.168.8.103:3000/store_points_upload";
+       var url = "https://api.unilever.store/store_points_upload/";
 
        let targetPaths = [];
        let storeDisplaysList = [];
@@ -417,7 +417,6 @@ import {
      }
 
      public byPass(img){
-       img = 'http://' + img;
        return this._sanitizer.bypassSecurityTrustResourceUrl(img);
      }
 
@@ -434,7 +433,8 @@ import {
 
      public uploadImage() {
        // Destination URL
-       var url = "http://192.168.8.101:3000/store_points_upload";
+       // var url = "http://192.168.8.101:3000/store_points_upload";
+       var url = "https://api.unilever.store/store_points_upload";
 
        // File for Upload
        var targetPath = this.pathForImage(this.imageUrl);

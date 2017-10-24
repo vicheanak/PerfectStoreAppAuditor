@@ -182,7 +182,8 @@ export class StoreModalComponent {
 
     public uploadImage() {
       // Destination URL
-      var url = "http://192.168.8.101:3000/store_points_upload";
+      // var url = "http://192.168.8.101:3000/store_points_upload";
+      var url = "https://api.unilever.store/store_points_upload";
 
       // File for Upload
       var targetPath = this.pathForImage(this.display.imageUrl);

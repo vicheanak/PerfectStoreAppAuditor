@@ -11,10 +11,10 @@ import 'rxjs/add/operator/map';
   @Injectable()
   export class StoreImagesProvider {
     // getApiUrl : string = "http://localhost:3000/store_images/stores/";
-    // getApiUrl : string = "https://api.unilever.store/store_images/stores/";
-    // postApiUrl : string = "https://api.unilever.store/store_images/";
-    getApiUrl : string = "http://192.168.8.103:3000/store_images/stores/";
-    postApiUrl : string = "http://192.168.8.103:3000/store_images/";
+    getApiUrl : string = "https://api.unilever.store/store_images/stores/";
+    postApiUrl : string = "https://api.unilever.store/store_images/";
+    // getApiUrl : string = "http://192.168.8.103:3000/store_images/stores/";
+    // postApiUrl : string = "http://192.168.8.103:3000/store_images/";
     constructor(public http: Http) {
 
     }
