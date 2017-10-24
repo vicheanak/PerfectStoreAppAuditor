@@ -62,8 +62,8 @@ export class StoreDetailPage {
     console.log('ionViewDidLoad StoreDetailPage');
   }
 
-  pointDetail(){
-    this.navCtrl.push('PointDetailPage');
+  pointDetail(sp){
+    this.navCtrl.push('PointDetailPage', {sp: sp});
   }
 
 }

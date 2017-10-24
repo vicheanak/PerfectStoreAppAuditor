@@ -46,7 +46,7 @@
 </ion-card-content>
 </ion-card>
 <ion-list>
-  <button ion-item (click)="pointDetail()" *ngFor="let sp of storePoints">
+  <button ion-item (click)="pointDetail(sp)" *ngFor="let sp of storePoints">
     {{sp?.total_points}} ពិន្ទុ
     <ion-note item-end>{{sp?.STORE_IMAGE?.capturedAt | date:'short'}}</ion-note>
   </button>

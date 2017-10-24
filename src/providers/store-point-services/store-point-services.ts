@@ -26,6 +26,15 @@ import 'rxjs/add/operator/map';
       });
     }
 
+    getStorePointsByStore(id) {
+      let storeApiUrl = this.getApiUrl + 'stores/' + id;
+      return  this.http.get(storeApiUrl)
+      .map((res : Response ) =>{
+        console.log('map --> ', res.json());
+        return res.json();
+      });
+    }
+
     getStoreSum(id){
       let sumStoreUrl = this.getApiUrl + 'store_sum/' + id;
       return  this.http.get(sumStoreUrl)

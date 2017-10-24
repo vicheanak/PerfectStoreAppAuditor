@@ -1,3 +1,10 @@
 page-point-detail {
-
+  .flex-container{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+ }
+ .flex-center{
+  max-width: 50%;
+}
 }

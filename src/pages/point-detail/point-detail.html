@@ -1,61 +1,71 @@
-<!--
-  Generated template for the PointDetailPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>Skin Care Gold</ion-title>
+  <ion-navbar primary>
+    <ion-title>រាប់ពិន្ទុ</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
 
   <ion-card>
 
     <ion-card-header>
-     ហាក់ ស្រ៊ុន
+      {{store?.name}} - {{store?.STORE_TYPE.name}}
     </ion-card-header>
+    <img [src]="byPass(imageUrl)" *ngIf="imageUrl" (click)="getPicture()">
+    <!-- <img src="{{pathForImage(imageUrl)}}" *ngIf="imageUrl" (click)="getPicture()"> -->
+    <div padding class="flex-container" *ngIf="imageUrl == null">
+      <button color="light" class="flex-center" ion-button icon-start round padding icon-only (click)="getPicture()">
+       <ion-icon name="camera"></ion-icon>
+     </button>
+   </div>
 
-  </ion-card>
+ </ion-card>
 
-  <ion-card>
+
+
+ <ion-item-group *ngFor="let dt of displayTypesArr;">
+  <ion-item-divider color="primary">
+    {{dt.name}}
+  </ion-item-divider>
+
+  <ion-card *ngFor="let store of dt.storeDisplays">
     <ion-item>
-      <h2>600 Pts - ឈុតចាំបាច់សម្រាប់តាំង </h2>
+      {{store?.displayName}}
+      <button item-end ion-button small round icon-only color="danger" (click)="remove(dt, store)">
+        <ion-icon name="md-close"></ion-icon>
+      </button>
     </ion-item>
-    <!-- <img src="../../assets/img/u1-s-m.jpg"> -->
-    <img src="../../assets/img/uu1.jpg">
 
-    <ion-card-content>
-      <p></p>
-    </ion-card-content>
-  </ion-card>
 
-  <ion-card>
+    <img [src]="byPass(store?.imageUrl)" (click)="showDisplayModal(store)">
+    <!-- <img src="{{pathForImage(store?.imageUrl)}}" (click)="showDisplayModal(store)"> -->
+    <!-- <img src="{{store?.imageUrl}}" (click)="showDisplayModal(store, dt)"> -->
     <ion-item>
-      <h2>1000 Pts - ឈុតព្យួរផលិតផល</h2>
+      <div padding class="flex-container">
+        <h1 class="points" color="flex-center">{{store?.points}} ពិន្ទុ</h1>
+      </div>
     </ion-item>
-   <!--  <img src="../../assets/img/u1-s-h.jpg"> -->
-    <img src="../../assets/img/uu2.jpg">
 
-    <ion-card-content>
-      <p></p>
-    </ion-card-content>
   </ion-card>
 
-  <ion-card>
-    <ion-item>
-      <h2>3000 Pts - ឈុតសម្រាប់តាំងលើធ្វើរ</h2>
-    </ion-item>
-    <!-- <img src="../../assets/img/u1-s-s.jpg"> -->
-    <img src="../../assets/img/uu3.jpg">
+  <!-- <div padding class="flex-container"> -->
+    <div padding>
+      <button color="light" ion-button round icon-left full (click)="showActionSheet(dt)">
+        <ion-icon name="md-add"></ion-icon>{{dt.name}}
+      </button>
+    </div>
+    <!-- </div> -->
+  </ion-item-group>
 
-    <ion-card-content>
-      <p></p>
-    </ion-card-content>
-  </ion-card>
+
+  <div padding>
+<!--   <p>{{tp}}</p>
+   <p>{{url}}</p>
+   <p>{{op}}</p> -->
+   <button ion-button round padding block (click)="save()">បញ្ជូន</button>
+ </div>
 </ion-content>
+<input type="file" #imgFile style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
