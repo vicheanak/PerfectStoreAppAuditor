@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/map';
+import {HostNameProvider} from '../../providers/host-name/host-name';
 
 @Injectable()
 export class DisplayTypesProvider {
 
-  // getApiUrl : string = "http://localhost:3000/display_types/";
-  getApiUrl : string = "https://api.unilever.store/display_types/";
-  // getApiUrl : string = "http://192.168.8.103:3000/display_types/";
+  getApiUrl : string = this.hostname.get() + "/display_types/";
 
-  constructor(public http: Http) {
+  constructor(public http: Http, public hostname: HostNameProvider) {
 
   }
 

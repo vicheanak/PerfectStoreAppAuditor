@@ -162,7 +162,6 @@ import {
 
      }
 
-
      remove(dt, d){
        const storeDisplaysIndex = dt.storeDisplays.findIndex(sd => sd.uId == d.uId);
        dt.storeDisplays.splice(storeDisplaysIndex, 1);

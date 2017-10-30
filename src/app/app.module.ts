@@ -32,6 +32,8 @@ import { StoreImagesProvider } from '../providers/store-images/store-images';
 import { DisplaysProvider } from '../providers/displays/displays';
 import { DisplayTypesProvider } from '../providers/display-types/display-types';
 import { StoreTypesProvider } from '../providers/store-types/store-types';
+import { HostNameProvider } from '../providers/host-name/host-name';
+import { ConditionsProvider } from '../providers/conditions/conditions';
 
 
 @NgModule({
@@ -82,7 +84,9 @@ import { StoreTypesProvider } from '../providers/store-types/store-types';
   FilePath,
     DisplaysProvider,
     DisplayTypesProvider,
-    StoreTypesProvider
+    StoreTypesProvider,
+    HostNameProvider,
+    ConditionsProvider
   ]
 })
 export class AppModule {}

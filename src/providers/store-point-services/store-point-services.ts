@@ -1,21 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/map';
+import {HostNameProvider} from '../../providers/host-name/host-name';
 
-/*
-  Generated class for the StorePointServicesProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-  */
   @Injectable()
   export class StorePointServicesProvider {
 
-    // getApiUrl : string = "http://localhost:3000/store_points/";
-    getApiUrl : string = "https://api.unilever.store/store_points/";
-    // getApiUrl : string = "http://192.168.8.103:3000/store_points/";
+    getApiUrl : string = this.hostname.get() + "/store_points/";
 
-    constructor(public http: Http) {
+    constructor(public http: Http, public hostname: HostNameProvider) {
 
     }
 

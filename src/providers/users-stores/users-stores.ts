@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/map';
+import {HostNameProvider} from '../../providers/host-name/host-name';
 
 /*
   Generated class for the UsersStoresProvider provider.
@@ -11,11 +12,9 @@ import 'rxjs/add/operator/map';
   @Injectable()
   export class UsersStoresProvider {
 
-    // getApiUrl : string = "http://localhost:3000/users_stores/users/";
-    getApiUrl : string = "https://api.unilever.store/users_stores/users/";
-    // getApiUrl : string = "http://192.168.8.103:3000/users_stores/users/";
+    getApiUrl : string = this.hostname.get() + "/users_stores/users/";
 
-    constructor(public http: Http) {
+    constructor(public http: Http, public hostname: HostNameProvider) {
 
     }
 
@@ -23,8 +22,8 @@ import 'rxjs/add/operator/map';
       this.getApiUrl = this.getApiUrl + id;
       return  this.http.get(this.getApiUrl)
       .map((res : Response ) =>{
+        console.log('get user store');
         let usersStores = res.json();
-
         return usersStores.records;
       });
     }
