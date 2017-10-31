@@ -6,6 +6,7 @@ import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
 import {StorePointServicesProvider} from '../../providers/store-point-services/store-point-services';
 import {DisplaysProvider} from '../../providers/displays/displays';
+import {ConditionsProvider} from '../../providers/conditions/conditions';
 
 declare var cordova: any;
 
@@ -24,6 +25,7 @@ export class StoreModalComponent {
   maxPoint: any;
   isNew: boolean;
   @ViewChild('imgFile') imgFile;
+  conditionList: any;
 
   constructor(
     public camera: Camera,
@@ -38,6 +40,7 @@ export class StoreModalComponent {
     private transfer: Transfer,
     private navParams: NavParams,
     public displays: DisplaysProvider,
+    public conditions: ConditionsProvider
     ) {
     // console.log('Hello StoreModalComponent Component');
     // this.points = 0;
@@ -56,8 +59,12 @@ export class StoreModalComponent {
       this.maxPoint = sDisplay.points;
       if (this.isNew){
         this.display.points = sDisplay.points;
+        this.display.sku = sDisplay.sku;
         this.display.imageUrl = '';
       }
+    });
+    this.conditions.allByDisplay(this.display.id).subscribe((conditions) => {
+      this.conditionList = conditions;
     });
   }
 
@@ -179,6 +186,7 @@ export class StoreModalComponent {
       });
       toast.present();
     }
+
 
     public uploadImage() {
       // Destination URL

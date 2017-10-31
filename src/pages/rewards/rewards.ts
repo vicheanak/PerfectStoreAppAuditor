@@ -21,7 +21,7 @@ export class RewardsPage {
   }
 
   ionViewDidLoad() {
-    this.rewardServices.getRewards().subscribe((data) => {
+    this.rewardServices.allRewards().subscribe((data) => {
     console.log('data service rewards', data);
     });
   }

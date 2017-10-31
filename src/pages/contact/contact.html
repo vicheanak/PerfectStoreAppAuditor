@@ -9,21 +9,28 @@
   <ion-list no-border>
 
     <ion-item (click)="changePassword()">
-      <ion-icon name='lock' item-start></ion-icon>
+      <ion-icon name='md-lock' item-start></ion-icon>
       ប្តូរលេខសំងាត់
     </ion-item>
-    <ion-item (click)="pullData()">
-      <ion-icon name='download' item-start></ion-icon>
+    <ion-item (click)="pull()">
+      <ion-icon name='md-cloud-download' item-start></ion-icon>
       ទាញយកទិន្ន័យ
     </ion-item>
 
-    <ion-item (click)="pushData()">
-      <ion-icon name='send' item-start></ion-icon>
+    <ion-item (click)="push()">
+      <ion-icon name='md-cloud-upload' item-start></ion-icon>
       បញ្ជូនទិន្ន័យ
     </ion-item>
+
+    <ion-item (click)="refresh()">
+      <ion-icon name='md-power' item-start></ion-icon>
+      ដំណើរការម្តងទៀត
+    </ion-item>
+
+    <ion-item (click)="logout()">
+      <ion-icon name='md-exit' item-start></ion-icon>
+      ចាកចេញ
+    </ion-item>
   </ion-list>
-
-
-
 
 </ion-content>

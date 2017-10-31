@@ -11,6 +11,13 @@ export class StoresProvider {
 
   }
 
+  allStores() {
+    return  this.http.get(this.getApiUrl)
+    .map((res : Response ) =>{
+      return res.json();
+    });
+  }
+
   getStore(id) {
     let getUrl = this.getApiUrl + id;
     return  this.http.get(getUrl)

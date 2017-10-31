@@ -4,13 +4,13 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HttpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
-
-
+import { SQLite } from '@ionic-native/sqlite';
 
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { Transfer } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
+import { Geolocation } from '@ionic-native/geolocation';
 
 
 import { AboutPage } from '../pages/about/about';
@@ -70,7 +70,6 @@ import { ConditionsProvider } from '../providers/conditions/conditions';
   providers: [
   StatusBar,
   SplashScreen,
-  Camera,
   {provide: ErrorHandler, useClass: IonicErrorHandler},
   RewardServicesProvider,
   StorePointServicesProvider,
@@ -81,12 +80,14 @@ import { ConditionsProvider } from '../providers/conditions/conditions';
   File,
   Transfer,
   Camera,
+  SQLite,
+  Geolocation,
   FilePath,
-    DisplaysProvider,
-    DisplayTypesProvider,
-    StoreTypesProvider,
-    HostNameProvider,
-    ConditionsProvider
+  DisplaysProvider,
+  DisplayTypesProvider,
+  StoreTypesProvider,
+  HostNameProvider,
+  ConditionsProvider
   ]
 })
 export class AppModule {}

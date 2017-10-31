@@ -7,6 +7,7 @@ import {HostNameProvider} from '../../providers/host-name/host-name';
 export class UserProvider {
   auditorUrl : string = this.hostname.get() + "/auth_auditor";
   isAuditorUrl : string = this.hostname.get() + "/is_auditor/";
+  getUrl : string = this.hostname.get() + "/auditors/";
   constructor(public http: Http, public hostname: HostNameProvider) {
 
   }
@@ -22,6 +23,19 @@ export class UserProvider {
   isAuth(token){
     this.isAuditorUrl = this.isAuditorUrl + token;
     return this.http.get(this.isAuditorUrl)
+    .map((res : Response ) =>{
+      console.log('res json', res.json());
+      return res.json();
+    });
+  }
+
+  changePassword(id, oldPassword, newPassword){
+    let getAuditorUrl = this.getUrl + 'changepassword/' + id;
+    let data = {
+      oldPassword: oldPassword,
+      newPassword: newPassword
+    }
+    return this.http.put(getAuditorUrl, data)
     .map((res : Response ) =>{
       console.log('res json', res.json());
       return res.json();

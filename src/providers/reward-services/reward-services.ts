@@ -13,7 +13,7 @@ import {HostNameProvider} from '../../providers/host-name/host-name';
 
     }
 
-    getRewards() {
+    allRewards() {
       return  this.http.get(this.getApiUrl)
       .map((res : Response ) =>{
         console.log('map --> ', res.json());

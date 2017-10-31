@@ -33,7 +33,7 @@
 
   <ion-card *ngFor="let store of dt.storeDisplays">
     <ion-item>
-      {{store?.displayName}}
+      {{store?.DISPLAY.name}}
       <button item-end ion-button small round icon-only color="danger" (click)="remove(dt, store)">
         <ion-icon name="md-close"></ion-icon>
       </button>
@@ -46,6 +46,9 @@
     <ion-item>
       <div padding class="flex-container">
         <h1 class="points" color="flex-center">{{store?.points}} ពិន្ទុ</h1>
+      </div>
+      <div padding class="flex-container">
+        <h2 class="points" color="flex-center">{{store?.CONDITION.name}}</h2>
       </div>
     </ion-item>
 

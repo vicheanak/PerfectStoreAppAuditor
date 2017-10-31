@@ -30,6 +30,7 @@ import {
   import {Observable} from 'rxjs/Rx';
   import {Http, Response} from '@angular/http';
   import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
+  import {HostNameProvider} from '../../providers/host-name/host-name';
 /**
  * Generated class for the AddPointPage page.
  *
@@ -97,7 +98,8 @@ import {
      private filePath: FilePath,
      private transfer: Transfer,
      public http: Http,
-     private _sanitizer: DomSanitizer
+     private _sanitizer: DomSanitizer,
+     private hostname: HostNameProvider
      ) {
      // this.storage.clear();
      this.storeDisplays = [];
@@ -141,10 +143,10 @@ import {
                for (let i = 0; i < displayTypes.length; i ++){
                  this.displayTypesArr[i]['storeDisplays'] = [];
                   for (let j = 0; j < storePointsData.length; j ++){
-                    console.log('display type id', storePointsData[j]['DISPLAY']['displayTypeIdDisplays']);
-                    console.log('this dis type', this.displayTypesArr[i].id);
+                    // console.log('display type id', storePointsData[j]['DISPLAY']['displayTypeIdDisplays']);
+                    // console.log('this dis type', this.displayTypesArr[i].id);
                     if (storePointsData[j]['DISPLAY']['displayTypeIdDisplays']==this.displayTypesArr[i].id){
-                      console.log(storePointsData[j]);
+                      // console.log(storePointsData[j]);
                       this.displayTypesArr[i]['storeDisplays'].push(storePointsData[j]);
                       // console.log(this.storePointsList[j]);
                     }
@@ -233,8 +235,8 @@ import {
        });
 
        // Destination URL
-       // var url = "http://192.168.8.103:3000/store_points_upload";
-       var url = "https://api.unilever.store/store_points_upload/";
+
+       var url = this.hostname.get() + "/store_points_upload/";
 
        let targetPaths = [];
        let storeDisplaysList = [];
@@ -432,8 +434,7 @@ import {
 
      public uploadImage() {
        // Destination URL
-       // var url = "http://192.168.8.101:3000/store_points_upload";
-       var url = "https://api.unilever.store/store_points_upload";
+       var url = this.hostname.get() + "/store_points_upload";
 
        // File for Upload
        var targetPath = this.pathForImage(this.imageUrl);

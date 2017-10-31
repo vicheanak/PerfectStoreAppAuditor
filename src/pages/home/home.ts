@@ -22,10 +22,9 @@ export class HomePage {
     public alertCtrl: AlertController,
     public user: UserProvider,
     public usersStores: UsersStoresProvider,
-
     private storage: Storage) {
 
-    // this.storage.clear();
+
     this.storage.get('userdata').then((userdata) => {
       if (userdata){
         this.userData = JSON.parse(userdata);
@@ -34,10 +33,8 @@ export class HomePage {
             this.showLogin();
           }
           else{
-            this.usersStores.getUsersStores(this.userData.id).subscribe((stores)=>{
-
-              this.stores = stores;
-              console.log('store ----> ', stores);
+            this.storage.get('usersStores').then((stores) => {
+              this.stores = JSON.parse(stores);
             });
           }
         });
@@ -76,8 +73,9 @@ export class HomePage {
   }
 
   addPoint(item) {
+    console.log('addPoint', item);
     this.navCtrl.push('AddPointPage', {
-      item: item
+      id: item.storeIdUsersStores
     });
   }
 
@@ -106,13 +104,13 @@ export class LoginModal {
     private storage: Storage,
     public alertCtrl: AlertController,
     ) {
-
+    // this.storage.clear();
   }
 
   showAlert(msg) {
     let alert = this.alertCtrl.create({
-      title: 'Error!',
-      subTitle: msg,
+      title: msg,
+      subTitle: 'សូមធ្វើការសាកល្បងម្តងទៀត',
       buttons: ['OK']
     });
     alert.present();
@@ -133,9 +131,7 @@ export class LoginModal {
         this.storage.set('userdata', JSON.stringify(this.userData)).then(()=>{
           this.viewCtrl.dismiss(this.userData);
         });
-
       }
-
     });
   }
 
