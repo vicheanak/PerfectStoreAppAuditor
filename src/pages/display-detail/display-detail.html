@@ -1,0 +1,35 @@
+<!--
+  Generated template for the DisplayDetailPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{storeType?.name}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-item-group *ngFor="let dt of displayTypes">
+    <ion-item-divider color="primary">
+      {{dt?.name}}
+    </ion-item-divider>
+
+    <ion-card *ngFor="let d of dt.DISPLAYs">
+      <ion-item>
+        {{d.name}} - SKU {{d.sku}}
+      </ion-item>
+      <img src="{{d.imageUrl}}">
+      <ion-item>
+        <div padding class="flex-container">
+          <h1 class="points" color="flex-center">{{d.points}} ពិន្ទុ</h1>
+        </div>
+      </ion-item>
+
+    </ion-card>
+  </ion-item-group>
+</ion-content>
+

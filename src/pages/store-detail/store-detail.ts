@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { StorePointServicesProvider} from '../../providers/store-point-services/store-point-services';
 import {StoresProvider} from '../../providers/stores/stores';
 import { DatePipe } from '@angular/common';
+import { DatabaseProvider } from './../../providers/database/database';
+declare var cordova: any;
 /**
  * Generated class for the StoreDetailPage page.
  *
@@ -10,60 +12,49 @@ import { DatePipe } from '@angular/common';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
-@Component({
-  selector: 'page-store-detail',
-  templateUrl: 'store-detail.html',
-})
-export class StoreDetailPage {
-  storePoints: any[];
-  storeId: any;
-  store: any;
-  storeSpent: any;
-  storeEarned: any;
-  storeRemaining: any;
+ @IonicPage()
+ @Component({
+   selector: 'page-store-detail',
+   templateUrl: 'store-detail.html',
+ })
+ export class StoreDetailPage {
+   storePoints: any[];
+   storeId: any;
+   store: any;
+   storeSpent: any;
+   storeEarned: any;
+   storeRemaining: any;
 
-  constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public stores: StoresProvider,
-    public storePointsServices: StorePointServicesProvider,
-    ) {
-    // this.storeId = this.navParams.get('store');
-    this.storeId = 1;
+   constructor(
+     public navCtrl: NavController,
+     public navParams: NavParams,
+     public stores: StoresProvider,
+     public storePointsServices: StorePointServicesProvider,
+     private databaseprovider: DatabaseProvider,
+     ) {
+     // this.storeId = this.navParams.get('store');
+     // this.storeId = 1;
+     this.storeId =  this.navParams.data.id;
 
-    this.stores.getStore(this.storeId).subscribe((store) => {
-      this.store = store;
-    });
+     this.databaseprovider.getStore(this.storeId).then(data => {
+       this.store = data[0];
+       console.log('GET_STORE ==> ', this.store);
+     });
 
-    this.storePointsServices.getStoreEarned(this.storeId).subscribe((data) => {
-      console.log('Earned ==> ', data);
-      this.storeEarned = data;
-    });
 
-    this.storePointsServices.getStoreSpent(this.storeId).subscribe((data) => {
-      console.log('Spent ==> ', data);
-      this.storeSpent = data;
-    });
+     this.databaseprovider.getStorePointsSum(this.storeId).then(data => {
+       this.storePoints = data;
+       console.log('GET_StorePointsSum ==> ', this.storePoints);
+     });
 
-    this.storePointsServices.getStoreRemaining(this.storeId).subscribe((data) => {
-      console.log('Remaining ==> ', data);
-      this.storeRemaining = data;
-    })
+   }
 
-    this.storePointsServices.getStoreSum(this.storeId).subscribe((data) => {
-      console.log('store storePoints ==> ', data);
-      this.storePoints = data;
-    });
+   ionViewDidLoad() {
+     console.log('ionViewDidLoad StoreDetailPage');
+   }
 
-  }
+   pointDetail(sp){
+     this.navCtrl.push('PointDetailPage', {sp: sp});
+   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad StoreDetailPage');
-  }
-
-  pointDetail(sp){
-    this.navCtrl.push('PointDetailPage', {sp: sp});
-  }
-
-}
+ }

@@ -5,71 +5,20 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-card>
-        <img src="../../assets/img/dream.jpg"/>
+    <ion-card *ngFor="let reward of rewards">
+        <img src="{{reward?.imageUrl}}"/>
         <ion-card-content>
             <ion-card-title>
-                Honda Dream 125cc
+                {{reward?.name}}
             </ion-card-title>
         </ion-card-content>
         <ion-row no-padding>
             <ion-col>
-                <button ion-button clear   color="danger" icon-start>
+                <button ion-button clear color="danger" icon-start>
                     <ion-icon name='ios-bowtie'></ion-icon>
-                    1,500,000 pts
+                    {{reward?.points}} ពិន្ទុ
                 </button>
             </ion-col>
         </ion-row>
-
-    </ion-card>
-    <ion-card>
-        <img src="../../assets/img/tv.jpg"/>
-        <ion-card-content>
-            <ion-card-title>
-                 ទូរទស្សន៍
-            </ion-card-title>
-        </ion-card-content>
-        <ion-row no-padding>
-            <ion-col>
-                <button ion-button clear   color="danger" icon-start>
-                    <ion-icon name='ios-bowtie'></ion-icon>
-                    900,000 pts
-                </button>
-            </ion-col>
-        </ion-row>
-
-    </ion-card>
-    <ion-card>
-        <img src="../../assets/img/fridge.jpg"/>
-        <ion-card-content>
-            <ion-card-title>
-                ទូរទឹកកក
-            </ion-card-title>
-        </ion-card-content>
-        <ion-row no-padding>
-            <ion-col>
-                <button ion-button clear   color="danger" icon-start>
-                    <ion-icon name='ios-bowtie'></ion-icon>
-                    600,000 pts
-                </button>
-            </ion-col>
-        </ion-row>
-    </ion-card>
-    <ion-card>
-        <img src="../../assets/img/microwave.jpg"/>
-        <ion-card-content>
-            <ion-card-title>
-                Microwave
-            </ion-card-title>
-        </ion-card-content>
-        <ion-row no-padding>
-            <ion-col>
-                <button ion-button clear  color="danger" icon-start>
-                    <ion-icon name='ios-bowtie'></ion-icon>
-                    100,000 pts
-                </button>
-            </ion-col>
-        </ion-row>
-
     </ion-card>
 </ion-content>

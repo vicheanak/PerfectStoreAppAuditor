@@ -12,9 +12,11 @@ import { Transfer } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
 import { Geolocation } from '@ionic-native/geolocation';
 
+import { SQLitePorter } from '@ionic-native/sqlite-porter';
 
-import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
+
+import { DisplayPage } from '../pages/display/display';
+import { SettingPage } from '../pages/setting/setting';
 import { HomePage, LoginModal } from '../pages/home/home';
 import {RewardsPage} from '../pages/rewards/rewards';
 import { TabsPage } from '../pages/tabs/tabs';
@@ -34,13 +36,16 @@ import { DisplayTypesProvider } from '../providers/display-types/display-types';
 import { StoreTypesProvider } from '../providers/store-types/store-types';
 import { HostNameProvider } from '../providers/host-name/host-name';
 import { ConditionsProvider } from '../providers/conditions/conditions';
+import { UuidProvider } from '../providers/uuid/uuid';
+import { DatabaseProvider } from '../providers/database/database';
+import { RegionProvider } from '../providers/region/region';
 
 
 @NgModule({
   declarations: [
   MyApp,
-  AboutPage,
-  ContactPage,
+  DisplayPage,
+  SettingPage,
   HomePage,
   LoginModal,
   RewardsPage,
@@ -59,8 +64,8 @@ import { ConditionsProvider } from '../providers/conditions/conditions';
   bootstrap: [IonicApp],
   entryComponents: [
   MyApp,
-  AboutPage,
-  ContactPage,
+  DisplayPage,
+  SettingPage,
   HomePage,
   LoginModal,
   RewardsPage,
@@ -87,7 +92,11 @@ import { ConditionsProvider } from '../providers/conditions/conditions';
   DisplayTypesProvider,
   StoreTypesProvider,
   HostNameProvider,
-  ConditionsProvider
+  ConditionsProvider,
+  UuidProvider,
+  DatabaseProvider,
+  SQLitePorter,
+    RegionProvider
   ]
 })
 export class AppModule {}

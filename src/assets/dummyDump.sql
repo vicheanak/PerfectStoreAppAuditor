@@ -1,0 +1,126 @@
+DROP TABLE IF EXISTS STORE_POINTs;
+DROP TABLE IF EXISTS STORE_IMAGEs;
+DROP TABLE IF EXISTS STOREs;
+DROP TABLE IF EXISTS USERs;
+DROP TABLE IF EXISTS DISPLAYs;
+DROP TABLE IF EXISTS DISPLAY_TYPEs;
+DROP TABLE IF EXISTS REGIONs;
+DROP TABLE IF EXISTS REWARDs;
+DROP TABLE IF EXISTS STOREs;
+DROP TABLE IF EXISTS STORE_TYPEs;
+DROP TABLE IF EXISTS STORES_REWARDs;
+DROP TABLE IF EXISTS CONDITIONs;
+
+CREATE TABLE IF NOT EXISTS DISPLAY_TYPEs(
+  id TEXT PRIMARY KEY,
+  name TEXT
+);
+
+CREATE TABLE IF NOT EXISTS STORE_TYPEs(
+  id TEXT PRIMARY KEY,
+  name TEXT
+);
+
+CREATE TABLE IF NOT EXISTS REWARDs(
+  id TEXT PRIMARY KEY,
+  name TEXT,
+  points INTEGER,
+  imageUrl TEXT
+);
+
+CREATE TABLE IF NOT EXISTS REGIONs(
+  id TEXT PRIMARY KEY,
+  name TEXT
+);
+
+CREATE TABLE IF NOT EXISTS USERs(
+  id TEXT PRIMARY KEY,
+  fullname TEXT,
+  username TEXT,
+  phone TEXT,
+  token TEXT,
+  regionIdUsers TEXT,
+  FOREIGN KEY(regionIdUsers) REFERENCES REGIONs(id)
+);
+
+CREATE TABLE IF NOT EXISTS STOREs(
+  id TEXT PRIMARY KEY,
+  uuid TEXT,
+  name TEXT,
+  address TEXT,
+  phone TEXT,
+  lat DECIMAL(10,5),
+  lng DECIMAL(10,5),
+  status BOOLEAN,
+  uploaded BOOLEAN,
+  storeTypeIdStores TEXT,
+  regionIdStores TEXT,
+  FOREIGN KEY(storeTypeIdStores) REFERENCES STORE_TYPEs(id),
+  FOREIGN KEY(regionIdStores) REFERENCES REGIONs(id)
+);
+
+
+CREATE TABLE IF NOT EXISTS DISPLAYs(
+  id TEXT PRIMARY KEY,
+  name TEXT,
+  points INTEGER,
+  imageUrl TEXT,
+  status BOOLEAN,
+  sku BOOLEAN,
+  displayTypeIdDisplays TEXT,
+  storeTypeIdDisplays TEXT,
+  FOREIGN KEY(displayTypeIdDisplays) REFERENCES DISPLAY_TYPEs(id),
+  FOREIGN KEY(storeTypeIdDisplays) REFERENCES STORE_TYPEs(id)
+);
+
+
+CREATE TABLE IF NOT EXISTS CONDITIONs(
+  id TEXT PRIMARY KEY,
+  name TEXT,
+  displayIdConditions TEXT,
+  FOREIGN KEY(displayIdConditions) REFERENCES DISPLAYs(id)
+);
+
+CREATE TABLE IF NOT EXISTS STORE_IMAGEs(
+  id TEXT PRIMARY KEY,
+  imageUrl TEXT,
+  capturedAt TEXT,
+  lat DECIMAL(10,5),
+  lng DECIMAL(10,5),
+  uploaded BOOLEAN,
+  storeIdStoreImages TEXT,
+  FOREIGN KEY(storeIdStoreImages) REFERENCES STORE(id)
+);
+
+CREATE TABLE IF NOT EXISTS STORE_POINTs(
+  id TEXT PRIMARY KEY,
+  uuid TEXT,
+  points INTEGER,
+  imageUrl TEXT,
+  uploaded BOOLEAN,
+  storeIdStorePoints TEXT,
+  userIdStorePoints TEXT,
+  displayIdStorePoints TEXT,
+  storeImageIdStorePoints TEXT,
+  conditionIdStorePoints TEXT,
+  FOREIGN KEY(storeIdStorePoints) REFERENCES STOREs(id),
+  FOREIGN KEY(userIdStorePoints) REFERENCES USERs(id),
+  FOREIGN KEY(displayIdStorePoints) REFERENCES DISPLAYs(id),
+  FOREIGN KEY(storeImageIdStorePoints) REFERENCES STORE_IMAGEs(id),
+  FOREIGN KEY(conditionIdStorePoints) REFERENCES CONDITIONs(id)
+);
+
+CREATE TABLE IF NOT EXISTS STORES_REWARDs(
+  id TEXT PRIMARY KEY,
+  uuid TEXT,
+  status INTEGER,
+  imageUrl TEXT,
+  points INTEGER,
+  deliveriedAt TEXT,
+  uploaded BOOLEAN,
+  storeIdStoresRewards TEXT,
+  rewardIdStoresRewards TEXT,
+  FOREIGN KEY(storeIdStoresRewards) REFERENCES STOREs(id),
+  FOREIGN KEY(rewardIdStoresRewards) REFERENCES REWARDs(id)
+);
+

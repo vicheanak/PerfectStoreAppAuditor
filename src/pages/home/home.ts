@@ -4,6 +4,8 @@ import {UserProvider} from '../../providers/user/user';
 import {UsersStoresProvider} from '../../providers/users-stores/users-stores';
 
 import { Storage } from '@ionic/storage';
+import { DatabaseProvider } from './../../providers/database/database';
+declare var cordova: any;
 
 @Component({
   selector: 'page-home',
@@ -14,6 +16,7 @@ export class HomePage {
   displayName;
   userData: any;
   stores: any[];
+  mymoment: any;
 
 
   constructor(
@@ -22,9 +25,9 @@ export class HomePage {
     public alertCtrl: AlertController,
     public user: UserProvider,
     public usersStores: UsersStoresProvider,
-    private storage: Storage) {
-
-
+    private storage: Storage,
+    private databaseprovider: DatabaseProvider,
+    ) {
     this.storage.get('userdata').then((userdata) => {
       if (userdata){
         this.userData = JSON.parse(userdata);
@@ -33,8 +36,9 @@ export class HomePage {
             this.showLogin();
           }
           else{
-            this.storage.get('usersStores').then((stores) => {
-              this.stores = JSON.parse(stores);
+            this.databaseprovider.getAllStores().then(data => {
+              this.stores = data;
+              console.log('STORES ==> AUTH', this.stores);
             });
           }
         });
@@ -42,6 +46,13 @@ export class HomePage {
       else{
         this.showLogin();
       }
+    });
+  }
+
+  ionViewDidEnter(){
+    this.databaseprovider.getAllStores().then(data => {
+      this.stores = data;
+      console.log('STORES ==> Reenter', this.stores);
     });
   }
 
@@ -59,23 +70,29 @@ export class HomePage {
 
     let modal = this.modalCtrl.create(LoginModal, {userId: '112'});
     modal.onDidDismiss(data => {
-      this.usersStores.getUsersStores(data.id).subscribe((stores)=>{
-        this.stores = stores;
+      console.log('close modal sss', data);
+      // this.usersStores.getUsersStores(data.id).subscribe((stores)=>{
+        //   console.log('close modal', stores);
+        //   this.stores = stores;
+        // });
+        this.databaseprovider.getAllStores().then(data => {
+          this.stores = data;
+          console.log('STORES ==> Close Modal', this.stores);
+        });
       });
-    });
     modal.present();
   }
 
   viewStore(store) {
     this.navCtrl.push('StoreDetailPage', {
-      store: store
+      id: store.id
     });
   }
 
   addPoint(item) {
     console.log('addPoint', item);
     this.navCtrl.push('AddPointPage', {
-      id: item.storeIdUsersStores
+      id: item.id
     });
   }
 

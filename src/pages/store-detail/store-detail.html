@@ -24,7 +24,7 @@
 
   <ion-card-content>
     <ion-list no-lines>
-     <ion-item>
+     <!-- <ion-item>
       សន្សំ
       <span item-end>
         {{storeEarned?.total_earned}} ពិន្ទុ
@@ -35,21 +35,25 @@
       <span item-end>
         {{storeSpent?.total_spent}} ពិន្ទុ
       </span>
-    </ion-item>
-    <ion-item>
-      នៅសល់
+    </ion-item> -->
+    <!-- <ion-item>
+      ពិន្ទុសរុប
       <span item-end>
         {{storeRemaining?.total_remaining}} ពិន្ទុ
       </span>
-    </ion-item>
+    </ion-item> -->
   </ion-list>
 </ion-card-content>
 </ion-card>
 <ion-list>
   <button ion-item (click)="pointDetail(sp)" *ngFor="let sp of storePoints">
     {{sp?.total_points}} ពិន្ទុ
-    <ion-note item-end>{{sp?.STORE_IMAGE?.capturedAt | date:'short'}}</ion-note>
+    <ion-note item-end>{{sp?.capturedAt}}</ion-note>
   </button>
+  <!--  <button ion-item (click)="pointDetail(sp)" *ngFor="let sp of storePoints">
+    {{sp?.total_points}} ពិន្ទុ
+    <ion-note item-end>{{sp?.STORE_IMAGE?.capturedAt | date:'short'}}</ion-note>
+  </button> -->
  <!-- <button ion-item color="{{sp.edit ? '' : 'light'}}" (click)="pointDetail()" *ngFor="let sp of storePoints">
   {{sp?.total_points}} ពិន្ទុ
   <ion-note item-end>{{sp?.STORE_IMAGE?.capturedAt | date:'short'}}</ion-note>

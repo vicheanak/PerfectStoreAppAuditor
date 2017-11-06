@@ -9,10 +9,10 @@
   <ion-card *ngFor="let store of stores">
     <ion-card-content>
       <ion-card-title>
-       {{store?.STORE?.name}}
+       {{store?.name}}
       </ion-card-title>
       <p>
-        {{store?.STORE.STORE_TYPE?.name}}
+        {{store?.storeTypeName}}
       </p>
     </ion-card-content>
     <ion-row no-padding>

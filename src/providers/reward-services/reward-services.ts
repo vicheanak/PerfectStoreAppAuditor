@@ -16,7 +16,9 @@ import {HostNameProvider} from '../../providers/host-name/host-name';
     allRewards() {
       return  this.http.get(this.getApiUrl)
       .map((res : Response ) =>{
-        console.log('map --> ', res.json());
+
+        let result = res.json();
+        return result.records;
       });
     }
 

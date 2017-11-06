@@ -4,30 +4,20 @@ import 'rxjs/add/operator/map';
 import {HostNameProvider} from '../../providers/host-name/host-name';
 
 @Injectable()
-export class DisplayTypesProvider {
+export class RegionProvider {
 
-  getApiUrl : string = this.hostname.get() + "/display_types/";
+  getApiUrl : string = this.hostname.get() + "/regions/";
 
   constructor(public http: Http, public hostname: HostNameProvider) {
 
   }
 
-  allDisplayTypes(){
+  allRegions(){
     this.getApiUrl = this.getApiUrl;
     return  this.http.get(this.getApiUrl)
     .map((res : Response ) =>{
       let data = res.json();
       return data.records;
-    });
-  }
-
-  getDisplayType(id){
-    let getUrl = this.getApiUrl + 'store_types/' + id;
-    console.log('get url', getUrl);
-    return  this.http.get(getUrl)
-    .map((res : Response ) => {
-      let data = res.json();
-      return data;
     });
   }
 
