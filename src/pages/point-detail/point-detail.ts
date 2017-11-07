@@ -104,6 +104,7 @@ import {
    spconditionIdStorePoints: any;
    lat: any;
    lng: any;
+   storeImageParam: any;
 
    constructor(public navCtrl: NavController,
      public alertCtrl: AlertController,
@@ -149,10 +150,11 @@ import {
          }
        });
        // console.log(this.navParams.data);
-       this.storeImageId = this.navParams.data.id;
-       console.log('sotre image id', this.storeImageId);
-       this.databaseprovider.getStoreImage(this.storeImageId).then((data) => {
-
+       this.storeImageParam = this.navParams.data.storeImage;
+       console.log('STORE IMAGE: ', this.storeImageParam);
+       console.log("STORE IMAGE ID: ", this.storeImageParam.storeImageId);
+       this.databaseprovider.getStoreImage(this.storeImageParam.storeImageId).then((data) => {
+         console.log("STORE IMAGE DATA: ", data);
          this.storeImageObj = data[0];
          this.imageUrl = this.storeImageObj.imageUrl;
        });
@@ -171,7 +173,8 @@ import {
          this.storage.get('storeTypes').then((storeTypes) => {
            this.storage.get('displayTypes').then((displayTypes)=>{
              this.storage.get('displays').then((displays) => {
-               this.databaseprovider.getStorePointByStoreImage(this.storeImageId).then((storePointsData) => {
+               this.databaseprovider.getStorePointByStoreImage(this.storeImageParam.storeImageId).then((storePointsData) => {
+                 console.log('STORE_POINT_DATA', storePointsData);
                  this.storeTypesArr = JSON.parse(storeTypes);
                  this.displayTypesArr = JSON.parse(displayTypes);
                  for (let i = 0; i < this.displayTypesArr.length; i ++){
@@ -277,7 +280,7 @@ import {
                   conditionName: data.condition.name,
                   conditionId: data.condition.id,
                   condition: {id: data.condition.name, name: data.condition.name},
-                  capturedAt: moment().format('YYYY-mm-DD hh:mm:ss')
+                  capturedAt: moment().format('YYYY-MM-DD hh:mm:ss')
                };
                this.selectedDisplayType.storeDisplays.push(displayData);
              }
@@ -288,38 +291,7 @@ import {
            }
          });
          modal.present();
-         // this.selectedDisplay = display;
-         // this.selectedDisplayType = dt;
 
-         // this.isNew = false;
-
-         // if (!display.uId){
-         //   this.isNew = true;
-         // }
-
-         // let modal = this.modalCtrl.create(StoreModalComponent, {display: display, isNew: this.isNew});
-         // modal.onDidDismiss((data) => {
-         //   console.log('Data Returned', data);
-         //   if (data){
-         //     if (this.isNew == true){
-         //       const random =  Math.random().toString(36).substr(2, 5)
-         //       const displayData = {
-         //         id: data.id,
-         //         uId: random,
-         //         displayName: this.selectedDisplay.name,
-         //         imageUrl: data.imageUrl,
-         //         points: data.points,
-         //         capturedAt: new Date()
-         //       };
-         //       this.selectedDisplayType.storeDisplays.push(displayData);
-         //     }
-         //     else{
-         //       const storeDisplaysIndex =  this.selectedDisplayType.storeDisplays.findIndex(sd => sd.uId == data.uId);
-         //       this.selectedDisplayType.storeDisplays[storeDisplaysIndex] = data;
-         //     }
-         //   }
-         // });
-         // modal.present();
        }
 
 
@@ -342,12 +314,12 @@ import {
          let id = uuid;
          let imageUrl = sImgTargetPath;
 
-         let capturedAt = moment().format('YYYY-mm-DD hh:mm:ss');
+         let capturedAt = moment().format('YYYY-MM-DD hh:mm:ss');
 
          let lat = this.lat;
          let lng = this.lng;
          let uploaded = false;
-         let storeIdStoreImages = this.store.id;
+         let storeIdStoreImages = this.storeImageParam.storeId;
 
          this.databaseprovider.addStoreImage(id, imageUrl, capturedAt, lat, lng, uploaded, storeIdStoreImages)
          .then(data => {
@@ -355,22 +327,22 @@ import {
            this.successMsg1 = 'Inserted Id ' + data.insertId;
 
            for (let i = 0; i < storeDisplaysList.length; i ++){
-             this.spid = this.uuid.get();
+             this.spid = storeDisplaysList[i].id;
              this.spuuid = storeDisplaysList[i].uuid;
              this.sppoints = storeDisplaysList[i].points;
              this.spimageUrl = storeDisplaysList[i].imageUrl;
              this.spuploaded = false;
-             this.spstoreIdStorePoints = this.store.id;
+             this.spstoreIdStorePoints = this.storeImageParam.storeId;
              this.spuserIdStorePoints = this.user.id;
              this.spdisplayIdStorePoints = storeDisplaysList[i].id;
              this.spstoreImageIdStorePoints = storeImageId;
              this.spconditionIdStorePoints = storeDisplaysList[i].conditionId;
-             let id = this.uuid.get();
+             let id = storeDisplaysList[i].id;
              let uuid = storeDisplaysList[i].uuid;
              let points = storeDisplaysList[i].points;
              let imageUrl = storeDisplaysList[i].imageUrl;
              let uploaded = false;
-             let storeIdStorePoints = this.store.id;
+             let storeIdStorePoints = this.storeImageParam.storeId;
              let userIdStorePoints = this.user.id;
              let displayIdStorePoints = storeDisplaysList[i].id;
              let storeImageIdStorePoints = storeImageId;

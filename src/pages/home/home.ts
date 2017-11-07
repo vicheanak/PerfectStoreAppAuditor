@@ -47,6 +47,7 @@ export class HomePage {
         this.showLogin();
       }
     });
+
   }
 
   ionViewDidEnter(){

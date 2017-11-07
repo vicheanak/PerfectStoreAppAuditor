@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS DISPLAYs(
   points INTEGER,
   imageUrl TEXT,
   status BOOLEAN,
-  sku BOOLEAN,
+  sku TEXT,
   displayTypeIdDisplays TEXT,
   storeTypeIdDisplays TEXT,
   FOREIGN KEY(displayTypeIdDisplays) REFERENCES DISPLAY_TYPEs(id),

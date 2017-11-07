@@ -22,12 +22,13 @@ export class StoreModalComponent {
   points: number = 0;
   loading: Loading;
   readPlatform;
-  display: any;
+  display: any = {};
   maxPoint: any;
   isNew: boolean;
   @ViewChild('imgFile') imgFile;
   conditionList: any;
   sDisplay: any;
+  allDisplays: any;
 
   constructor(
     public camera: Camera,
@@ -48,26 +49,26 @@ export class StoreModalComponent {
     // console.log('Hello StoreModalComponent Component');
     // this.points = 0;
 
-    this.isNew = this.navParams.get("isNew");
-    this.display = this.navParams.get("display");
-    console.log('DISPLAY  MODAL =====> ', this.display);
 
+    this.display.points = 0;
 
     // console.log('Display 1st NavParams', this.display);
   }
 
   ionViewDidLoad() {
+    this.databaseprovider.getAllDisplays().then((allDisplays) => {
+      console.log('ALL DISPLAYS ====> ', allDisplays);
+      this.allDisplays = allDisplays;
+    });
+    this.isNew = this.navParams.data.isNew;
+    this.display = this.navParams.data.display;
+    console.log('DISPLAY  MODAL =====> ', this.display);
     console.log('LOOKING FOR CONDITION add to display.condition =====> ', this.display);
     let getId = this.display.id;
-    // if (!this.isNew){
-    //   getId = this.display.displayTypeId;
-    //   this.display.name = this.display.name;
-    //   this.display.condition = {id: this.display.condition.id, name:this.display.condition.name};
-    // }
     this.databaseprovider.getDisplay(getId).then((sDisplay) => {
+      console.log('ssssssssDISPLAY ===> ', sDisplay[0]);
       this.sDisplay = sDisplay[0];
       this.maxPoint = this.sDisplay.points;
-
       if (this.isNew){
         this.display.points = this.sDisplay.points;
         this.display.sku = this.sDisplay.sku;

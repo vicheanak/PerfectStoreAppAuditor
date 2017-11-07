@@ -18,6 +18,8 @@ export class HostNameProvider {
   get(){
 
     return 'http://192.168.8.104:3000';
+    // return 'http://172.17.96.162:3000';
+    // return 'http://192.168.2.1:3000';
     // return 'http://localhost:3000';
     // return 'https://api.unileverstore.com';
   }

@@ -74,5 +74,56 @@
    <p>{{op}}</p> -->
    <button ion-button round padding block (click)="save()">បញ្ជូន</button>
  </div>
+<!--  <p>
+
+  Success Message 1: {{ successMsg1 }}
+</p>
+<p>
+  Success Message 2: {{ successMsg2 }}
+</p>
+<p>
+  Success Message 3: {{ successMsg3 }}
+</p> -->
+<ion-list>
+  <ion-item>
+    <h2>Store Images</h2>
+  </ion-item>
+ <!--  <ion-item *ngFor="let s of storeImages">
+    <h2>id {{s?.id}}</h2>
+    <h2>filename {{s?.imageUrl}}</h2>
+    <h2>captureAt {{s?.capturedAt}}</h2>
+    <h2>storeId {{s?.storeIdStoreImages}}</h2>
+    <h2>lat {{s?.lat}}</h2>
+    <h2>lng {{s?.lng}}</h2>
+  </ion-item> -->
+</ion-list>
+
+
+<ion-list>
+  <ion-item>
+    <h2>Store Points</h2>
+  </ion-item>
+  <!-- <p>spid ==> {{spid}}</p>
+  <p>spuuid ==> {{spuuid}}</p>
+  <p>sppoints ==> {{sppoints}}</p>
+  <p>spimageUrl ==> {{spimageUrl}}</p>
+  <p>spuploaded ==> {{spuploaded}}</p>
+  <p>spstoreIdStorePoints ==> {{spstoreIdStorePoints}}</p>
+  <p>spuserIdStorePoints ==> {{spuserIdStorePoints}}</p>
+  <p>spdisplayIdStorePoints ==> {{spdisplayIdStorePoints}}</p>
+  <p>spstoreImageIdStorePoints ==> {{spstoreImageIdStorePoints}}</p>
+  <p>spconditionIdStorePoints ==> {{spconditionIdStorePoints}}</p> -->
+  <ion-item *ngFor="let sp of storePoints">
+    <h2>id {{sp?.id}}</h2>
+    <h2>points {{sp?.points}}</h2>
+    <h2>filename {{sp?.imageUrl}}</h2>
+    <h2>storeimageid {{sp?.storeImageId}}</h2>
+    <h2>storeIdStorePoints {{sp?.storeIdStorePoints}}</h2>
+    <h2>userIdStorePoints {{sp?.userIdStorePoints}}</h2>
+    <h2>displayIdStorePoints {{sp?.displayIdStorePoints}}</h2>
+    <h2>storeImageIdStorePoints {{sp?.storeImageIdStorePoints}}</h2>
+    <h2>conditionIdStorePoints {{sp?.conditionIdStorePoints}}</h2>
+  </ion-item>
+</ion-list>
 </ion-content>
 <input type="file" #imgFile style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />

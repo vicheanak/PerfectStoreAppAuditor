@@ -53,8 +53,8 @@ declare var cordova: any;
      console.log('ionViewDidLoad StoreDetailPage');
    }
 
-   pointDetail(id){
-     this.navCtrl.push('PointDetailPage', {id: id});
+   pointDetail(storeImage){
+     this.navCtrl.push('PointDetailPage', {storeImage: storeImage});
    }
 
  }

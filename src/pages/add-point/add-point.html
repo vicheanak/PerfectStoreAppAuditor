@@ -68,7 +68,7 @@
 <!--   <p>{{tp}}</p>
    <p>{{url}}</p>
    <p>{{op}}</p> -->
-   <button ion-button round padding block (click)="save()">បញ្ជូន</button>
+   <button ion-button round padding block [disabled]="!imageUrl" (click)="save()">បញ្ជូន</button>
  </div>
  <p>
 

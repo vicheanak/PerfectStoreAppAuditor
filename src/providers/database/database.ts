@@ -77,6 +77,29 @@ export class DatabaseProvider {
 
   }
 
+  getUploadedStoreImages() {
+    return this.database.executeSql("SELECT * FROM STORE_IMAGEs WHERE uploaded = ?", [false]).then((data) => {
+      let results = [];
+      if (data.rows.length > 0) {
+        for (var i = 0; i < data.rows.length; i++) {
+          results.push({
+            id: data.rows.item(i).id,
+            imageUrl: data.rows.item(i).imageUrl,
+            capturedAt: data.rows.item(i).capturedAt,
+            lat: data.rows.item(i).lat,
+            lng: data.rows.item(i).lng,
+            uploaded: data.rows.item(i).uploaded,
+            storeIdStoreImages: data.rows.item(i).storeIdStoreImages,
+          });
+        }
+      }
+      return results;
+    }, err => {
+      console.log('Error: ', err);
+      return [];
+    });
+  }
+
   getAllStoreImages() {
     return this.database.executeSql("SELECT * FROM STORE_IMAGEs", []).then((data) => {
       let results = [];
@@ -104,21 +127,26 @@ export class DatabaseProvider {
     let data = [id, uuid, points, imageUrl, uploaded, storeIdStorePoints, userIdStorePoints, displayIdStorePoints, storeImageIdStorePoints, conditionIdStorePoints];
     let updateData =[uuid, points, imageUrl, uploaded, storeIdStorePoints, userIdStorePoints, displayIdStorePoints, storeImageIdStorePoints, conditionIdStorePoints, id];
 
-    return this.database.executeSql("UPDATE STORE_POINTs SET uuid = ?, points = ?, imageUrl = ?, uploaded = ?, storeIdStorePoints = ?, userIdStorePoints = ?, displayIdStorePoints = ?, storeImageIdStorePoints = ?, conditionIdStorePoints = ? WHERE id = ?", updateData).then(data1 => {
-      if (data1.rows.rowsAffected){
-        return data1;
-      }
-      else{
-        return this.database.executeSql("INSERT INTO STORE_POINTs (id, uuid, points, imageUrl, uploaded, storeIdStorePoints, userIdStorePoints, displayIdStorePoints, storeImageIdStorePoints, conditionIdStorePoints) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", data).then(data2 => {
-          return data2;
+    return this.database.executeSql("SELECT * FROM STORE_POINTs WHERE id = ?", [id]).then((data3) => {
+      console.log('ADD_STORE_POINT', data3.rows);
+      if (data3.rows.length){
+        return this.database.executeSql("UPDATE STORE_POINTs SET uuid = ?, points = ?, imageUrl = ?, uploaded = ?, storeIdStorePoints = ?, userIdStorePoints = ?, displayIdStorePoints = ?, storeImageIdStorePoints = ?, conditionIdStorePoints = ? WHERE id = ?", updateData).then(data1 => {
+          console.log('UPDATE STORE_POINTs SUCCESS', data1.rows);
+          return data1;
         }, err => {
-          console.log('Error: ', err);
+          console.log('Error Updated: ', err);
           return err;
         });
       }
-    }, err => {
-      console.log('Error: ', err);
-      return err;
+      else{
+        return this.database.executeSql("INSERT INTO STORE_POINTs (id, uuid, points, imageUrl, uploaded, storeIdStorePoints, userIdStorePoints, displayIdStorePoints, storeImageIdStorePoints, conditionIdStorePoints) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", data).then(data2 => {
+          console.log('INSERT STORE_POINTs SUCCESS', data2.rows);
+          return data2;
+        }, err => {
+          console.log('Error Inserted: ', err);
+          return err;
+        });
+      }
     });
   }
 
@@ -149,9 +177,9 @@ export class DatabaseProvider {
   }
 
   getStorePointsSum(id){
-    return this.database.executeSql(`SELECT sp.id, si.capturedAt, si.id as storeImageId, sum(sp.points) as total_points
+    return this.database.executeSql(`SELECT sp.id, si.capturedAt, si.storeIdStoreImages as storeId, si.id as storeImageId, sum(sp.points) as total_points
       FROM STORE_POINTs AS sp INNER JOIN STORE_IMAGEs AS si ON sp.storeImageIdStorePoints = si.id
-      WHERE sp.storeIdStorePoints = ? GROUP BY sp.storeImageIdStorePoints`, [id]).then((data) => {
+      WHERE sp.storeIdStorePoints = ? GROUP BY sp.storeImageIdStorePoints ORDER BY si.capturedAt DESC`, [id]).then((data) => {
         let results = [];
         if (data.rows.length > 0) {
           for (var i = 0; i < data.rows.length; i++) {
@@ -159,7 +187,8 @@ export class DatabaseProvider {
               id: data.rows.item(i).id,
               capturedAt: data.rows.item(i).capturedAt,
               total_points: data.rows.item(i).total_points,
-              storeImageId: data.rows.item(i).storeImageId
+              storeImageId: data.rows.item(i).storeImageId,
+              storeId: data.rows.item(i).storeId
             });
           }
         }
@@ -262,6 +291,7 @@ export class DatabaseProvider {
           return this.database.executeSql(`SELECT s.id, s.name, s.address, st.name as storeTypeName
             FROM STOREs AS s INNER JOIN STORE_TYPEs AS st ON st.id = s.storeTypeIdStores`, []).then((data) => {
               let results = [];
+              console.log('ALL STORES ===> ', data.rows);
               if (data.rows.length > 0) {
                 for (var i = 0; i < data.rows.length; i++) {
                   results.push({

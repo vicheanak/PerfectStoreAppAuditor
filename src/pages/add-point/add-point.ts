@@ -99,6 +99,7 @@ import {
    spdisplayIdStorePoints: any;
    spstoreImageIdStorePoints: any;
    spconditionIdStorePoints: any;
+   isValid: any;
 
    constructor(public navCtrl: NavController,
      public alertCtrl: AlertController,
@@ -269,7 +270,7 @@ import {
                                conditionName: data.condition.name,
                                conditionId: data.condition.id,
                                condition: {id: data.condition.name, name: data.condition.name},
-                               capturedAt: moment().format('YYYY-mm-DD hh:mm:ss')
+                               capturedAt: moment().format('YYYY-MM-DD hh:mm:ss')
                              };
                              this.selectedDisplayType.storeDisplays.push(displayData);
                            }
@@ -301,7 +302,7 @@ import {
                        let id = uuid;
                        let imageUrl = sImgTargetPath;
 
-                       let capturedAt = moment().format('YYYY-mm-DD hh:mm:ss');
+                       let capturedAt = moment().format('YYYY-MM-DD hh:mm:ss');
 
                        let lat = this.lat;
                        let lng = this.lng;

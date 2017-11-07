@@ -39,6 +39,7 @@ import { ConditionsProvider } from '../providers/conditions/conditions';
 import { UuidProvider } from '../providers/uuid/uuid';
 import { DatabaseProvider } from '../providers/database/database';
 import { RegionProvider } from '../providers/region/region';
+import { UploadProvider } from '../providers/upload/upload';
 
 
 @NgModule({
@@ -96,7 +97,8 @@ import { RegionProvider } from '../providers/region/region';
   UuidProvider,
   DatabaseProvider,
   SQLitePorter,
-    RegionProvider
+    RegionProvider,
+    UploadProvider
   ]
 })
 export class AppModule {}

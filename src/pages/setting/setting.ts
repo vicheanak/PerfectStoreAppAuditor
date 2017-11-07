@@ -16,6 +16,7 @@ import {RegionProvider} from '../../providers/region/region';
 import { File } from '@ionic-native/file';
 import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
+import {UploadProvider} from '../../providers/upload/upload';
 declare var cordova: any;
 
 @Component({
@@ -54,6 +55,7 @@ export class SettingPage {
     private file: File,
     private filePath: FilePath,
     private transfer: Transfer,
+    private uploadProvider: UploadProvider
     ) {
     this.storage.get('userdata').then((userdata) => {
       if (userdata){
@@ -157,6 +159,7 @@ export class SettingPage {
 
 
     this.rewardsProvider.allRewards().subscribe((rewards) => {
+      console.log('1. REWARDS SERVER ===> ', rewards);
       let counter = 0;
       rewards.map((i) => {
 
@@ -176,6 +179,7 @@ export class SettingPage {
             counter ++;
             this.msg1 = res;
             if (counter == rewards.length){
+              console.log('1. REWARDS DONE');
               rewardLoad = true;
             }
           });
@@ -188,6 +192,7 @@ export class SettingPage {
     });
 
     this.regionProvider.allRegions().subscribe((regions) => {
+      console.log('2. REGIONS SERVER ===> ', regions);
       let counter = 0;
       regions.map((i) => {
         let id = i.id;
@@ -195,6 +200,7 @@ export class SettingPage {
         this.databaseprovider.addRegion(id, name).then(() => {
           counter ++;
           if (counter == regions.length){
+            console.log('2. REGIONS DONE');
             regionLoad = true;
           }
         });
@@ -202,6 +208,7 @@ export class SettingPage {
     });
 
     this.displayTypesProvider.allDisplayTypes().subscribe((displayTypes) => {
+      console.log('3. DISPLAY_TYPE SERVER ===> ', displayTypes);
       this.storage.set('displayTypes', JSON.stringify(displayTypes));
       let counter = 0;
       displayTypes.map((i) => {
@@ -210,6 +217,7 @@ export class SettingPage {
         this.databaseprovider.addDisplayType(id, name).then(() => {
           counter ++;
           if (counter == displayTypes.length){
+            console.log('3. DISPLAY TYPE DONE');
             displayTypeLoad = true;
           }
         });
@@ -217,6 +225,7 @@ export class SettingPage {
     });
 
     this.storeTypesProvider.allStoreTypes().subscribe((storeTypes) => {
+      console.log('4. STORE TYPE SERVER ===> ', storeTypes);
       this.storage.set('storeTypes', JSON.stringify(storeTypes));
       let counter = 0;
       storeTypes.map((i) => {
@@ -227,6 +236,7 @@ export class SettingPage {
             this.storage.set('DISPLAY_TYPEs_' + id, JSON.stringify(data1)).then(()=>{
               counter ++;
               if (counter == storeTypes.length){
+                console.log('4. STORE TYPES DONE');
                 storeTypeLoad = true;
               }
             });
@@ -236,6 +246,7 @@ export class SettingPage {
     });
 
     this.displaysProvider.allDisplays().subscribe((displays) => {
+      console.log('5. DISPLAYS SERVER ===> ', displays);
       this.storage.set('displays', JSON.stringify(displays));
       let counter = 0;
       displays.map((i) => {
@@ -261,6 +272,7 @@ export class SettingPage {
           this.databaseprovider.addDisplay(id, name, points, entry.toURL(), status, sku, displayTypeIdDisplays, storeTypeIdDisplays).then(() => {
             counter ++;
             if (counter == displays.length){
+              console.log('5. DISPLAY DONE');
               displayLoad = true;
             }
           });
@@ -272,6 +284,7 @@ export class SettingPage {
     });
 
     this.conditionsProvider.all().subscribe((conditions) => {
+      console.log('6. CONDITIONS SERVER ===> ', conditions);
       let counter = 0;
       conditions.map((i) => {
         let id = i.id;
@@ -280,6 +293,7 @@ export class SettingPage {
         this.databaseprovider.addCondition(id, name, displayIdConditions).then(() => {
           counter ++;
           if (counter == conditions.length){
+            console.log('6. CONDITION DONE');
             conditionLoad = true;
           }
         });
@@ -287,6 +301,7 @@ export class SettingPage {
     });
 
     this.usersStoresProvider.getUsersStores(this.userData.id).subscribe((usersStores) => {
+      console.log('7. USER STORE SERVER ===> ', usersStores);
       this.storage.set('usersStores', JSON.stringify(usersStores)).then(()=>{
         let countArr = 0;
         usersStores.map(i => {
@@ -304,6 +319,7 @@ export class SettingPage {
             this.databaseprovider.addStore(id,name,address,phone,lat,lng,status,uploaded,storeTypeIdStores,regionIdStores).then(() => {
               countArr ++;
               if (countArr == usersStores.length){
+                console.log('7. USER STORE DONE');
                 userStoreLoad = true;
               }
             });
@@ -330,8 +346,24 @@ export class SettingPage {
   }
 
   push(){
+    this.databaseprovider.getUploadedStoreImages().then((storeImages) => {
+      let imageUrls = [];
+      storeImages.map(i => {
+        imageUrls.push(i.imageUrl);
+      });
+      this.uploadProvider.upload(imageUrls).subscribe((data) => {
+        console.log('SUCCESS UPLOAD ===> ', data);
+      }, (error) => {
+        console.log('ERROR OBSERVABLE ==> ', error.http_status);
+        console.log('ERROR OBSERVABLE ==> ', error);
+        if (error.http_status){
+          console.log('SUCCESS UPLOAD');
+        }
+      });
+    });
 
   }
+
 
   logout(){
     this.loading = this.loadingCtrl.create({

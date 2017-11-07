@@ -102,4 +102,8 @@
     <plugin name="uk.co.workingedge.cordova.plugin.sqliteporter" spec="^1.0.2" />
     <plugin name="cordova-sqlite-storage" spec="^2.0.4" />
     <allow-navigation href="http://192.168.8.104:8100" />
+    <allow-navigation href="http://172.17.96.162:8100" />
+    <allow-navigation href="http://192.168.2.1:8100" />
+    <allow-navigation href="http://192.168.3.1:8100" />
+    <preference name="loadUrlTimeoutValue" value="700000" />
 </widget>
