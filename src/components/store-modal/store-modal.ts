@@ -7,6 +7,7 @@ import { FilePath } from '@ionic-native/file-path';
 import {StorePointServicesProvider} from '../../providers/store-point-services/store-point-services';
 import {DisplaysProvider} from '../../providers/displays/displays';
 import {ConditionsProvider} from '../../providers/conditions/conditions';
+import { DatabaseProvider } from './../../providers/database/database';
 
 declare var cordova: any;
 
@@ -26,6 +27,7 @@ export class StoreModalComponent {
   isNew: boolean;
   @ViewChild('imgFile') imgFile;
   conditionList: any;
+  sDisplay: any;
 
   constructor(
     public camera: Camera,
@@ -40,32 +42,43 @@ export class StoreModalComponent {
     private transfer: Transfer,
     private navParams: NavParams,
     public displays: DisplaysProvider,
-    public conditions: ConditionsProvider
+    public conditions: ConditionsProvider,
+    public databaseprovider: DatabaseProvider
     ) {
     // console.log('Hello StoreModalComponent Component');
     // this.points = 0;
 
     this.isNew = this.navParams.get("isNew");
     this.display = this.navParams.get("display");
+    console.log('DISPLAY  MODAL =====> ', this.display);
 
 
     // console.log('Display 1st NavParams', this.display);
   }
 
   ionViewDidLoad() {
-    // console.log('this.display.id', this.display.id);
-    this.displays.getDisplay(this.display.id).subscribe((sDisplay) => {
-      // console.log('Displays From Local ===> ', sDisplay);
-      this.maxPoint = sDisplay.points;
+    console.log('LOOKING FOR CONDITION add to display.condition =====> ', this.display);
+    let getId = this.display.id;
+    // if (!this.isNew){
+    //   getId = this.display.displayTypeId;
+    //   this.display.name = this.display.name;
+    //   this.display.condition = {id: this.display.condition.id, name:this.display.condition.name};
+    // }
+    this.databaseprovider.getDisplay(getId).then((sDisplay) => {
+      this.sDisplay = sDisplay[0];
+      this.maxPoint = this.sDisplay.points;
+
       if (this.isNew){
-        this.display.points = sDisplay.points;
-        this.display.sku = sDisplay.sku;
+        this.display.points = this.sDisplay.points;
+        this.display.sku = this.sDisplay.sku;
         this.display.imageUrl = '';
       }
     });
-    this.conditions.allByDisplay(this.display.id).subscribe((conditions) => {
+
+    this.databaseprovider.getConditionByDisplayId(getId).then((conditions) => {
       this.conditionList = conditions;
     });
+
   }
 
   processWebImage(event) {

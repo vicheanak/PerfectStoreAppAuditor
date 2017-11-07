@@ -253,7 +253,7 @@ import {
 
                        let modal = this.modalCtrl.create(StoreModalComponent, {display: display, isNew: this.isNew});
                        modal.onDidDismiss((data) => {
-                         console.log('Data Returned', data);
+                         console.log('DATA RETURNED ======> ', data);
                          if (data){
                            // console.log('condition id', data.condition.id);
                            // console.log('condition name', data.condition.name);
@@ -263,10 +263,12 @@ import {
                                id: data.id,
                                uuid: this.uuid.get(),
                                displayName: this.selectedDisplay.name,
+                               name: this.selectedDisplay.name,
                                imageUrl: data.imageUrl,
                                points: data.points,
                                conditionName: data.condition.name,
                                conditionId: data.condition.id,
+                               condition: {id: data.condition.name, name: data.condition.name},
                                capturedAt: moment().format('YYYY-mm-DD hh:mm:ss')
                              };
                              this.selectedDisplayType.storeDisplays.push(displayData);
@@ -289,12 +291,12 @@ import {
                        let optionLists = [];
                        this.displayTypesArr.map((dt) => {
                          dt.storeDisplays.map((d) => {
-                           targetPaths.push(this.pathForImage(d.imageUrl));
+                           targetPaths.push(d.imageUrl);
                            storeDisplaysList.push(d);
                          })
                        });
 
-                       var sImgTargetPath = this.pathForImage(this.imageUrl);
+                       var sImgTargetPath = this.imageUrl;
 
                        let id = uuid;
                        let imageUrl = sImgTargetPath;
@@ -605,7 +607,7 @@ import {
                                                                var url = "https://api.unilever.store/store_points_upload";
 
                                                                // File for Upload
-                                                               var targetPath = this.pathForImage(this.imageUrl);
+                                                               var targetPath = this.imageUrl;
 
                                                                // File name only
                                                                var filename = this.imageUrl;

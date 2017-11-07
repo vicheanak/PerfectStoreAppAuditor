@@ -12,10 +12,10 @@
   <ion-card>
 
     <ion-card-header>
-      {{store?.name}} - {{store?.STORE_TYPE.name}}
+      {{storeImageObj?.name}}
     </ion-card-header>
-    <img [src]="byPass(imageUrl)" *ngIf="imageUrl" (click)="getPicture()">
-    <!-- <img src="{{pathForImage(imageUrl)}}" *ngIf="imageUrl" (click)="getPicture()"> -->
+    <!-- <img [src]="byPass(imageUrl)" *ngIf="imageUrl" (click)="getPicture()"> -->
+    <img src="{{imageUrl}}" *ngIf="imageUrl" (click)="getPicture()">
     <div padding class="flex-container" *ngIf="imageUrl == null">
       <button color="light" class="flex-center" ion-button icon-start round padding icon-only (click)="getPicture()">
        <ion-icon name="camera"></ion-icon>
@@ -33,22 +33,26 @@
 
   <ion-card *ngFor="let store of dt.storeDisplays">
     <ion-item>
-      {{store?.DISPLAY.name}}
+      {{store?.displayName}}
+      <button item-end ion-button small round icon-only color="primary" (click)="showDisplayModal(store, dt)">
+        <ion-icon name="md-create"></ion-icon>
+      </button>
       <button item-end ion-button small round icon-only color="danger" (click)="remove(dt, store)">
         <ion-icon name="md-close"></ion-icon>
       </button>
+
     </ion-item>
 
 
-    <img [src]="byPass(store?.imageUrl)" (click)="showDisplayModal(store)">
-    <!-- <img src="{{pathForImage(store?.imageUrl)}}" (click)="showDisplayModal(store)"> -->
+    <!-- <img [src]="byPass(store?.imageUrl)" (click)="showDisplayModal(store)"> -->
+    <img src="{{pathForImage(store?.imageUrl)}}" (click)="showDisplayModal(store, dt)">
     <!-- <img src="{{store?.imageUrl}}" (click)="showDisplayModal(store, dt)"> -->
     <ion-item>
       <div padding class="flex-container">
         <h1 class="points" color="flex-center">{{store?.points}} ពិន្ទុ</h1>
       </div>
       <div padding class="flex-container">
-        <h2 class="points" color="flex-center">{{store?.CONDITION.name}}</h2>
+        <h2 class="points" color="flex-center">{{store?.condition.name}}</h2>
       </div>
     </ion-item>
 

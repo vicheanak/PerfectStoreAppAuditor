@@ -34,18 +34,21 @@
   <ion-card *ngFor="let store of dt.storeDisplays">
     <ion-item>
       {{store?.displayName}}
+      <button item-end ion-button small round icon-only color="primary" (click)="showDisplayModal(store, dt)">
+        <ion-icon name="md-create"></ion-icon>
+      </button>
       <button item-end ion-button small round icon-only color="danger" (click)="remove(dt, store)">
         <ion-icon name="md-close"></ion-icon>
       </button>
     </ion-item>
-    <img src="{{pathForImage(store?.imageUrl)}}" (click)="showDisplayModal(store)">
+    <img src="{{store?.imageUrl}}" (click)="showDisplayModal(store, dt)">
     <!-- <img src="{{store?.imageUrl}}" (click)="showDisplayModal(store, dt)"> -->
     <ion-item>
       <div padding class="flex-container">
         <h1 class="points" color="flex-center">{{store?.points}} ពិន្ទុ</h1>
       </div>
       <div padding class="flex-container">
-        <h2 class="points" color="flex-center">{{store?.conditionName}}</h2>
+        <h2 class="points" color="flex-center">{{store?.condition.name}}</h2>
       </div>
     </ion-item>
 

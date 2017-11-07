@@ -53,8 +53,8 @@ declare var cordova: any;
      console.log('ionViewDidLoad StoreDetailPage');
    }
 
-   pointDetail(sp){
-     this.navCtrl.push('PointDetailPage', {sp: sp});
+   pointDetail(id){
+     this.navCtrl.push('PointDetailPage', {id: id});
    }
 
  }

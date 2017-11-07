@@ -31,6 +31,10 @@ import {
   import {Http, Response} from '@angular/http';
   import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
   import {HostNameProvider} from '../../providers/host-name/host-name';
+  import moment from 'moment';
+  import { DatabaseProvider } from './../../providers/database/database';
+  import {UuidProvider} from '../../providers/uuid/uuid';
+
 /**
  * Generated class for the AddPointPage page.
  *
@@ -70,12 +74,36 @@ import {
    url:any;
    op: any;
    storePointsList: any;
-
+   storeImageId: any;
 
    storeDisplays: any[];
 
    alerts = [];
    storePoint: any;
+   storeImageObj: any;
+
+   storePointId: any;
+
+   successMsg1: any;
+   successMsg2: any;
+   successMsg3: any;
+
+   storeImages: any = [];
+   storePoints: any = [];
+
+
+   spid: any;
+   spuuid: any;
+   sppoints: any;
+   spimageUrl: any;
+   spuploaded: any;
+   spstoreIdStorePoints: any;
+   spuserIdStorePoints: any;
+   spdisplayIdStorePoints: any;
+   spstoreImageIdStorePoints: any;
+   spconditionIdStorePoints: any;
+   lat: any;
+   lng: any;
 
    constructor(public navCtrl: NavController,
      public alertCtrl: AlertController,
@@ -99,7 +127,9 @@ import {
      private transfer: Transfer,
      public http: Http,
      private _sanitizer: DomSanitizer,
-     private hostname: HostNameProvider
+     private hostname: HostNameProvider,
+     public databaseprovider: DatabaseProvider,
+     public uuid: UuidProvider
      ) {
      // this.storage.clear();
      this.storeDisplays = [];
@@ -119,357 +149,501 @@ import {
          }
        });
        // console.log(this.navParams.data);
-       this.storePoint = this.navParams.data.sp;
+       this.storeImageId = this.navParams.data.id;
+       console.log('sotre image id', this.storeImageId);
+       this.databaseprovider.getStoreImage(this.storeImageId).then((data) => {
+
+         this.storeImageObj = data[0];
+         this.imageUrl = this.storeImageObj.imageUrl;
+       });
 
        // console.log(this.storePoint.STORE_IMAGE.imageUrl);
-       this.imageUrl = this.storePoint.STORE_IMAGE.imageUrl;
-       this.storeId = 1;
-       // console.log(this.storeId);
-       this.stores.getStore(this.storeId).subscribe((store) => {
-         this.store = store;
-         console.log(this.store);
-       });
-     }
 
-     storeData(){
-       this.storeTypes.allStoreTypes().subscribe((storeTypes) => {
-         this.displayTypes.allDisplayTypes().subscribe((displayTypes)=>{
-           this.displays.allDisplays().subscribe((displays) => {
-             this.storePointsServices.getStorePointsByStore(this.storePoint.storeImageIdStorePoints).subscribe((storePointsData) =>
-             {
-               // this.storePointsList = storePointsData;
-               this.storeTypesArr = storeTypes;
-               this.displayTypesArr = displayTypes;
-               for (let i = 0; i < displayTypes.length; i ++){
-                 this.displayTypesArr[i]['storeDisplays'] = [];
-                  for (let j = 0; j < storePointsData.length; j ++){
-                    // console.log('display type id', storePointsData[j]['DISPLAY']['displayTypeIdDisplays']);
-                    // console.log('this dis type', this.displayTypesArr[i].id);
-                    if (storePointsData[j]['DISPLAY']['displayTypeIdDisplays']==this.displayTypesArr[i].id){
-                      // console.log(storePointsData[j]);
-                      this.displayTypesArr[i]['storeDisplays'].push(storePointsData[j]);
-                      // console.log(this.storePointsList[j]);
-                    }
-                  }
-               }
+       // this.storeId = this.storePoint.storeId;
+       // console.log(this.storeId);
+       // this.stores.getStore(this.storeId).subscribe((store) => {
+         //   this.store = store;
+         //   console.log(this.store);
+         // });
+       }
+
+       storeData(){
+         this.storage.get('storeTypes').then((storeTypes) => {
+           this.storage.get('displayTypes').then((displayTypes)=>{
+             this.storage.get('displays').then((displays) => {
+               this.databaseprovider.getStorePointByStoreImage(this.storeImageId).then((storePointsData) => {
+                 this.storeTypesArr = JSON.parse(storeTypes);
+                 this.displayTypesArr = JSON.parse(displayTypes);
+                 for (let i = 0; i < this.displayTypesArr.length; i ++){
+                   this.displayTypesArr[i]['storeDisplays'] = [];
+                   for (let j = 0; j < storePointsData.length; j ++){
+                     if (storePointsData[j]['displayTypeId']==this.displayTypesArr[i].id){
+                       this.displayTypesArr[i]['storeDisplays'].push(storePointsData[j]);
+                       console.log('storeDisplays ===> ', this.displayTypesArr[i]['storeDisplays'][j]);
+                     }
+                   }
+                 }
+               });
                this.displaysArr = displays;
              });
-
            });
          });
-       });
-     }
+         // this.storeTypes.allStoreTypes().subscribe((storeTypes) => {
+         //   this.displayTypes.allDisplayTypes().subscribe((displayTypes)=>{
+         //     this.displays.allDisplays().subscribe((displays) => {
+         //       this.storePointsServices.getStorePointsByStore(this.storePoint.storeImageIdStorePoints).subscribe((storePointsData) =>
+         //       {
+         //         this.storeTypesArr = storeTypes;
+         //         this.displayTypesArr = displayTypes;
+         //         for (let i = 0; i < displayTypes.length; i ++){
+         //           this.displayTypesArr[i]['storeDisplays'] = [];
+         //           for (let j = 0; j < storePointsData.length; j ++){
+         //             // console.log('display type id', storePointsData[j]['DISPLAY']['displayTypeIdDisplays']);
+         //             // console.log('this dis type', this.displayTypesArr[i].id);
+         //             if (storePointsData[j]['DISPLAY']['displayTypeIdDisplays']==this.displayTypesArr[i].id){
+         //               // console.log(storePointsData[j]);
+         //               this.displayTypesArr[i]['storeDisplays'].push(storePointsData[j]);
+         //               // console.log(this.storePointsList[j]);
+         //             }
+         //           }
+         //         }
+         //         this.displaysArr = displays;
+         //       });
 
-     ionViewDidEnter(){
+         //     });
+         //   });
+         // });
+       }
 
-     }
+       ionViewDidEnter(){
 
-     remove(dt, d){
-       const storeDisplaysIndex = dt.storeDisplays.findIndex(sd => sd.uId == d.uId);
-       dt.storeDisplays.splice(storeDisplaysIndex, 1);
-     }
+       }
 
-     showActionSheet(dt){
-       let buttonOptions = [];
-       this.selectedDisplayType = dt;
-       for (let d of dt.DISPLAYs){
+       remove(dt, d){
+         const storeDisplaysIndex = dt.storeDisplays.findIndex(sd => sd.uId == d.uId);
+         dt.storeDisplays.splice(storeDisplaysIndex, 1);
+       }
+
+       showActionSheet(dt){
+         let buttonOptions = [];
+         this.selectedDisplayType = dt;
+         for (let d of dt.DISPLAYs){
+           buttonOptions.push({
+             text: d.name,
+             handler: () => {
+               this.showDisplayModal(d, dt);
+             }
+           });
+         }
+
          buttonOptions.push({
-           text: d.name,
-           handler: () => {
-             this.showDisplayModal(d, dt);
-           }
+           text: 'បិទផ្ទាំង',
+           role: 'cancel'
          });
-       }
 
-       buttonOptions.push({
-         text: 'បិទផ្ទាំង',
-         role: 'cancel'
-       });
-
-       let actionSheet = this.actionSheetCtrl.create({
-         title: 'ជ្រើសរើសឈុត',
-         buttons: buttonOptions
-       });
-
-       actionSheet.present();
-     }
-
-     showDisplayModal(display, dt){
-       this.selectedDisplay = display;
-       this.selectedDisplayType = dt;
-
-       this.isNew = false;
-
-       if (!display.uId){
-         this.isNew = true;
-       }
-
-       let modal = this.modalCtrl.create(StoreModalComponent, {display: display, isNew: this.isNew});
-       modal.onDidDismiss((data) => {
-         console.log('Data Returned', data);
-         if (data){
-           if (this.isNew == true){
-             const random =  Math.random().toString(36).substr(2, 5)
-             const displayData = {
-               id: data.id,
-               uId: random,
-               displayName: this.selectedDisplay.name,
-               imageUrl: data.imageUrl,
-               points: data.points,
-               capturedAt: new Date()
-             };
-             this.selectedDisplayType.storeDisplays.push(displayData);
-           }
-           else{
-             const storeDisplaysIndex =  this.selectedDisplayType.storeDisplays.findIndex(sd => sd.uId == data.uId);
-             this.selectedDisplayType.storeDisplays[storeDisplaysIndex] = data;
-           }
-         }
-       });
-       modal.present();
-     }
-
-     save(){
-       this.loading = this.loadingCtrl.create({
-         content: 'បញ្ជូនទិន្ន័យ',
-       });
-
-       // Destination URL
-
-       var url = this.hostname.get() + "/store_points_upload/";
-
-       let targetPaths = [];
-       let storeDisplaysList = [];
-       let optionLists = [];
-       this.displayTypesArr.map((dt) => {
-         dt.storeDisplays.map((st) => {
-           targetPaths.push(this.pathForImage(st.imageUrl));
-           storeDisplaysList.push(st);
-           optionLists.push({
-             fileKey: 'file',
-             fileName: st.imageUrl,
-             chunkedMode: false,
-             mimeType: "multipart/form-data",
-             params : {'fileName': st.imageUrl}
-           })
-         })
-       })
-
-       const fileTransfer: TransferObject = this.transfer.create();
-
-       let uploadArr = [];
-       for (let i = 0; i < targetPaths.length; i ++){
-         uploadArr.push({
-           targetPath: targetPaths[i],
-           url: url,
-           option: optionLists[i],
-           displays: storeDisplaysList[i]
-         });
-       }
-
-
-
-       var sImgTargetPath = this.pathForImage(this.imageUrl);
-
-       // File name only
-       var sImgFilename = this.imageUrl;
-
-       var sImgOptions = {
-         fileKey: "file",
-         fileName: sImgFilename,
-         chunkedMode: false,
-         mimeType: "multipart/form-data",
-         params : {'fileName': sImgFilename}
-       };
-
-       fileTransfer.upload(sImgTargetPath, url, sImgOptions).then(success => {
-         this.tp = 'upload success';
-         this.op = this.user.id;
-         let simgData = {
-           fileName: sImgFilename,
-           storeIdStoreImages: this.storeId
-         };
-         this.storeImage.createStoreImage(simgData).subscribe((simgRes) => {
-           console.log('Store Image ID ==> ', );
-           this.url = simgRes.id;
-
-
-           Observable.forkJoin(
-             uploadArr.map(i => fileTransfer.upload(i.targetPath, url, i.option).then(data => {
-               let sdata = {
-                 points:  i.displays.points,
-                 uId: i.displays.uId,
-                 fileName: i.option.fileName,
-                 storeIdStorePoints: this.storeId,
-                 userIdStorePoints: this.user.id,
-                 displayIdStorePoints: i.displays.id,
-                 storeImageIdStorePoints: simgRes.id
-               };
-               this.storePointsServices.createStorePoints(sdata).subscribe((sdata)=> {
-
-               });
-             }))
-             ).subscribe((res) => {
-               this.loading.dismissAll();
-               this.presentToast('Image succesful uploaded.');
-             });
-
-           });
-       }, err => {
-
-       });
-
-     }
-
-     processWebImage(event) {
-       let reader = new FileReader();
-       reader.onload = (readerEvent) => {
-         let imageData = (readerEvent.target as any).result;
-         this.imageUrl = imageData;
-       };
-       reader.readAsDataURL(event.target.files[0]);
-     }
-
-     getPicture() {
-       if (Camera['installed']()) {
          let actionSheet = this.actionSheetCtrl.create({
-           title: 'ជ្រើសរើសប្រភពរូបភាព',
-           buttons: [
-           {
-             text: 'ពីរូបទូរស័ព្ទ',
-             handler: () => {
-               this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY);
-             }
-           },
-           {
-             text: 'ពីកាមេរ៉ា',
-             handler: () => {
-               this.takePicture(this.camera.PictureSourceType.CAMERA);
-             }
-           },
-           {
-             text: 'បោះបង់',
-             role: 'cancel'
-           }
-           ]
+           title: 'ជ្រើសរើសឈុត',
+           buttons: buttonOptions
          });
+
          actionSheet.present();
-       } else {
-         this.imgFile.nativeElement.click();
        }
-     }
 
-     public takePicture(sourceType) {
-       // Create options for the Camera Dialog
-       var options = {
-         quality: 50,
-         sourceType: sourceType,
-         saveToPhotoAlbum: true,
-         correctOrientation: true,
-         destinationType: this.camera.DestinationType.FILE_URI
-       };
+       showDisplayModal(display, dt){
+         this.selectedDisplay = display;
+         this.selectedDisplayType = dt;
 
-       this.camera.getPicture(options).then((imagePath) => {
-         // this.imgSrc = 'data:image/jpg;base64,' + imageData;
-         if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
-           this.readPlatform = 'android';
-           this.filePath.resolveNativePath(imagePath)
-           .then(filePath => {
-             let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
-             let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
-             this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
-           });
-         } else {
-           this.readPlatform = 'other';
-           var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
-           var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-           this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
+         this.isNew = false;
+
+         console.log('CHECK UUID DISPLAY ==> ', display);
+
+         if (!display.uuid){
+           this.isNew = true;
          }
-       }, (err) => {
-         this.presentToast('Error while selecting image.');
-       });
-     }
 
+         let modal = this.modalCtrl.create(StoreModalComponent, {display: display, isNew: this.isNew});
+         modal.onDidDismiss((data) => {
+           console.log('Data Returned', data);
+           if (data){
+             // console.log('condition id', data.condition.id);
+             // console.log('condition name', data.condition.name);
+             if (this.isNew == true){
+               const displayData = {
+                  id: data.id,
+                  uuid: this.uuid.get(),
+                  displayName: this.selectedDisplay.name,
+                  imageUrl: data.imageUrl,
+                  points: data.points,
+                  conditionName: data.condition.name,
+                  conditionId: data.condition.id,
+                  condition: {id: data.condition.name, name: data.condition.name},
+                  capturedAt: moment().format('YYYY-mm-DD hh:mm:ss')
+               };
+               this.selectedDisplayType.storeDisplays.push(displayData);
+             }
+             else{
+               const storeDisplaysIndex =  this.selectedDisplayType.storeDisplays.findIndex(sd => sd.uuid == data.uuid);
+               this.selectedDisplayType.storeDisplays[storeDisplaysIndex] = data;
+             }
+           }
+         });
+         modal.present();
+         // this.selectedDisplay = display;
+         // this.selectedDisplayType = dt;
 
-     // Create a new name for the image
-     private createFileName() {
-       var d = new Date(),
-       n = d.getTime(),
-       newFileName =  n + ".jpg";
-       return newFileName;
-     }
+         // this.isNew = false;
 
-     // Copy the image to a local folder
-     private copyFileToLocalDir(namePath, currentName, newFileName) {
-       this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
-         this.imageUrl = newFileName;
-       }, error => {
-         this.presentToast('Error while storing file.');
-       });
-     }
+         // if (!display.uId){
+         //   this.isNew = true;
+         // }
 
-     // Always get the accurate path to your apps folder
-     public pathForImage(img) {
-       if (img === null) {
-         return '';
-       } else {
-         return cordova.file.dataDirectory + img;
+         // let modal = this.modalCtrl.create(StoreModalComponent, {display: display, isNew: this.isNew});
+         // modal.onDidDismiss((data) => {
+         //   console.log('Data Returned', data);
+         //   if (data){
+         //     if (this.isNew == true){
+         //       const random =  Math.random().toString(36).substr(2, 5)
+         //       const displayData = {
+         //         id: data.id,
+         //         uId: random,
+         //         displayName: this.selectedDisplay.name,
+         //         imageUrl: data.imageUrl,
+         //         points: data.points,
+         //         capturedAt: new Date()
+         //       };
+         //       this.selectedDisplayType.storeDisplays.push(displayData);
+         //     }
+         //     else{
+         //       const storeDisplaysIndex =  this.selectedDisplayType.storeDisplays.findIndex(sd => sd.uId == data.uId);
+         //       this.selectedDisplayType.storeDisplays[storeDisplaysIndex] = data;
+         //     }
+         //   }
+         // });
+         // modal.present();
        }
+
+
+       save(){
+
+         let uuid = this.uuid.get();
+
+         let targetPaths = [];
+         let storeDisplaysList = [];
+         let optionLists = [];
+         this.displayTypesArr.map((dt) => {
+           dt.storeDisplays.map((d) => {
+             targetPaths.push(d.imageUrl);
+             storeDisplaysList.push(d);
+           })
+         });
+
+         var sImgTargetPath = this.imageUrl;
+
+         let id = uuid;
+         let imageUrl = sImgTargetPath;
+
+         let capturedAt = moment().format('YYYY-mm-DD hh:mm:ss');
+
+         let lat = this.lat;
+         let lng = this.lng;
+         let uploaded = false;
+         let storeIdStoreImages = this.store.id;
+
+         this.databaseprovider.addStoreImage(id, imageUrl, capturedAt, lat, lng, uploaded, storeIdStoreImages)
+         .then(data => {
+           let storeImageId = id;
+           this.successMsg1 = 'Inserted Id ' + data.insertId;
+
+           for (let i = 0; i < storeDisplaysList.length; i ++){
+             this.spid = this.uuid.get();
+             this.spuuid = storeDisplaysList[i].uuid;
+             this.sppoints = storeDisplaysList[i].points;
+             this.spimageUrl = storeDisplaysList[i].imageUrl;
+             this.spuploaded = false;
+             this.spstoreIdStorePoints = this.store.id;
+             this.spuserIdStorePoints = this.user.id;
+             this.spdisplayIdStorePoints = storeDisplaysList[i].id;
+             this.spstoreImageIdStorePoints = storeImageId;
+             this.spconditionIdStorePoints = storeDisplaysList[i].conditionId;
+             let id = this.uuid.get();
+             let uuid = storeDisplaysList[i].uuid;
+             let points = storeDisplaysList[i].points;
+             let imageUrl = storeDisplaysList[i].imageUrl;
+             let uploaded = false;
+             let storeIdStorePoints = this.store.id;
+             let userIdStorePoints = this.user.id;
+             let displayIdStorePoints = storeDisplaysList[i].id;
+             let storeImageIdStorePoints = storeImageId;
+             let conditionIdStorePoints = storeDisplaysList[i].conditionId;
+
+             this.databaseprovider.addStorePoint(
+               id,
+               uuid,
+               points,
+               imageUrl,
+               uploaded,
+               storeIdStorePoints,
+               userIdStorePoints,
+               displayIdStorePoints,
+               storeImageIdStorePoints,
+               conditionIdStorePoints
+               ).then(() => {
+                 this.databaseprovider.getAllStorePoints().then(data1 => {
+                   this.storePoints = data1;
+                   this.successMsg3 = 'getAllStorePoints ==> ' + data1[data1.length - 1];
+                 });
+                 this.databaseprovider.getAllStoreImages().then(data2 => {
+                   this.storeImages = data2;
+                   this.successMsg2 = 'getAllStoreImages ==> ' + data2[data2.length - 1].capturedAt;
+                 });
+               });
+             }
+           });
+
+
+       }
+
+       // save(){
+       //   this.loading = this.loadingCtrl.create({
+       //     content: 'បញ្ជូនទិន្ន័យ',
+       //   });
+
+       //   // Destination URL
+
+       //   var url = this.hostname.get() + "/store_points_upload/";
+
+       //   let targetPaths = [];
+       //   let storeDisplaysList = [];
+       //   let optionLists = [];
+       //   this.displayTypesArr.map((dt) => {
+       //     dt.storeDisplays.map((st) => {
+       //       targetPaths.push(this.pathForImage(st.imageUrl));
+       //       storeDisplaysList.push(st);
+       //       optionLists.push({
+       //         fileKey: 'file',
+       //         fileName: st.imageUrl,
+       //         chunkedMode: false,
+       //         mimeType: "multipart/form-data",
+       //         params : {'fileName': st.imageUrl}
+       //       })
+       //     })
+       //   })
+
+       //   const fileTransfer: TransferObject = this.transfer.create();
+
+       //   let uploadArr = [];
+       //   for (let i = 0; i < targetPaths.length; i ++){
+       //     uploadArr.push({
+       //       targetPath: targetPaths[i],
+       //       url: url,
+       //       option: optionLists[i],
+       //       displays: storeDisplaysList[i]
+       //     });
+       //   }
+
+
+
+       //   var sImgTargetPath = this.pathForImage(this.imageUrl);
+
+       //   // File name only
+       //   var sImgFilename = this.imageUrl;
+
+       //   var sImgOptions = {
+       //     fileKey: "file",
+       //     fileName: sImgFilename,
+       //     chunkedMode: false,
+       //     mimeType: "multipart/form-data",
+       //     params : {'fileName': sImgFilename}
+       //   };
+
+       //   fileTransfer.upload(sImgTargetPath, url, sImgOptions).then(success => {
+       //     this.tp = 'upload success';
+       //     this.op = this.user.id;
+       //     let simgData = {
+       //       fileName: sImgFilename,
+       //       storeIdStoreImages: this.storeId
+       //     };
+       //     this.storeImage.createStoreImage(simgData).subscribe((simgRes) => {
+       //       console.log('Store Image ID ==> ', );
+       //       this.url = simgRes.id;
+
+
+       //       Observable.forkJoin(
+       //         uploadArr.map(i => fileTransfer.upload(i.targetPath, url, i.option).then(data => {
+       //           let sdata = {
+       //             points:  i.displays.points,
+       //             uId: i.displays.uId,
+       //             fileName: i.option.fileName,
+       //             storeIdStorePoints: this.storeId,
+       //             userIdStorePoints: this.user.id,
+       //             displayIdStorePoints: i.displays.id,
+       //             storeImageIdStorePoints: simgRes.id
+       //           };
+       //           this.storePointsServices.createStorePoints(sdata).subscribe((sdata)=> {
+
+       //           });
+       //         }))
+       //         ).subscribe((res) => {
+       //           this.loading.dismissAll();
+       //           this.presentToast('Image succesful uploaded.');
+       //         });
+
+       //       });
+       //   }, err => {
+
+       //   });
+
+       // }
+
+       processWebImage(event) {
+         let reader = new FileReader();
+         reader.onload = (readerEvent) => {
+           let imageData = (readerEvent.target as any).result;
+           this.imageUrl = imageData;
+         };
+         reader.readAsDataURL(event.target.files[0]);
+       }
+
+       getPicture() {
+         if (Camera['installed']()) {
+           let actionSheet = this.actionSheetCtrl.create({
+             title: 'ជ្រើសរើសប្រភពរូបភាព',
+             buttons: [
+             {
+               text: 'ពីរូបទូរស័ព្ទ',
+               handler: () => {
+                 this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY);
+               }
+             },
+             {
+               text: 'ពីកាមេរ៉ា',
+               handler: () => {
+                 this.takePicture(this.camera.PictureSourceType.CAMERA);
+               }
+             },
+             {
+               text: 'បោះបង់',
+               role: 'cancel'
+             }
+             ]
+           });
+           actionSheet.present();
+         } else {
+           this.imgFile.nativeElement.click();
+         }
+       }
+
+       public takePicture(sourceType) {
+         // Create options for the Camera Dialog
+         var options = {
+           quality: 50,
+           sourceType: sourceType,
+           saveToPhotoAlbum: true,
+           correctOrientation: true,
+           destinationType: this.camera.DestinationType.FILE_URI
+         };
+
+         this.camera.getPicture(options).then((imagePath) => {
+           // this.imgSrc = 'data:image/jpg;base64,' + imageData;
+           if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
+             this.readPlatform = 'android';
+             this.filePath.resolveNativePath(imagePath)
+             .then(filePath => {
+               let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
+               let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
+               this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
+             });
+           } else {
+             this.readPlatform = 'other';
+             var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
+             var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
+             this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
+           }
+         }, (err) => {
+           this.presentToast('Error while selecting image.');
+         });
+       }
+
+
+       // Create a new name for the image
+       private createFileName() {
+         var d = new Date(),
+         n = d.getTime(),
+         newFileName =  n + ".jpg";
+         return newFileName;
+       }
+
+       // Copy the image to a local folder
+       private copyFileToLocalDir(namePath, currentName, newFileName) {
+         this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
+           this.imageUrl = newFileName;
+         }, error => {
+           this.presentToast('Error while storing file.');
+         });
+       }
+
+       // Always get the accurate path to your apps folder
+       public pathForImage(img) {
+         if (img === null) {
+           return '';
+         } else {
+           return cordova.file.dataDirectory + img;
+         }
+       }
+
+       public byPass(img){
+         return this._sanitizer.bypassSecurityTrustResourceUrl(img);
+       }
+
+       private presentToast(text) {
+         let toast = this.toastCtrl.create({
+           message: text,
+           duration: 3000,
+           position: 'top'
+         });
+         toast.present();
+       }
+
+
+
+       public uploadImage() {
+         // Destination URL
+         var url = this.hostname.get() + "/store_points_upload";
+
+         // File for Upload
+         var targetPath = this.pathForImage(this.imageUrl);
+
+         // File name only
+         var filename = this.imageUrl;
+
+         var options = {
+           fileKey: "file",
+           fileName: filename,
+           chunkedMode: false,
+           mimeType: "multipart/form-data",
+           params : {'fileName': filename}
+         };
+
+         const fileTransfer: TransferObject = this.transfer.create();
+
+         this.loading = this.loadingCtrl.create({
+           content: 'Uploading...',
+         });
+
+         this.loading.present();
+
+
+         // Use the FileTransfer to upload the image
+         fileTransfer.upload(targetPath, url, options).then(data => {
+           this.loading.dismissAll();
+
+
+           this.presentToast('Image succesful uploaded.');
+         }, err => {
+           this.loading.dismissAll();
+           this.presentToast('Error while uploading file.');
+         });
+       }
+
      }
-
-     public byPass(img){
-       return this._sanitizer.bypassSecurityTrustResourceUrl(img);
-     }
-
-     private presentToast(text) {
-       let toast = this.toastCtrl.create({
-         message: text,
-         duration: 3000,
-         position: 'top'
-       });
-       toast.present();
-     }
-
-
-
-     public uploadImage() {
-       // Destination URL
-       var url = this.hostname.get() + "/store_points_upload";
-
-       // File for Upload
-       var targetPath = this.pathForImage(this.imageUrl);
-
-       // File name only
-       var filename = this.imageUrl;
-
-       var options = {
-         fileKey: "file",
-         fileName: filename,
-         chunkedMode: false,
-         mimeType: "multipart/form-data",
-         params : {'fileName': filename}
-       };
-
-       const fileTransfer: TransferObject = this.transfer.create();
-
-       this.loading = this.loadingCtrl.create({
-         content: 'Uploading...',
-       });
-
-       this.loading.present();
-
-
-       // Use the FileTransfer to upload the image
-       fileTransfer.upload(targetPath, url, options).then(data => {
-         this.loading.dismissAll();
-
-
-         this.presentToast('Image succesful uploaded.');
-       }, err => {
-         this.loading.dismissAll();
-         this.presentToast('Error while uploading file.');
-       });
-     }
-
-   }
 
