@@ -28,10 +28,6 @@ export class HomePage {
     private storage: Storage,
     private databaseprovider: DatabaseProvider,
     ) {
-
-  }
-
-  ionViewDidEnter(){
     this.storage.get('userdata').then((userdata) => {
       if (userdata){
         this.userData = JSON.parse(userdata);
@@ -51,6 +47,9 @@ export class HomePage {
         this.showLogin();
       }
     });
+  }
+
+  ionViewDidEnter(){
 
     this.databaseprovider.getAllStores().then(data => {
       this.stores = data;
@@ -100,7 +99,7 @@ export class HomePage {
 
   viewClaimReward(item){
     this.navCtrl.push('ClaimRewardPage', {
-      storeId: item
+      store: item
     });
   }
 

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-
+import {DatabaseProvider} from '../../providers/database/database';
 /**
  * Generated class for the ClaimRewardPage page.
  *
@@ -16,7 +16,13 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
  export class ClaimRewardPage {
 
    store: any;
-   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
+   storePoint: any;
+   storeRewards: any;
+   constructor(
+     public navCtrl: NavController,
+     public navParams: NavParams,
+     public alertCtrl: AlertController,
+     public databaseprovider: DatabaseProvider) {
 
    }
 
@@ -29,10 +35,21 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
        "storeTypeName":"FOOD GOLD"
      };
 
+     this.databaseprovider.getStoreTotalPoints(this.store.id).then(storePoint => {
+       this.storePoint = storePoint[0];
+     })
+
+     this.databaseprovider.getStoreRewards(this.store.id).then(storeRewards => {
+       console.log('Store Rewards ===> ', storeRewards);
+       this.storeRewards = storeRewards;
+     })
+
    }
 
-   goToClaimRewardDetail(){
-     this.navCtrl.push('ClaimRewardDetailPage', {});
+   goToClaimRewardDetail(storeReward){
+     this.navCtrl.push('ClaimRewardDetailPage', {
+       storeReward: storeReward
+     });
    }
 
    goToClaimRewardList(){
@@ -41,30 +58,5 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
      });
    }
 
-   confirmRecieved(){
-     let confirm = this.alertCtrl.create({
-       title: 'ពិតជាទទួលបានរង្វាន់?',
-       buttons: [
-       {
-         text: 'ទេ',
-         handler: () => {
-           console.log('Disagree clicked');
-         }
-       },
-       {
-         text: 'ប្តូរ',
-         handler: () => {
-           console.log('Agree clicked');
-           // this.navCtrl.parent.select(1);
-           // this.navCtrl.setPages([
-           //    { page: AboutPage }
-           // ]);
-         }
-       }
-       ]
-     });
-     confirm.present();
-
-   }
 
  }

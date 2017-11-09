@@ -13,7 +13,7 @@
 </ion-header>
 
 
-<ion-content >
+<ion-content>
  <ion-card>
   <ion-card-header>
     <h1>{{store?.name}} - {{store?.storeTypeName}}</h1>
@@ -39,7 +39,7 @@
       </button>
     </ion-col>
     <ion-col text-right>
-      <button ion-button color="{{reward?.points <= storePoint?.total_points ? 'primary' : 'light'}}" icon-start (click)="confirmClaim(reward.points)">
+      <button ion-button color="{{reward?.points <= storePoint?.total_points ? 'primary' : 'light'}}" icon-start (click)="confirmClaim(reward)">
         <ion-icon name='ios-beer'></ion-icon>
         ប្តូរ
       </button>

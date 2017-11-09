@@ -113,6 +113,7 @@ CREATE TABLE IF NOT EXISTS STORES_REWARDs(
   status INTEGER,
   imageUrl TEXT,
   points INTEGER,
+  claimedAt TEXT,
   deliveriedAt TEXT,
   uploaded BOOLEAN,
   storeIdStoresRewards TEXT,

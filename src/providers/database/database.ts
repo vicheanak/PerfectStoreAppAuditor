@@ -207,7 +207,7 @@ export class DatabaseProvider {
   getStorePointsSum(id){
     return this.database.executeSql(`SELECT sp.id, si.capturedAt, si.storeIdStoreImages as storeId, si.id as storeImageId, sum(sp.points) as total_points
       FROM STORE_POINTs AS sp INNER JOIN STORE_IMAGEs AS si ON sp.storeImageIdStorePoints = si.id
-      WHERE sp.storeIdStorePoints = ? GROUP BY sp.storeImageIdStorePoints ORDER BY si.capturedAt DESC`, [id]).then((data) => {
+      WHERE sp.storeIdStorePoints = ? GROUP BY sp.storeImageIdStorePoints ORDER BY datetime(si.capturedAt) DESC`, [id]).then((data) => {
         let results = [];
         if (data.rows.length > 0) {
           for (var i = 0; i < data.rows.length; i++) {
@@ -230,7 +230,7 @@ export class DatabaseProvider {
     getStoreTotalPoints(id){
       return this.database.executeSql(`SELECT sp.id, si.capturedAt, si.storeIdStoreImages as storeId, si.id as storeImageId, sum(sp.points) as total_points
         FROM STORE_POINTs AS sp INNER JOIN STORE_IMAGEs AS si ON sp.storeImageIdStorePoints = si.id
-        WHERE sp.storeIdStorePoints = ? GROUP BY sp.storeIdStorePoints ORDER BY si.capturedAt DESC`, [id]).then((data) => {
+        WHERE sp.storeIdStorePoints = ? GROUP BY sp.storeIdStorePoints ORDER BY datetime(si.capturedAt) DESC`, [id]).then((data) => {
           let results = [];
           if (data.rows.length > 0) {
             for (var i = 0; i < data.rows.length; i++) {
@@ -730,25 +730,29 @@ export class DatabaseProvider {
                 });
               }
 
-              addStoreReward(id, status, imageUrl, points, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards) {
-                let data = [id, status, imageUrl, points, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards];
-                let updateData = [status, imageUrl, points, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards, id];
-
-                return this.database.executeSql("UPDATE REWARDs SET status = ?, imageUrl = ?, points = ?, deliveriedAt = ?, uploaded = ?, storeIdStoresRewards = ?, rewardIdStoresRewards = ? WHERE id = ?", updateData).then(data1 => {
-                  if (data1.rows.rowsAffected){
-                    return data1;
-                  }
-                  else{
-                    return this.database.executeSql("INSERT INTO STORES_REWARDs (id, status, imageUrl, points, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", data).then(data2 => {
-                      return data2;
+              addStoreReward(id, status, imageUrl, points, claimedAt, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards) {
+                let data = [id, status, imageUrl, points, claimedAt, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards];
+                let updateData = [status, imageUrl, points, claimedAt, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards, id];
+                console.log('UPDATE DATA ===> ', updateData);
+                return this.database.executeSql("SELECT id FROM STORES_REWARDs WHERE id = ?", [id]).then(data0 => {
+                  if (data0.rows.length){
+                    return this.database.executeSql("UPDATE STORES_REWARDs SET status = ?, imageUrl = ?, points = ?, claimedAt = ?, deliveriedAt = ?, uploaded = ?, storeIdStoresRewards = ?, rewardIdStoresRewards = ? WHERE id = ?", updateData).then(data1 => {
+                      console.log('SUCCESS UPDATE');
+                      return data1;
                     }, err => {
-                      console.log('Error: ', err);
+                      console.log('Error UPDATE: ', err);
                       return err;
                     });
                   }
-                }, err => {
-                  console.log('Error: ', err);
-                  return err;
+                  else{
+                    return this.database.executeSql("INSERT INTO STORES_REWARDs (id, status, imageUrl, points, claimedAt, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", data).then(data2 => {
+                      console.log('SUCCESS INSERT');
+                      return data2;
+                    }, err => {
+                      console.log('Error INSERT: ', err);
+                      return err;
+                    });
+                  }
                 });
               }
 
@@ -776,8 +780,46 @@ export class DatabaseProvider {
                 });
               }
 
-              getDatabaseState() {
-                return this.databaseReady.asObservable();
-              }
+              getStoreRewards(storeId) {
+                return this.database.executeSql(`SELECT
+                  sr.id as storeRewardId,
+                  sr.status as storeRewardStatus,
+                  sr.points as storeRewardPoint,
+                  r.name as rewardName,
+                  sr.imageUrl as storeRewardImageUrl,
+                  sr.claimedAt as storeRewardClaimedAt,
+                  sr.deliveriedAt as storeRewardDeliveriedAt,
+                  sr.storeIdStoresRewards as storeIdStoresRewards,
+                  sr.rewardIdStoresRewards as rewardIdStoresRewards
+                  FROM STORES_REWARDs as sr INNER JOIN REWARDs as r ON sr.rewardIdStoresRewards = r.id
+                  WHERE sr.storeIdStoresRewards = ? ORDER BY datetime(sr.claimedAt) DESC`, [storeId]).then((data) => {
+                    let results = [];
 
-            }
+                    if (data.rows.length > 0) {
+                      for (var i = 0; i < data.rows.length; i++) {
+                        console.log('Item ===> ', data.rows.item(i));
+                        results.push({
+                          id: data.rows.item(i).storeRewardId,
+                          status: data.rows.item(i).storeRewardStatus,
+                          points: data.rows.item(i).storeRewardPoint,
+                          name: data.rows.item(i).rewardName,
+                          imageUrl: data.rows.item(i).storeRewardImageUrl,
+                          claimedAt: data.rows.item(i).storeRewardClaimedAt,
+                          deliveriedAt: data.rows.item(i).storeRewardDeliveriedAt,
+                          storeIdStoresRewards: data.rows.item(i).storeIdStoresRewards,
+                          rewardIdStoresRewards: data.rows.item(i).rewardIdStoresRewards,
+                        });
+                      }
+                    }
+                    return results;
+                  }, err => {
+                    console.log('Error: ', err);
+                    return [];
+                  });
+                }
+
+                getDatabaseState() {
+                  return this.databaseReady.asObservable();
+                }
+
+              }
