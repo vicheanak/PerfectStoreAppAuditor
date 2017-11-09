@@ -14,7 +14,7 @@
     <ion-card-header>
       {{store?.name}} - {{store?.storeTypeName}}
     </ion-card-header>
-    <!-- <img src="{{imageUrl}}" *ngIf="imageUrl" (click)="getPicture()"> -->
+
     <img src="{{pathForImage(imageUrl)}}" *ngIf="imageUrl" (click)="getPicture()">
     <div padding class="flex-container" *ngIf="imageUrl == null">
       <button color="light" class="flex-center" ion-button icon-start round padding icon-only (click)="getPicture()">
@@ -31,24 +31,24 @@
     {{dt.name}}
   </ion-item-divider>
 
-  <ion-card *ngFor="let store of dt.storeDisplays">
+  <ion-card *ngFor="let storePoint of dt.storeDisplays">
     <ion-item>
-      {{store?.displayName}}
-      <button item-end ion-button small round icon-only color="primary" (click)="showDisplayModal(store, dt)">
+      {{storePoint?.display.name}}
+      <button item-end ion-button small round icon-only color="primary" (click)="showDisplayModal(storePoint, dt)">
         <ion-icon name="md-create"></ion-icon>
       </button>
-      <button item-end ion-button small round icon-only color="danger" (click)="remove(dt, store)">
+      <button item-end ion-button small round icon-only color="danger" (click)="remove(dt, storePoint)">
         <ion-icon name="md-close"></ion-icon>
       </button>
     </ion-item>
-    <img src="{{store?.imageUrl}}" (click)="showDisplayModal(store, dt)">
+    <img src="{{pathForImage(storePoint?.imageUrl)}}" (click)="showDisplayModal(storePoint, dt)">
     <!-- <img src="{{store?.imageUrl}}" (click)="showDisplayModal(store, dt)"> -->
     <ion-item>
       <div padding class="flex-container">
-        <h1 class="points" color="flex-center">{{store?.points}} ពិន្ទុ</h1>
+        <h1 class="points" color="flex-center">{{storePoint?.points}} ពិន្ទុ</h1>
       </div>
       <div padding class="flex-container">
-        <h2 class="points" color="flex-center">{{store?.condition.name}}</h2>
+        <h2 class="points" color="flex-center">{{storePoint?.condition.name}}</h2>
       </div>
     </ion-item>
 
@@ -65,56 +65,9 @@
 
 
   <div padding>
-<!--   <p>{{tp}}</p>
-   <p>{{url}}</p>
-   <p>{{op}}</p> -->
+
    <button ion-button round padding block [disabled]="!imageUrl" (click)="save()">បញ្ជូន</button>
  </div>
- <p>
 
-  Success Message 1: {{ successMsg1 }}
-</p>
-<p>
-  Success Message 2: {{ successMsg2 }}
-</p>
-<p>
-  Success Message 3: {{ successMsg3 }}
-</p>
-<ion-list>
-  <ion-item>
-    <h2>Store Images</h2>
-  </ion-item>
-  <ion-item *ngFor="let s of storeImages">
-    <h2>id {{s?.id}}</h2>
-    <h2>filename {{s?.imageUrl}}</h2>
-    <h2>captureAt {{s?.capturedAt}}</h2>
-    <h2>storeId {{s?.storeIdStoreImages}}</h2>
-    <h2>lat {{s?.lat}}</h2>
-    <h2>lng {{s?.lng}}</h2>
-  </ion-item>
-</ion-list>
-
-
-<ion-list>
-  <ion-item>
-    <h2>Store Points</h2>
-  </ion-item>
-  <p>spid ==> {{spid}}</p>
-  <p>spuuid ==> {{spuuid}}</p>
-  <p>sppoints ==> {{sppoints}}</p>
-  <p>spimageUrl ==> {{spimageUrl}}</p>
-  <p>spuploaded ==> {{spuploaded}}</p>
-  <p>spstoreIdStorePoints ==> {{spstoreIdStorePoints}}</p>
-  <p>spuserIdStorePoints ==> {{spuserIdStorePoints}}</p>
-  <p>spdisplayIdStorePoints ==> {{spdisplayIdStorePoints}}</p>
-  <p>spstoreImageIdStorePoints ==> {{spstoreImageIdStorePoints}}</p>
-  <p>spconditionIdStorePoints ==> {{spconditionIdStorePoints}}</p>
-  <ion-item *ngFor="let sp of storePoints">
-    <h2>id {{sp?.id}}</h2>
-    <h2>points {{sp?.points}}</h2>
-    <h2>filename {{sp?.imageUrl}}</h2>
-    <h2>storeimageid {{sp?.storeImageId}}</h2>
-  </ion-item>
-</ion-list>
 </ion-content>
 <input type="file" #imgFile style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />

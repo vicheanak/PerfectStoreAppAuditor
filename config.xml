@@ -106,4 +106,5 @@
     <allow-navigation href="http://192.168.2.1:8100" />
     <allow-navigation href="http://192.168.3.1:8100" />
     <preference name="loadUrlTimeoutValue" value="700000" />
+    <allow-navigation href="http://192.168.100.88:8100" />
 </widget>

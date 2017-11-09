@@ -15,15 +15,30 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
  })
  export class ClaimRewardPage {
 
+   store: any;
    constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
+
    }
 
-   ionViewDidLoad() {
-     console.log('ionViewDidLoad ClaimRewardPage');
+   ionViewDidEnter() {
+     // this.store = this.navParams.get('store');
+     this.store = {
+       "id":"1db8bc1a-c118-11e7-abc4-cec278b6b50a",
+       "name":"Store 1",
+       "address":"Phnom Penh",
+       "storeTypeName":"FOOD GOLD"
+     };
+
    }
 
    goToClaimRewardDetail(){
      this.navCtrl.push('ClaimRewardDetailPage', {});
+   }
+
+   goToClaimRewardList(){
+     this.navCtrl.push('ClaimRewardListPage', {
+       store: this.store
+     });
    }
 
    confirmRecieved(){

@@ -32,29 +32,31 @@ declare var cordova: any;
      public storePointsServices: StorePointServicesProvider,
      private databaseprovider: DatabaseProvider,
      ) {
-     // this.storeId = this.navParams.get('store');
-     // this.storeId = 1;
+
+
+   }
+
+   getStorePointSum(storeId){
+     this.databaseprovider.getStorePointsSum(storeId).then(data => {
+       this.storePoints = data;
+     });
+   }
+
+
+   ionViewDidEnter() {
      this.storeId =  this.navParams.data.id;
 
      this.databaseprovider.getStore(this.storeId).then(data => {
        this.store = data[0];
-       console.log('GET_STORE ==> ', this.store);
      });
 
-
-     this.databaseprovider.getStorePointsSum(this.storeId).then(data => {
-       this.storePoints = data;
-       console.log('GET_StorePointsSum ==> ', this.storePoints);
-     });
-
-   }
-
-   ionViewDidLoad() {
-     console.log('ionViewDidLoad StoreDetailPage');
+     this.getStorePointSum(this.storeId);
    }
 
    pointDetail(storeImage){
-     this.navCtrl.push('PointDetailPage', {storeImage: storeImage});
+     this.navCtrl.push('PointDetailPage', {
+       storeImage: storeImage
+     });
    }
 
  }

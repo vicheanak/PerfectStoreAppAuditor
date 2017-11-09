@@ -6,53 +6,28 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-list>
-    <ion-list-header>
+<ion-content>
+
+  <ion-card>
+    <ion-card-header>
+      <h1>{{store?.name}} - {{store?.storeTypeName}}</h1>
+    </ion-card-header>
+    <ion-card-content>
+     <h2>
       ពិន្ទុនៅសល់ 20,000 pts
-    </ion-list-header>
+    </h2>
+  </ion-card-content>
+</ion-card>
+<div padding>
+  <button ion-button block round (click)="goToClaimRewardList()">ប្តូររង្វាន់</button>
+</div>
+<ion-list>
 
-    <ion-item (click)="goToClaimRewardDetail()">
-      <ion-avatar item-start>
-        <img src="assets/img/tv.jpg">
-      </ion-avatar>
-      <h2>ទូរទស្សន៍</h2>
-      <h3>900,000 pts</h3>
-      <p>05/09/2017</p>
-      <button ion-button outline item-end color="danger">រងចាំ</button>
-      <!-- <ion-badge color="danger" item-end>ផ្ញើរ</ion-badge> -->
-    </ion-item>
-
-    <ion-item (click)="goToClaimRewardDetail()">
-      <ion-avatar item-start>
-        <img src="assets/img/microwave.jpg">
-      </ion-avatar>
-      <h2>Microwave</h2>
-      <h3>100,000 pts</h3>
-      <p>05/09/2017</p>
-      <button ion-button outline item-end color="danger">រងចាំ</button>
-    </ion-item>
-
-    <ion-item (click)="goToClaimRewardDetail()">
-      <ion-avatar item-start>
-        <img src="assets/img/tv.jpg">
-      </ion-avatar>
-      <h2>ទូរទស្សន៍</h2>
-      <h3>900,000 pts</h3>
-      <p>01/01/2017</p>
-      <ion-badge item-end>ទទួលបាន</ion-badge>
-    </ion-item>
-
-    <ion-item (click)="goToClaimRewardDetail()">
-      <ion-avatar item-start>
-        <img src="assets/img/microwave.jpg">
-      </ion-avatar>
-      <h2>Microwave</h2>
-      <h3>100,000 pts</h3>
-      <p>05/09/2016</p>
-      <ion-badge item-end>ទទួលបាន</ion-badge>
-    </ion-item>
-  </ion-list>
-
+  <ion-item (click)="goToClaimRewardDetail()">
+    <h2>ទូរទស្សន៍</h2>
+    <p>05/09/2017</p>
+    <button ion-button outline item-end color="danger">រងចាំ</button>
+  </ion-item>
+</ion-list>
 
 </ion-content>

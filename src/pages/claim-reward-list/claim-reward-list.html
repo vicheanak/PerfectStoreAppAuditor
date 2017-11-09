@@ -1,0 +1,49 @@
+<!--
+  Generated template for the ClaimRewardListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>តារាងរង្វាន់</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content >
+ <ion-card>
+  <ion-card-header>
+    <h1>{{store?.name}} - {{store?.storeTypeName}}</h1>
+  </ion-card-header>
+  <ion-card-content>
+   <h2>
+    នៅសល់ {{storePoint?.total_points}} ពិន្ទុ
+  </h2>
+</ion-card-content>
+</ion-card>
+<ion-card *ngFor="let reward of rewards">
+  <img src="{{reward?.imageUrl}}"/>
+  <ion-card-content>
+    <ion-card-title>
+      {{reward?.name}}
+    </ion-card-title>
+  </ion-card-content>
+  <ion-row no-padding>
+    <ion-col>
+      <button ion-button clear color="danger" icon-start>
+        <ion-icon name='md-card'></ion-icon>
+        {{reward?.points}} ពិន្ទុ
+      </button>
+    </ion-col>
+    <ion-col text-right>
+      <button ion-button color="{{reward?.points <= storePoint?.total_points ? 'primary' : 'light'}}" icon-start (click)="confirmClaim(reward.points)">
+        <ion-icon name='ios-beer'></ion-icon>
+        ប្តូរ
+      </button>
+    </ion-col>
+  </ion-row>
+</ion-card>
+</ion-content>

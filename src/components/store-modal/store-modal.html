@@ -19,7 +19,6 @@
       {{display?.name}} - SKU {{display?.sku}}
     </ion-item>
     <img src="{{pathForImage(display?.imageUrl)}}" (click)="getPicture()">
-    <img src="{{display?.imageUrl}}" (click)="getPicture()">
     <ion-item>
       <div padding class="flex-container">
         <h1 class="points" color="flex-center">{{display?.points}} ពិន្ទុ</h1>
@@ -30,7 +29,7 @@
         </ion-range>
       </ion-item>
       <ion-item>
-        <ion-label>លក្ខណ្ឌ</ion-label>
+        <ion-label>លក្ខណ្ឌ {{display?.condition?.name}}</ion-label>
         <ion-select [(ngModel)]="display.condition">
           <ion-option *ngFor="let condition of conditionList" [value]="condition">{{condition.name}}</ion-option>
         </ion-select>
@@ -44,7 +43,7 @@
    </div>
 
    <div padding>
-    <button ion-button icon-start round padding block (click)="save()">
+    <button ion-button icon-start round padding block [disabled]="!display?.imageUrl" (click)="save()">
      <ion-icon name="save"></ion-icon> បញ្ជូន
    </button>
  </div>

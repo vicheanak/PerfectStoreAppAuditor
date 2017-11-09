@@ -32,7 +32,7 @@ declare var cordova: any;
    ionViewDidEnter(){
      this.databaseprovider.getAllRewards().then(data => {
        this.rewards = data;
-     })
+     });
    }
 
    showConfirm() {
