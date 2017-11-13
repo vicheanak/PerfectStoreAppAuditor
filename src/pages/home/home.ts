@@ -6,6 +6,7 @@ import {UsersStoresProvider} from '../../providers/users-stores/users-stores';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from './../../providers/database/database';
 declare var cordova: any;
+import moment from 'moment';
 
 @Component({
   selector: 'page-home',
@@ -16,6 +17,7 @@ export class HomePage {
   displayName;
   userData: any;
   stores: any[];
+  storeImages: any[];
   mymoment: any;
 
 
@@ -36,10 +38,7 @@ export class HomePage {
             this.showLogin();
           }
           else{
-            this.databaseprovider.getAllStores().then(data => {
-              this.stores = data;
-              console.log('STORES ==> AUTH', this.stores);
-            });
+            this.getStores();
           }
         });
       }
@@ -49,13 +48,34 @@ export class HomePage {
     });
   }
 
-  ionViewDidEnter(){
 
-    this.databaseprovider.getAllStores().then(data => {
-      this.stores = data;
-      console.log('STORES ==> Reenter', this.stores);
+  ionViewDidEnter(){
+    this.getStores();
+  }
+
+  getStores(){
+    this.databaseprovider.getAllStores().then(data1 => {
+      this.stores = data1;
+      this.databaseprovider.getAllStoresGroup().then(data2 => {
+        this.storeImages = data2;
+        this.stores.map((s) => {
+          this.storeImages.map((si) => {
+            if (s.id == si.id){
+              s.capturedAt = si.capturedAt;
+              let capturedAt = moment().month(si.capturedAt);
+              let capturedMonthYear = capturedAt.format("YYYY-MM");
+              let currentMonthYear = moment().format('YYYY-MM');
+              if (capturedMonthYear == currentMonthYear){
+                s.doneCaptured = true;
+              }
+            }
+          })
+        });
+        console.log('STORES ==> Reenter', this.stores);
+      });
     });
   }
+
 
 
   signInWithFacebook() {

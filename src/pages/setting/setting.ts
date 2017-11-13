@@ -19,6 +19,7 @@ import { FilePath } from '@ionic-native/file-path';
 import {UploadProvider} from '../../providers/upload/upload';
 import {StoreImagesProvider} from '../../providers/store-images/store-images';
 import {StorePointServicesProvider} from '../../providers/store-point-services/store-point-services';
+import {StoreRewardsProvider} from '../../providers/store-rewards/store-rewards';
 declare var cordova: any;
 
 @Component({
@@ -60,7 +61,8 @@ export class SettingPage {
     private transfer: Transfer,
     private uploadProvider: UploadProvider,
     private storeImagesProvider: StoreImagesProvider,
-    private storePointsProvider: StorePointServicesProvider
+    private storePointsProvider: StorePointServicesProvider,
+    private storeRewardsProvider: StoreRewardsProvider
     ) {
     this.storage.get('userdata').then((userdata) => {
       if (userdata){
@@ -355,7 +357,6 @@ export class SettingPage {
         imageUrls.push(i.imageUrl);
       });
       this.uploadProvider.upload(imageUrls).subscribe((data) => {
-        console.log('SUCCESS UPLOAD ===> ', data);
         this.createSI(storeImages);
       }, (error) => {
         if (error.http_status == 200){
@@ -384,30 +385,67 @@ export class SettingPage {
   uploadSP(){
     this.databaseprovider.getUploadedStorePoints().then((storePoints) => {
       let imageUrls = [];
-      console.log('STORE POINTS ', storePoints);
       storePoints.map(j => {
         imageUrls.push(j.imageUrl);
       });
       this.uploadProvider.upload(imageUrls).subscribe((data) => {
-        console.log('SUCCESS UPLOAD ===> ', data);
         this.createSP(storePoints);
       }, (error) => {
         if (error.http_status == 200){
           this.createSP(storePoints);
-          console.log('SUCCESS UPLOAD CATCH ==>');
+          console.log('ERROR SP UPLOAD CATCH ==>');
         }
       });
     });
   }
 
   createSP(storePoints){
+    let counter = 0;
     storePoints.map(i => {
       this.storePointsProvider.createStorePoints(i).subscribe((successStorePoint) => {
-        console.log('SUCCESS STORE POINT', successStorePoint);
+        counter ++;
+        console.log('COUNTER ==> ', counter, successStorePoint.length);
+
+        if (counter == storePoints.length){
+          this.uploadSR();
+        }
       });
     });
   }
 
+  uploadSR(){
+    this.databaseprovider.getUploadedStoreRewards().then((storeRewards) => {
+      let imageUrls = [];
+      storeRewards.map(j => {
+        imageUrls.push(j.imageUrl);
+      });
+      this.uploadProvider.upload(imageUrls).subscribe((data) => {
+        this.createSR(storeRewards);
+      }, (error) => {
+        if (error.http_status == 200){
+          this.createSR(storeRewards);
+        }
+      });
+    });
+  }
+
+  createSR(storeRewards){
+    let counter = 0;
+    storeRewards.map(i => {
+      this.storeRewardsProvider.createStoresRewards(i).subscribe((successStorePoint) => {
+        counter ++;
+        if (counter == storeRewards.length){
+          // this.changeUploadedStatus();
+        }
+      });
+    });
+  }
+
+  changeUploadedStatus(){
+    this.databaseprovider.updateUploadedStatus().then((data) => {
+      console.log('FINISH UPDATED UPLOAD ', data);
+    });
+  }
 
   logout(){
     this.loading = this.loadingCtrl.create({

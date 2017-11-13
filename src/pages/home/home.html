@@ -17,7 +17,7 @@
     </ion-card-content>
     <ion-row no-padding>
       <ion-col text-right>
-       <button ion-button color="danger" clear small icon-start (click)="viewClaimReward(store)">
+       <button ion-button color="danger" clear small icon-start *ngIf="store?.doneCaptured">
         <ion-icon name='md-star'></ion-icon>
         រួច
       </button>

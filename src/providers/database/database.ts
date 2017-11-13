@@ -343,7 +343,11 @@ export class DatabaseProvider {
           }
 
           getAllStores() {
-            return this.database.executeSql(`SELECT s.id, s.name, s.address, st.name as storeTypeName
+            return this.database.executeSql(`SELECT
+              s.id,
+              s.name,
+              s.address,
+              st.name as storeTypeName
               FROM STOREs AS s INNER JOIN STORE_TYPEs AS st ON st.id = s.storeTypeIdStores`, []).then((data) => {
                 let results = [];
                 console.log('ALL STORES ===> ', data.rows);
@@ -364,19 +368,27 @@ export class DatabaseProvider {
               });
             }
 
-            getStore(id) {
-              let data = [id];
-              return this.database.executeSql(`SELECT s.id, s.name, s.address, st.name as storeTypeName
-                FROM STOREs AS s INNER JOIN STORE_TYPEs AS st ON st.id = s.storeTypeIdStores WHERE s.id = ?`, data).then((data) => {
+            getAllStoresGroup() {
+              return this.database.executeSql(`SELECT
+                s.id,
+                s.name,
+                s.address,
+                st.name as storeTypeName,
+                si.capturedAt
+                FROM STORE_IMAGEs AS si
+                INNER JOIN STOREs AS s ON si.storeIdStoreImages = s.id
+                INNER JOIN STORE_TYPEs as st ON s.storeTypeIdStores = st.id
+                GROUP BY si.storeIdStoreImages`, []).then((data) => {
                   let results = [];
-                  console.log('===> getStore function database.ts', data);
+                  console.log('ALL STORES ===> ', data.rows);
                   if (data.rows.length > 0) {
                     for (var i = 0; i < data.rows.length; i++) {
                       results.push({
                         id: data.rows.item(i).id,
                         name: data.rows.item(i).name,
                         address: data.rows.item(i).address,
-                        storeTypeName: data.rows.item(i).storeTypeName
+                        storeTypeName: data.rows.item(i).storeTypeName,
+                        capturedAt: data.rows.item(i).capturedAt
                       });
                     }
                   }
@@ -387,427 +399,19 @@ export class DatabaseProvider {
                 });
               }
 
-              addUser(id, fullname, username, phone, token, regionIdUsers) {
-                let data = [id, fullname, username, phone, token, regionIdUsers];
-                let updateData = [fullname, username, phone, token, regionIdUsers, id];
-
-                return this.database.executeSql("UPDATE USERs SET fullname = ?, username = ?, phone = ?, token = ?, regionIdUsers = ? WHERE id = ?", updateData).then(data1 => {
-                  if (data1.rows.rowsAffected){
-                    return data1;
-                  }
-                  else{
-                    return this.database.executeSql("INSERT INTO USERs (id, fullname, username, phone, token, regionIdUsers) VALUES (?, ?, ?, ?, ?, ?)", data).then(data2 => {
-                      return data2;
-                    }, err => {
-                      console.log('Error: ', err);
-                      return err;
-                    });
-                  }
-                }, err => {
-                  console.log('Error: ', err);
-                  return err;
-                });
-              }
-
-              getAllUsers() {
-                return this.database.executeSql("SELECT * FROM USERs", []).then((data) => {
-                  let results = [];
-                  if (data.rows.length > 0) {
-                    for (var i = 0; i < data.rows.length; i++) {
-                      results.push({
-                        id: data.rows.item(i).id,
-                        fullname: data.rows.item(i).fullname,
-                        username: data.rows.item(i).username,
-                        phone: data.rows.item(i).phone,
-                        token: data.rows.item(i).token,
-                        regionIdUsers: data.rows.item(i).regionIdUsers,
-                      });
-                    }
-                  }
-                  return results;
-                }, err => {
-                  console.log('Error: ', err);
-                  return [];
-                });
-              }
-
-              addDisplay(id, name, points, imageUrl, status, sku, displayTypeIdDisplays, storeTypeIdDisplays) {
-                let data = [id, name, points, imageUrl, status, sku, displayTypeIdDisplays, storeTypeIdDisplays];
-                let updateData =[name, points, imageUrl, status, sku, displayTypeIdDisplays, storeTypeIdDisplays, id];
-
-                return this.database.executeSql("UPDATE DISPLAYs SET name = ?, points = ?, imageUrl = ?, status = ?, sku = ?, displayTypeIdDisplays = ?, storeTypeIdDisplays = ? WHERE id = ?", updateData).then(data1 => {
-                  if (data1.rows.rowsAffected){
-                    return data1;
-                  }
-                  else{
-                    return this.database.executeSql("INSERT INTO DISPLAYs (id, name, points, imageUrl, status, sku, displayTypeIdDisplays, storeTypeIdDisplays) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", data).then(data2 => {
-                      return data2;
-                    }, err => {
-                      console.log('Error: ', err);
-                      return err;
-                    });
-                  }
-                }, err => {
-                  console.log('Error: ', err);
-                  return err;
-                });
-              }
-
-              getAllDisplays() {
-                return this.database.executeSql("SELECT * FROM DISPLAYs", []).then((data) => {
-                  let results = [];
-                  if (data.rows.length > 0) {
-                    for (var i = 0; i < data.rows.length; i++) {
-                      results.push({
-                        id: data.rows.item(i).id,
-                        name: data.rows.item(i).name,
-                        points: data.rows.item(i).points,
-                        imageUrl: data.rows.item(i).imageUrl,
-                        status: data.rows.item(i).status,
-                        sku: data.rows.item(i).sku,
-                        displayTypeIdDisplays: data.rows.item(i).displayTypeIdDisplays,
-                        storeTypeIdDisplays: data.rows.item(i).storeTypeIdDisplays,
-                      });
-                    }
-                  }
-                  return results;
-                }, err => {
-                  console.log('Error: ', err);
-                  return [];
-                });
-              }
-
-              getDisplay(displayId) {
-                return this.database.executeSql("SELECT * FROM DISPLAYs WHERE id = ?", [displayId]).then((data) => {
-                  let results = [];
-                  if (data.rows.length > 0) {
-                    for (var i = 0; i < data.rows.length; i++) {
-                      results.push({
-                        id: data.rows.item(i).id,
-                        name: data.rows.item(i).name,
-                        points: data.rows.item(i).points,
-                        imageUrl: data.rows.item(i).imageUrl,
-                        status: data.rows.item(i).status,
-                        sku: data.rows.item(i).sku,
-                        displayTypeIdDisplays: data.rows.item(i).displayTypeIdDisplays,
-                        storeTypeIdDisplays: data.rows.item(i).storeTypeIdDisplays,
-                      });
-                    }
-                  }
-                  return results;
-                }, err => {
-                  console.log('Error: ', err);
-                  return [];
-                });
-              }
-
-              addDisplayType(id, name) {
-                let data = [id, name];
-                let updateData = [name, id];
-
-                return this.database.executeSql("UPDATE DISPLAY_TYPEs SET name = ? WHERE id = ?", updateData).then(data1 => {
-                  if (data1.rows.rowsAffected){
-                    this.getAllDisplayTypes();
-                    return data1;
-                  }
-                  else{
-                    return this.database.executeSql("INSERT INTO DISPLAY_TYPEs (id, name) VALUES (?, ?)", data).then(data2 => {
-                      return data2;
-                    }, err => {
-                      console.log('Error: ', err);
-                      return err;
-                    });
-                  }
-                }, err => {
-                  console.log('Error: ', err);
-                  return err;
-                });
-              }
-
-              getAllDisplayTypes() {
-                return this.database.executeSql("SELECT * FROM DISPLAY_TYPEs", []).then((data) => {
-                  let results = [];
-                  console.log('===>', data.rows.length);
-                  if (data.rows.length > 0) {
-                    for (var i = 0; i < data.rows.length; i++) {
-                      results.push({
-                        id: data.rows.item(i).id,
-                        name: data.rows.item(i).name
-                      });
-                    }
-                  }
-                  return results;
-                }, err => {
-                  console.log('Error: ', err);
-                  return [];
-                });
-              }
-
-              addCondition(id, name, displayIdConditions) {
-                let data = [id, name, displayIdConditions];
-                let updateData = [name, displayIdConditions, id];
-
-                return this.database.executeSql("UPDATE CONDITIONs SET name = ?, displayIdConditions = ? WHERE id = ?", updateData).then(data1 => {
-                  if (data1.rows.rowsAffected){
-                    return data1;
-                  }
-                  else{
-                    return this.database.executeSql("INSERT INTO CONDITIONs (id, name, displayIdConditions) VALUES (?, ?, ?)", data).then(data2 => {
-                      return data2;
-                    }, err => {
-                      console.log('Error: ', err);
-                      return err;
-                    });
-                  }
-                }, err => {
-                  console.log('Error: ', err);
-                  return err;
-                });
-              }
-
-              getAllConditions() {
-                return this.database.executeSql("SELECT * FROM CONDITIONs", []).then((data) => {
-                  let results = [];
-                  if (data.rows.length > 0) {
-                    for (var i = 0; i < data.rows.length; i++) {
-                      results.push({
-                        id: data.rows.item(i).id,
-                        name: data.rows.item(i).name,
-                        displayIdConditions: data.rows.item(i).displayIdConditions,
-                      });
-                    }
-                  }
-                  return results;
-                }, err => {
-                  console.log('Error: ', err);
-                  return [];
-                });
-              }
-
-              getConditionByDisplayId(displayId){
-                return this.database.executeSql("SELECT * FROM CONDITIONs WHERE displayIdConditions = ?", [displayId]).then((data) => {
-                  let results = [];
-                  if (data.rows.length > 0) {
-                    for (var i = 0; i < data.rows.length; i++) {
-                      results.push({
-                        id: data.rows.item(i).id,
-                        name: data.rows.item(i).name,
-                        displayIdConditions: data.rows.item(i).displayIdConditions,
-                      });
-                    }
-                  }
-                  return results;
-                }, err => {
-                  console.log('Error: ', err);
-                  return [];
-                });
-              }
-
-              addStoreType(id, name) {
-                let data = [id, name];
-                let updateData = [name, id];
-
-                return this.database.executeSql("UPDATE STORE_TYPEs SET name = ? WHERE id = ?", updateData).then(data1 => {
-                  console.log('Data STORE_TYPEs ========= ', data1);
-                  if (data1.rows.rowsAffected){
-                    return data1;
-                  }
-                  else{
-                    return this.database.executeSql("INSERT INTO STORE_TYPEs (id, name) VALUES (?, ?)", data).then(data2 => {
-                      console.log('INSERT STORE_TYPEs =======', data2);
-                      return data2;
-                    }, err => {
-                      console.log('Error STORE_TYPEs INSERT: ', err);
-                      return err;
-                    });
-                  }
-                }, err => {
-                  console.log('Error STORE_TYPEs UPDATE: ', err);
-                  return err;
-                });
-
-              }
-
-              getAllStoreTypes() {
-                return this.database.executeSql("SELECT * FROM STORE_TYPEs", []).then((data) => {
-                  let results = [];
-                  if (data.rows.length > 0) {
-                    for (var i = 0; i < data.rows.length; i++) {
-                      results.push({
-                        id: data.rows.item(i).id,
-                        name: data.rows.item(i).name,
-                      });
-                    }
-                  }
-                  return results;
-                }, err => {
-                  console.log('Error: ', err);
-                  return [];
-                });
-              }
-
-              addReward(id, name, points, imageUrl) {
-                let data = [id, name, points, imageUrl];
-                let updateData = [name, points, imageUrl, id];
-                return this.database.executeSql("UPDATE REWARDs SET name = ?, points = ?, imageUrl = ? WHERE id = ?", updateData).then(data1 => {
-                  if (data1.rows.rowsAffected){
-                    return data1;
-                  }
-                  else{
-                    return this.database.executeSql("INSERT INTO REWARDs (id, name, points, imageUrl) VALUES (?, ?, ?, ?)", data).then(data2 => {
-                      return data2;
-                    }, err => {
-                      console.log('Error: ', err);
-                      return err;
-                    });
-                  }
-                }, err => {
-                  console.log('Error: ', err);
-                  return err;
-                });
-              }
-
-              getAllRewards() {
-                return this.database.executeSql("SELECT * FROM REWARDs", []).then((data) => {
-                  let results = [];
-
-                  if (data.rows.length > 0) {
-                    for (var i = 0; i < data.rows.length; i++) {
-
-                      results.push({
-                        id: data.rows.item(i).id,
-                        name: data.rows.item(i).name,
-                        points: data.rows.item(i).points,
-                        imageUrl: data.rows.item(i).imageUrl,
-                      });
-                    }
-                  }
-                  return results;
-                }, err => {
-                  console.log('Error: ', err);
-                  return [];
-                });
-              }
-
-              addRegion(id, name) {
-                let data = [id, name];
-                let updateData = [name, id];
-
-                return this.database.executeSql("UPDATE REGIONs SET name = ? WHERE id = ?", updateData).then(data1 => {
-                  if (data1.rows.rowsAffected){
-                    return data1;
-                  }
-                  else{
-                    return this.database.executeSql("INSERT INTO REGIONs (id, name) VALUES (?, ?)", data).then(data2 => {
-                      return data2;
-                    }, err => {
-                      console.log('Error: ', err);
-                      return err;
-                    });
-                  }
-                }, err => {
-                  console.log('Error: ', err);
-                  return err;
-                });
-
-              }
-
-              getAllRegions() {
-                return this.database.executeSql("SELECT * FROM REGIONs", []).then((data) => {
-                  let results = [];
-                  if (data.rows.length > 0) {
-                    for (var i = 0; i < data.rows.length; i++) {
-                      results.push({
-                        id: data.rows.item(i).id,
-                        name: data.rows.item(i).name
-                      });
-                    }
-                  }
-                  return results;
-                }, err => {
-                  console.log('Error: ', err);
-                  return [];
-                });
-              }
-
-              addStoreReward(id, status, imageUrl, points, claimedAt, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards) {
-                let data = [id, status, imageUrl, points, claimedAt, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards];
-                let updateData = [status, imageUrl, points, claimedAt, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards, id];
-                console.log('UPDATE DATA ===> ', updateData);
-                return this.database.executeSql("SELECT id FROM STORES_REWARDs WHERE id = ?", [id]).then(data0 => {
-                  if (data0.rows.length){
-                    return this.database.executeSql("UPDATE STORES_REWARDs SET status = ?, imageUrl = ?, points = ?, claimedAt = ?, deliveriedAt = ?, uploaded = ?, storeIdStoresRewards = ?, rewardIdStoresRewards = ? WHERE id = ?", updateData).then(data1 => {
-                      console.log('SUCCESS UPDATE');
-                      return data1;
-                    }, err => {
-                      console.log('Error UPDATE: ', err);
-                      return err;
-                    });
-                  }
-                  else{
-                    return this.database.executeSql("INSERT INTO STORES_REWARDs (id, status, imageUrl, points, claimedAt, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", data).then(data2 => {
-                      console.log('SUCCESS INSERT');
-                      return data2;
-                    }, err => {
-                      console.log('Error INSERT: ', err);
-                      return err;
-                    });
-                  }
-                });
-              }
-
-              getAllStoreRewards() {
-                return this.database.executeSql("SELECT * FROM STORES_REWARDs", []).then((data) => {
-                  let results = [];
-                  if (data.rows.length > 0) {
-                    for (var i = 0; i < data.rows.length; i++) {
-                      results.push({
-                        id: data.rows.item(i).id,
-                        status: data.rows.item(i).status,
-                        imageUrl: data.rows.item(i).imageUrl,
-                        points: data.rows.item(i).points,
-                        deliveriedAt: data.rows.item(i).deliveriedAt,
-                        uploaded: data.rows.item(i).uploaded,
-                        storeIdStoresRewards: data.rows.item(i).storeIdStoresRewards,
-                        rewardIdStoresRewards: data.rows.item(i).rewardIdStoresRewards
-                      });
-                    }
-                  }
-                  return results;
-                }, err => {
-                  console.log('Error: ', err);
-                  return [];
-                });
-              }
-
-              getStoreRewards(storeId) {
-                return this.database.executeSql(`SELECT
-                  sr.id as storeRewardId,
-                  sr.status as storeRewardStatus,
-                  sr.points as storeRewardPoint,
-                  r.name as rewardName,
-                  sr.imageUrl as storeRewardImageUrl,
-                  sr.claimedAt as storeRewardClaimedAt,
-                  sr.deliveriedAt as storeRewardDeliveriedAt,
-                  sr.storeIdStoresRewards as storeIdStoresRewards,
-                  sr.rewardIdStoresRewards as rewardIdStoresRewards
-                  FROM STORES_REWARDs as sr INNER JOIN REWARDs as r ON sr.rewardIdStoresRewards = r.id
-                  WHERE sr.storeIdStoresRewards = ? ORDER BY datetime(sr.claimedAt) DESC`, [storeId]).then((data) => {
+              getStore(id) {
+                let data = [id];
+                return this.database.executeSql(`SELECT s.id, s.name, s.address, st.name as storeTypeName
+                  FROM STOREs AS s INNER JOIN STORE_TYPEs AS st ON st.id = s.storeTypeIdStores WHERE s.id = ?`, data).then((data) => {
                     let results = [];
-
+                    console.log('===> getStore function database.ts', data);
                     if (data.rows.length > 0) {
                       for (var i = 0; i < data.rows.length; i++) {
-                        console.log('Item ===> ', data.rows.item(i));
                         results.push({
-                          id: data.rows.item(i).storeRewardId,
-                          status: data.rows.item(i).storeRewardStatus,
-                          points: data.rows.item(i).storeRewardPoint,
-                          name: data.rows.item(i).rewardName,
-                          imageUrl: data.rows.item(i).storeRewardImageUrl,
-                          claimedAt: data.rows.item(i).storeRewardClaimedAt,
-                          deliveriedAt: data.rows.item(i).storeRewardDeliveriedAt,
-                          storeIdStoresRewards: data.rows.item(i).storeIdStoresRewards,
-                          rewardIdStoresRewards: data.rows.item(i).rewardIdStoresRewards,
+                          id: data.rows.item(i).id,
+                          name: data.rows.item(i).name,
+                          address: data.rows.item(i).address,
+                          storeTypeName: data.rows.item(i).storeTypeName
                         });
                       }
                     }
@@ -818,8 +422,526 @@ export class DatabaseProvider {
                   });
                 }
 
-                getDatabaseState() {
-                  return this.databaseReady.asObservable();
+                addUser(id, fullname, username, phone, token, regionIdUsers) {
+                  let data = [id, fullname, username, phone, token, regionIdUsers];
+                  let updateData = [fullname, username, phone, token, regionIdUsers, id];
+
+                  return this.database.executeSql("UPDATE USERs SET fullname = ?, username = ?, phone = ?, token = ?, regionIdUsers = ? WHERE id = ?", updateData).then(data1 => {
+                    if (data1.rows.rowsAffected){
+                      return data1;
+                    }
+                    else{
+                      return this.database.executeSql("INSERT INTO USERs (id, fullname, username, phone, token, regionIdUsers) VALUES (?, ?, ?, ?, ?, ?)", data).then(data2 => {
+                        return data2;
+                      }, err => {
+                        console.log('Error: ', err);
+                        return err;
+                      });
+                    }
+                  }, err => {
+                    console.log('Error: ', err);
+                    return err;
+                  });
                 }
 
-              }
+                getAllUsers() {
+                  return this.database.executeSql("SELECT * FROM USERs", []).then((data) => {
+                    let results = [];
+                    if (data.rows.length > 0) {
+                      for (var i = 0; i < data.rows.length; i++) {
+                        results.push({
+                          id: data.rows.item(i).id,
+                          fullname: data.rows.item(i).fullname,
+                          username: data.rows.item(i).username,
+                          phone: data.rows.item(i).phone,
+                          token: data.rows.item(i).token,
+                          regionIdUsers: data.rows.item(i).regionIdUsers,
+                        });
+                      }
+                    }
+                    return results;
+                  }, err => {
+                    console.log('Error: ', err);
+                    return [];
+                  });
+                }
+
+                addDisplay(id, name, points, imageUrl, status, sku, displayTypeIdDisplays, storeTypeIdDisplays) {
+                  let data = [id, name, points, imageUrl, status, sku, displayTypeIdDisplays, storeTypeIdDisplays];
+                  let updateData =[name, points, imageUrl, status, sku, displayTypeIdDisplays, storeTypeIdDisplays, id];
+
+                  return this.database.executeSql("UPDATE DISPLAYs SET name = ?, points = ?, imageUrl = ?, status = ?, sku = ?, displayTypeIdDisplays = ?, storeTypeIdDisplays = ? WHERE id = ?", updateData).then(data1 => {
+                    if (data1.rows.rowsAffected){
+                      return data1;
+                    }
+                    else{
+                      return this.database.executeSql("INSERT INTO DISPLAYs (id, name, points, imageUrl, status, sku, displayTypeIdDisplays, storeTypeIdDisplays) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", data).then(data2 => {
+                        return data2;
+                      }, err => {
+                        console.log('Error: ', err);
+                        return err;
+                      });
+                    }
+                  }, err => {
+                    console.log('Error: ', err);
+                    return err;
+                  });
+                }
+
+                getAllDisplays() {
+                  return this.database.executeSql("SELECT * FROM DISPLAYs", []).then((data) => {
+                    let results = [];
+                    if (data.rows.length > 0) {
+                      for (var i = 0; i < data.rows.length; i++) {
+                        results.push({
+                          id: data.rows.item(i).id,
+                          name: data.rows.item(i).name,
+                          points: data.rows.item(i).points,
+                          imageUrl: data.rows.item(i).imageUrl,
+                          status: data.rows.item(i).status,
+                          sku: data.rows.item(i).sku,
+                          displayTypeIdDisplays: data.rows.item(i).displayTypeIdDisplays,
+                          storeTypeIdDisplays: data.rows.item(i).storeTypeIdDisplays,
+                        });
+                      }
+                    }
+                    return results;
+                  }, err => {
+                    console.log('Error: ', err);
+                    return [];
+                  });
+                }
+
+                getDisplay(displayId) {
+                  return this.database.executeSql("SELECT * FROM DISPLAYs WHERE id = ?", [displayId]).then((data) => {
+                    let results = [];
+                    if (data.rows.length > 0) {
+                      for (var i = 0; i < data.rows.length; i++) {
+                        results.push({
+                          id: data.rows.item(i).id,
+                          name: data.rows.item(i).name,
+                          points: data.rows.item(i).points,
+                          imageUrl: data.rows.item(i).imageUrl,
+                          status: data.rows.item(i).status,
+                          sku: data.rows.item(i).sku,
+                          displayTypeIdDisplays: data.rows.item(i).displayTypeIdDisplays,
+                          storeTypeIdDisplays: data.rows.item(i).storeTypeIdDisplays,
+                        });
+                      }
+                    }
+                    return results;
+                  }, err => {
+                    console.log('Error: ', err);
+                    return [];
+                  });
+                }
+
+                addDisplayType(id, name) {
+                  let data = [id, name];
+                  let updateData = [name, id];
+
+                  return this.database.executeSql("UPDATE DISPLAY_TYPEs SET name = ? WHERE id = ?", updateData).then(data1 => {
+                    if (data1.rows.rowsAffected){
+                      this.getAllDisplayTypes();
+                      return data1;
+                    }
+                    else{
+                      return this.database.executeSql("INSERT INTO DISPLAY_TYPEs (id, name) VALUES (?, ?)", data).then(data2 => {
+                        return data2;
+                      }, err => {
+                        console.log('Error: ', err);
+                        return err;
+                      });
+                    }
+                  }, err => {
+                    console.log('Error: ', err);
+                    return err;
+                  });
+                }
+
+                getAllDisplayTypes() {
+                  return this.database.executeSql("SELECT * FROM DISPLAY_TYPEs", []).then((data) => {
+                    let results = [];
+                    console.log('===>', data.rows.length);
+                    if (data.rows.length > 0) {
+                      for (var i = 0; i < data.rows.length; i++) {
+                        results.push({
+                          id: data.rows.item(i).id,
+                          name: data.rows.item(i).name
+                        });
+                      }
+                    }
+                    return results;
+                  }, err => {
+                    console.log('Error: ', err);
+                    return [];
+                  });
+                }
+
+                addCondition(id, name, displayIdConditions) {
+                  let data = [id, name, displayIdConditions];
+                  let updateData = [name, displayIdConditions, id];
+
+                  return this.database.executeSql("UPDATE CONDITIONs SET name = ?, displayIdConditions = ? WHERE id = ?", updateData).then(data1 => {
+                    if (data1.rows.rowsAffected){
+                      return data1;
+                    }
+                    else{
+                      return this.database.executeSql("INSERT INTO CONDITIONs (id, name, displayIdConditions) VALUES (?, ?, ?)", data).then(data2 => {
+                        return data2;
+                      }, err => {
+                        console.log('Error: ', err);
+                        return err;
+                      });
+                    }
+                  }, err => {
+                    console.log('Error: ', err);
+                    return err;
+                  });
+                }
+
+                getAllConditions() {
+                  return this.database.executeSql("SELECT * FROM CONDITIONs", []).then((data) => {
+                    let results = [];
+                    if (data.rows.length > 0) {
+                      for (var i = 0; i < data.rows.length; i++) {
+                        results.push({
+                          id: data.rows.item(i).id,
+                          name: data.rows.item(i).name,
+                          displayIdConditions: data.rows.item(i).displayIdConditions,
+                        });
+                      }
+                    }
+                    return results;
+                  }, err => {
+                    console.log('Error: ', err);
+                    return [];
+                  });
+                }
+
+                getConditionByDisplayId(displayId){
+                  return this.database.executeSql("SELECT * FROM CONDITIONs WHERE displayIdConditions = ?", [displayId]).then((data) => {
+                    let results = [];
+                    if (data.rows.length > 0) {
+                      for (var i = 0; i < data.rows.length; i++) {
+                        results.push({
+                          id: data.rows.item(i).id,
+                          name: data.rows.item(i).name,
+                          displayIdConditions: data.rows.item(i).displayIdConditions,
+                        });
+                      }
+                    }
+                    return results;
+                  }, err => {
+                    console.log('Error: ', err);
+                    return [];
+                  });
+                }
+
+                addStoreType(id, name) {
+                  let data = [id, name];
+                  let updateData = [name, id];
+
+                  return this.database.executeSql("UPDATE STORE_TYPEs SET name = ? WHERE id = ?", updateData).then(data1 => {
+                    console.log('Data STORE_TYPEs ========= ', data1);
+                    if (data1.rows.rowsAffected){
+                      return data1;
+                    }
+                    else{
+                      return this.database.executeSql("INSERT INTO STORE_TYPEs (id, name) VALUES (?, ?)", data).then(data2 => {
+                        console.log('INSERT STORE_TYPEs =======', data2);
+                        return data2;
+                      }, err => {
+                        console.log('Error STORE_TYPEs INSERT: ', err);
+                        return err;
+                      });
+                    }
+                  }, err => {
+                    console.log('Error STORE_TYPEs UPDATE: ', err);
+                    return err;
+                  });
+
+                }
+
+                getAllStoreTypes() {
+                  return this.database.executeSql("SELECT * FROM STORE_TYPEs", []).then((data) => {
+                    let results = [];
+                    if (data.rows.length > 0) {
+                      for (var i = 0; i < data.rows.length; i++) {
+                        results.push({
+                          id: data.rows.item(i).id,
+                          name: data.rows.item(i).name,
+                        });
+                      }
+                    }
+                    return results;
+                  }, err => {
+                    console.log('Error: ', err);
+                    return [];
+                  });
+                }
+
+                addReward(id, name, points, imageUrl) {
+                  let data = [id, name, points, imageUrl];
+                  let updateData = [name, points, imageUrl, id];
+                  return this.database.executeSql("UPDATE REWARDs SET name = ?, points = ?, imageUrl = ? WHERE id = ?", updateData).then(data1 => {
+                    if (data1.rows.rowsAffected){
+                      return data1;
+                    }
+                    else{
+                      return this.database.executeSql("INSERT INTO REWARDs (id, name, points, imageUrl) VALUES (?, ?, ?, ?)", data).then(data2 => {
+                        return data2;
+                      }, err => {
+                        console.log('Error: ', err);
+                        return err;
+                      });
+                    }
+                  }, err => {
+                    console.log('Error: ', err);
+                    return err;
+                  });
+                }
+
+                getAllRewards() {
+                  return this.database.executeSql("SELECT * FROM REWARDs", []).then((data) => {
+                    let results = [];
+
+                    if (data.rows.length > 0) {
+                      for (var i = 0; i < data.rows.length; i++) {
+
+                        results.push({
+                          id: data.rows.item(i).id,
+                          name: data.rows.item(i).name,
+                          points: data.rows.item(i).points,
+                          imageUrl: data.rows.item(i).imageUrl,
+                        });
+                      }
+                    }
+                    return results;
+                  }, err => {
+                    console.log('Error: ', err);
+                    return [];
+                  });
+                }
+
+                addRegion(id, name) {
+                  let data = [id, name];
+                  let updateData = [name, id];
+
+                  return this.database.executeSql("UPDATE REGIONs SET name = ? WHERE id = ?", updateData).then(data1 => {
+                    if (data1.rows.rowsAffected){
+                      return data1;
+                    }
+                    else{
+                      return this.database.executeSql("INSERT INTO REGIONs (id, name) VALUES (?, ?)", data).then(data2 => {
+                        return data2;
+                      }, err => {
+                        console.log('Error: ', err);
+                        return err;
+                      });
+                    }
+                  }, err => {
+                    console.log('Error: ', err);
+                    return err;
+                  });
+
+                }
+
+                getAllRegions() {
+                  return this.database.executeSql("SELECT * FROM REGIONs", []).then((data) => {
+                    let results = [];
+                    if (data.rows.length > 0) {
+                      for (var i = 0; i < data.rows.length; i++) {
+                        results.push({
+                          id: data.rows.item(i).id,
+                          name: data.rows.item(i).name
+                        });
+                      }
+                    }
+                    return results;
+                  }, err => {
+                    console.log('Error: ', err);
+                    return [];
+                  });
+                }
+
+                addStoreReward(id, status, imageUrl, spent_points, claimedAt, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards) {
+                  let data = [id, status, imageUrl, spent_points, claimedAt, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards];
+                  let updateData = [status, imageUrl, spent_points, claimedAt, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards, id];
+                  console.log('UPDATE DATA ===> ', updateData);
+                  return this.database.executeSql("SELECT id FROM STORES_REWARDs WHERE id = ?", [id]).then(data0 => {
+                    if (data0.rows.length){
+                      return this.database.executeSql("UPDATE STORES_REWARDs SET status = ?, imageUrl = ?, spent_points = ?, claimedAt = ?, deliveriedAt = ?, uploaded = ?, storeIdStoresRewards = ?, rewardIdStoresRewards = ? WHERE id = ?", updateData).then(data1 => {
+                        console.log('SUCCESS UPDATE');
+                        return data1;
+                      }, err => {
+                        console.log('Error UPDATE: ', err);
+                        return err;
+                      });
+                    }
+                    else{
+                      return this.database.executeSql("INSERT INTO STORES_REWARDs (id, status, imageUrl, spent_points, claimedAt, deliveriedAt, uploaded, storeIdStoresRewards, rewardIdStoresRewards) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", data).then(data2 => {
+                        console.log('SUCCESS INSERT');
+                        return data2;
+                      }, err => {
+                        console.log('Error INSERT: ', err);
+                        return err;
+                      });
+                    }
+                  });
+                }
+
+                getAllStoreRewards() {
+                  return this.database.executeSql("SELECT * FROM STORES_REWARDs", []).then((data) => {
+                    let results = [];
+                    if (data.rows.length > 0) {
+                      for (var i = 0; i < data.rows.length; i++) {
+                        results.push({
+                          id: data.rows.item(i).id,
+                          status: data.rows.item(i).status,
+                          imageUrl: data.rows.item(i).imageUrl,
+                          spent_points: data.rows.item(i).spent_points,
+                          deliveriedAt: data.rows.item(i).deliveriedAt,
+                          uploaded: data.rows.item(i).uploaded,
+                          storeIdStoresRewards: data.rows.item(i).storeIdStoresRewards,
+                          rewardIdStoresRewards: data.rows.item(i).rewardIdStoresRewards
+                        });
+                      }
+                    }
+                    return results;
+                  }, err => {
+                    console.log('Error: ', err);
+                    return [];
+                  });
+                }
+
+                getUploadedStoreRewards(){
+                  return this.database.executeSql("SELECT * FROM STORES_REWARDs WHERE uploaded = ?", [false]).then((data) => {
+                    let results = [];
+                    if (data.rows.length > 0) {
+                      for (var i = 0; i < data.rows.length; i++) {
+                        results.push({
+                          id: data.rows.item(i).id,
+                          status: data.rows.item(i).status,
+                          imageUrl: data.rows.item(i).imageUrl,
+                          spent_points: data.rows.item(i).spent_points,
+                          claimedAt: data.rows.item(i).claimedAt,
+                          deliveriedAt: data.rows.item(i).deliveriedAt,
+                          uploaded: data.rows.item(i).uploaded,
+                          storeIdStoresRewards: data.rows.item(i).storeIdStoresRewards,
+                          rewardIdStoresRewards: data.rows.item(i).rewardIdStoresRewards
+                        });
+                      }
+                    }
+                    return results;
+                  }, err => {
+                    console.log('Error: ', err);
+                    return [];
+                  });
+                }
+
+                updateUploadedStatus(){
+                  return this.database.executeSql(`
+                    UPDATE STORE_IMAGEs
+                    SET uploaded = 'true'
+                    WHERE
+                    uploaded = 'false'
+                    `, []).then((data1) => {
+                      return this.database.executeSql(`
+                        UPDATE STORE_POINTs
+                        SET uploaded = 'true'
+                        WHERE
+                        uploaded = 'false'
+                        `, []).then((data2) => {
+                          return this.database.executeSql(`
+                            UPDATE STORES_REWARDs
+                            SET uploaded = 'true'
+                            WHERE
+                            uploaded = 'false'
+                            `, []).then((data3) => {
+                              console.log('FINISH UPDATED UPLOADED !!!');
+                              return data3;
+                            }, err => {
+                              console.log('Error STORE_REWARDs: ', err);
+                              return [];
+                            });
+                          }, err => {
+                            console.log('Error STORE_POINTs: ', err);
+                            return [];
+                          });
+                      }, err => {
+                        console.log('Error STORE_IMAGEs: ', err);
+                        return [];
+                      });
+                  }
+
+
+                  getRemainingPoint(storeId){
+                    return this.database.executeSql(`SELECT
+                      sum(sp.points) as earnedPoints,
+                      sum(sr.spent_points) as spentPoints
+                      FROM STORES_REWARDs as sr INNER JOIN STOREs as s ON sr.storeIdStoresRewards = s.id
+                      INNER JOIN STORE_POINTs as sp ON sp.storeIdStorePoints = s.id
+                      WHERE sr.storeIdStoresRewards = ?`, [storeId]).then((data) => {
+                        let results = [];
+
+                        if (data.rows.length > 0) {
+                          for (var i = 0; i < data.rows.length; i++) {
+                            console.log('Item ===> ', data.rows.item(i));
+                            results.push({
+                              earnedPoints: data.rows.item(i).earnedPoints,
+                              spentPoints: data.rows.item(i).spentPoints,
+                              remainingPoints: data.rows.item(i).remainingPoints
+                            });
+                          }
+                        }
+                        return results;
+                      }, err => {
+                        console.log('Error: ', err);
+                        return [];
+                      });
+                    }
+
+                    getStoreRewards(storeId) {
+                      return this.database.executeSql(`SELECT
+                        sr.id as storeRewardId,
+                        sr.status as storeRewardStatus,
+                        sr.spent_points as storeRewardPoint,
+                        r.name as rewardName,
+                        sr.imageUrl as storeRewardImageUrl,
+                        sr.claimedAt as storeRewardClaimedAt,
+                        sr.deliveriedAt as storeRewardDeliveriedAt,
+                        sr.storeIdStoresRewards as storeIdStoresRewards,
+                        sr.rewardIdStoresRewards as rewardIdStoresRewards
+                        FROM STORES_REWARDs as sr INNER JOIN REWARDs as r ON sr.rewardIdStoresRewards = r.id
+                        WHERE sr.storeIdStoresRewards = ? ORDER BY datetime(sr.claimedAt) DESC`, [storeId]).then((data) => {
+                          let results = [];
+
+                          if (data.rows.length > 0) {
+                            for (var i = 0; i < data.rows.length; i++) {
+                              console.log('Item ===> ', data.rows.item(i));
+                              results.push({
+                                id: data.rows.item(i).storeRewardId,
+                                status: data.rows.item(i).storeRewardStatus,
+                                spent_points: data.rows.item(i).storeRewardPoint,
+                                name: data.rows.item(i).rewardName,
+                                imageUrl: data.rows.item(i).storeRewardImageUrl,
+                                claimedAt: data.rows.item(i).storeRewardClaimedAt,
+                                deliveriedAt: data.rows.item(i).storeRewardDeliveriedAt,
+                                storeIdStoresRewards: data.rows.item(i).storeIdStoresRewards,
+                                rewardIdStoresRewards: data.rows.item(i).rewardIdStoresRewards,
+                              });
+                            }
+                          }
+                          return results;
+                        }, err => {
+                          console.log('Error: ', err);
+                          return [];
+                        });
+                      }
+
+                      getDatabaseState() {
+                        return this.databaseReady.asObservable();
+                      }
+
+                    }

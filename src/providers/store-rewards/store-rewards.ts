@@ -4,9 +4,9 @@ import 'rxjs/add/operator/map';
 import {HostNameProvider} from '../../providers/host-name/host-name';
 
   @Injectable()
-  export class StorePointServicesProvider {
+  export class StoreRewardsProvider {
 
-    getApiUrl : string = this.hostname.get() + "/store_points/";
+    getApiUrl : string = this.hostname.get() + "/stores_rewards/";
 
     constructor(public http: Http, public hostname: HostNameProvider) {
 
@@ -60,7 +60,7 @@ import {HostNameProvider} from '../../providers/host-name/host-name';
       });
     }
 
-    createStorePoints(data){
+    createStoresRewards(data){
       return  this.http.post(this.getApiUrl, data)
       .map((res : Response ) =>{
         console.log('map --> ', res.json());

@@ -18,6 +18,8 @@ import {DatabaseProvider} from '../../providers/database/database';
    store: any;
    storePoint: any;
    storeRewards: any;
+   points: any;
+   remainingPoints: any;
    constructor(
      public navCtrl: NavController,
      public navParams: NavParams,
@@ -42,6 +44,12 @@ import {DatabaseProvider} from '../../providers/database/database';
      this.databaseprovider.getStoreRewards(this.store.id).then(storeRewards => {
        console.log('Store Rewards ===> ', storeRewards);
        this.storeRewards = storeRewards;
+     })
+
+     this.databaseprovider.getRemainingPoint(this.store.id).then(points => {
+       console.log('REMAINING POINTS =====>', points);
+       this.points = points[0];
+       this.remainingPoints = this.points.earnedPoints - this.points.spentPoints;
      })
 
    }

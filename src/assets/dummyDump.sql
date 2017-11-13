@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS STORES_REWARDs(
   id TEXT PRIMARY KEY,
   status INTEGER,
   imageUrl TEXT,
-  points INTEGER,
+  spent_points INTEGER,
   claimedAt TEXT,
   deliveriedAt TEXT,
   uploaded BOOLEAN,

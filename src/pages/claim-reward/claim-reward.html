@@ -13,7 +13,7 @@
     </ion-card-header>
     <ion-card-content>
      <h2>
-      នៅសល់ {{storePoint?.total_points}} ពិន្ទុ
+      នៅសល់ {{remainingPoints}} ពិន្ទុ
     </h2>
   </ion-card-content>
 </ion-card>
@@ -24,6 +24,7 @@
 
   <ion-item *ngFor="let sr of storeRewards" (click)="goToClaimRewardDetail(sr)">
     <h2>{{sr.name}}</h2>
+    <h2>{{sr.spent_points}} ពិន្ទុ</h2>
     <p>{{sr.deliveredAt ? sr.deliveredAt : sr.claimedAt}}</p>
     <button ion-button item-end color="{{sr.status == 1 ? 'danger' : 'primary'}}">{{sr.status == 1 ? 'រងចាំ' : 'ទទួល'}}</button>
   </ion-item>

@@ -72,10 +72,12 @@ import moment from 'moment';
      this.storeReward.deliveriedAt = moment().format('YYYY-MM-DD hh:mm:ss');
      this.storeReward.status = 2;
      this.storeReward.uploaded = false;
+     // this.storeReward.spent_points = 30000;
+     console.log('Store Reward', this.storeReward);
      console.log('id ====> ', this.storeReward.id)
      console.log('status ====> ', this.storeReward.status)
      console.log('imageUrl ====> ', this.storeReward.imageUrl)
-     console.log('points ====> ', this.storeReward.points)
+     console.log('spent_points ====> ', this.storeReward.spent_points)
      console.log('claimedAt ====> ', this.storeReward.claimedAt)
      console.log('deliveriedAt ====> ', this.storeReward.deliveriedAt)
      console.log('uploaded ====> ', this.storeReward.uploaded)
@@ -85,7 +87,7 @@ import moment from 'moment';
        this.storeReward.id,
        this.storeReward.status,
        this.storeReward.imageUrl,
-       this.storeReward.points,
+       this.storeReward.spent_points,
        this.storeReward.claimedAt,
        this.storeReward.deliveriedAt,
        this.storeReward.uploaded,

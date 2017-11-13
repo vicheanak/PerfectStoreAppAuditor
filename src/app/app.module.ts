@@ -40,6 +40,7 @@ import { UuidProvider } from '../providers/uuid/uuid';
 import { DatabaseProvider } from '../providers/database/database';
 import { RegionProvider } from '../providers/region/region';
 import { UploadProvider } from '../providers/upload/upload';
+import { StoreRewardsProvider } from '../providers/store-rewards/store-rewards';
 
 
 @NgModule({
@@ -97,8 +98,9 @@ import { UploadProvider } from '../providers/upload/upload';
   UuidProvider,
   DatabaseProvider,
   SQLitePorter,
-    RegionProvider,
-    UploadProvider
+  RegionProvider,
+  UploadProvider,
+  StoreRewardsProvider
   ]
 })
 export class AppModule {}
