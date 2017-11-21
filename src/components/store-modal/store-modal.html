@@ -47,16 +47,7 @@
      <ion-icon name="save"></ion-icon> បញ្ជូន
    </button>
  </div>
- <ion-item *ngFor="let s of allDisplays">
-    <h2>id {{s.id}}</h2>
-    <h2>name {{s.name}}</h2>
-    <h2>points {{s.points}}</h2>
-    <h2>imageUrl {{s.imageUrl}}</h2>
-    <h2>status {{s.status}}</h2>
-    <h2>sku {{s.sku}}</h2>
-    <h2>displayTypeIdDisplays {{s.displayTypeIdDisplays}}</h2>
-    <h2>storeTypeIdDisplays {{s.storeTypeIdDisplays}}</h2>
-  </ion-item>
+
 
 <input type="file" #imgFile style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
 </ion-content>

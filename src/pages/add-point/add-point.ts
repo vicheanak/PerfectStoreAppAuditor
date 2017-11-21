@@ -299,12 +299,13 @@ import {
            storeImageIdStorePoints,
            conditionIdStorePoints
            ).then(() => {
-             this.databaseprovider.getAllStorePoints().then(data1 => {
-               this.storePoints = data1;
-             });
-             this.databaseprovider.getAllStoreImages().then(data2 => {
-               this.storeImages = data2;
-             });
+             this.navCtrl.pop();
+             // this.databaseprovider.getAllStorePoints().then(data1 => {
+             //   this.storePoints = data1;
+             // });
+             // this.databaseprovider.getAllStoreImages().then(data2 => {
+             //   this.storeImages = data2;
+             // });
            });
          }
        });

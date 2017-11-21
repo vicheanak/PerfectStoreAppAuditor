@@ -228,9 +228,18 @@ export class DatabaseProvider {
     }
 
     getStoreTotalPoints(id){
-      return this.database.executeSql(`SELECT sp.id, si.capturedAt, si.storeIdStoreImages as storeId, si.id as storeImageId, sum(sp.points) as total_points
-        FROM STORE_POINTs AS sp INNER JOIN STORE_IMAGEs AS si ON sp.storeImageIdStorePoints = si.id
-        WHERE sp.storeIdStorePoints = ? GROUP BY sp.storeIdStorePoints ORDER BY datetime(si.capturedAt) DESC`, [id]).then((data) => {
+      return this.database.executeSql(`
+        SELECT
+        sp.id,
+        si.capturedAt,
+        si.storeIdStoreImages as storeId,
+        si.id as storeImageId,
+        sum(sp.points) as total_points
+        FROM STORE_POINTs AS sp INNER JOIN STORE_IMAGEs
+        AS si ON sp.storeImageIdStorePoints = si.id
+        WHERE sp.storeIdStorePoints = ?
+        GROUP BY sp.storeIdStorePoints
+        ORDER BY datetime(si.capturedAt) DESC`, [id]).then((data) => {
           let results = [];
           if (data.rows.length > 0) {
             for (var i = 0; i < data.rows.length; i++) {
@@ -877,21 +886,22 @@ export class DatabaseProvider {
 
 
                   getRemainingPoint(storeId){
-                    return this.database.executeSql(`SELECT
-                      sum(sp.points) as earnedPoints,
-                      sum(sr.spent_points) as spentPoints
-                      FROM STORES_REWARDs as sr INNER JOIN STOREs as s ON sr.storeIdStoresRewards = s.id
-                      INNER JOIN STORE_POINTs as sp ON sp.storeIdStorePoints = s.id
-                      WHERE sr.storeIdStoresRewards = ?`, [storeId]).then((data) => {
+                    return this.database.executeSql(`
+                      SELECT
+                      s.id,
+                      s.name,
+                      (SELECT sum(points) FROM STORE_POINTs AS sp WHERE sp.storeIdStorePoints = s.id) as earnedPoints,
+                      (SELECT sum(spent_points) FROM STORES_REWARDS AS sr WHERE sr.storeIdStoresRewards = s.id) as spentPoints
+                      FROM STOREs AS s
+                      WHERE s.id = ?`, [storeId]).then((data) => {
                         let results = [];
 
                         if (data.rows.length > 0) {
                           for (var i = 0; i < data.rows.length; i++) {
-                            console.log('Item ===> ', data.rows.item(i));
+                            console.log('GET REMINAING POINT ===> ', data.rows.item(i));
                             results.push({
-                              earnedPoints: data.rows.item(i).earnedPoints,
-                              spentPoints: data.rows.item(i).spentPoints,
-                              remainingPoints: data.rows.item(i).remainingPoints
+                              earnedPoints: data.rows.item(i).earnedPoints ? data.rows.item(i).earnedPoints : 0,
+                              spentPoints: data.rows.item(i).spentPoints ? data.rows.item(i).spentPoints : 0,
                             });
                           }
                         }

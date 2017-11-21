@@ -119,7 +119,7 @@ export class StoreModalComponent {
   }
 
   save(){
-    console.log('SAVE ==> ',this.display);
+
     this.viewCtrl.dismiss(this.display);
   }
 

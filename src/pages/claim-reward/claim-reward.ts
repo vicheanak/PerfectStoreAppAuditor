@@ -29,13 +29,13 @@ import {DatabaseProvider} from '../../providers/database/database';
    }
 
    ionViewDidEnter() {
-     // this.store = this.navParams.get('store');
-     this.store = {
-       "id":"1db8bc1a-c118-11e7-abc4-cec278b6b50a",
-       "name":"Store 1",
-       "address":"Phnom Penh",
-       "storeTypeName":"FOOD GOLD"
-     };
+     this.store = this.navParams.get('store');
+     // this.store = {
+     //   "id":"1db8bc1a-c118-11e7-abc4-cec278b6b50a",
+     //   "name":"Store 1",
+     //   "address":"Phnom Penh",
+     //   "storeTypeName":"FOOD GOLD"
+     // };
 
      this.databaseprovider.getStoreTotalPoints(this.store.id).then(storePoint => {
        this.storePoint = storePoint[0];

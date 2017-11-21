@@ -351,6 +351,11 @@ export class SettingPage {
   }
 
   push(){
+    this.loading = this.loadingCtrl.create({
+      content: 'បញ្ជូនទិន្ន័យ',
+    });
+
+    this.loading.present();
     this.databaseprovider.getUploadedStoreImages().then((storeImages) => {
       let imageUrls = [];
       storeImages.map(i => {
@@ -362,6 +367,8 @@ export class SettingPage {
         if (error.http_status == 200){
           this.createSI(storeImages);
           console.log('SUCCESS UPLOAD CATCH ==>');
+          this.loading.dismissAll();
+          this.presentToast('បញ្ជូនទិន្ន័យដោយជោគជ័យ');
         }
       });
     });

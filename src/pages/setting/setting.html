@@ -32,32 +32,13 @@
       ចាកចេញ
     </ion-item>
   </ion-list>
-<!--
-  <ion-item>
-    <ion-label stacked>Filename</ion-label>
-    <ion-input [(ngModel)]="storeImage.fileName" placeholder="File Name"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label stacked>Store ID</ion-label>
-    <ion-input [(ngModel)]="storeImage.storeId" placeholder="Store Id"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label stacked>Lat</ion-label>
-    <ion-input [(ngModel)]="storeImage.lat" placeholder="Lat"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label stacked>Lng</ion-label>
-    <ion-input [(ngModel)]="storeImage.lng" placeholder="Lng"></ion-input>
-  </ion-item>
 
-  <button ion-button full (click)="addStoreImage()">Add Store Image</button>
- -->
   <ion-list>
     <ion-item *ngFor="let r of rewards">
       <h2>name {{r?.fileName}}</h2>
     </ion-item>
   </ion-list>
-  <h1>{{msg1}}</h1>
+
 
 
 

@@ -32,13 +32,13 @@ import moment from 'moment';
    }
 
    ionViewDidEnter(){
-     // this.store = this.navParams.get('store');
-     this.store = {
-       "id":"1db8bc1a-c118-11e7-abc4-cec278b6b50a",
-       "name":"Store 1",
-       "address":"Phnom Penh",
-       "storeTypeName":"FOOD GOLD"
-     };
+     this.store = this.navParams.get('store');
+     // this.store = {
+     //   "id":"1db8bc1a-c118-11e7-abc4-cec278b6b50a",
+     //   "name":"Store 1",
+     //   "address":"Phnom Penh",
+     //   "storeTypeName":"FOOD GOLD"
+     // };
      this.databaseprovider.getAllRewards().then(data => {
        this.rewards = data;
      });

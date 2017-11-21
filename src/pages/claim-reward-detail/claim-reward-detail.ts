@@ -53,14 +53,14 @@ import moment from 'moment';
      //   "rewardIdStoresRewards": ""
      // }
      this.imageUrl = null;
-     // this.store = this.navParams.get('store');
+     this.store = this.navParams.get('store');
 
-     this.store = {
-       "id":"1db8bc1a-c118-11e7-abc4-cec278b6b50a",
-       "name":"Store 1",
-       "address":"Phnom Penh",
-       "storeTypeName":"FOOD GOLD"
-     };
+     // this.store = {
+     //   "id":"1db8bc1a-c118-11e7-abc4-cec278b6b50a",
+     //   "name":"Store 1",
+     //   "address":"Phnom Penh",
+     //   "storeTypeName":"FOOD GOLD"
+     // };
      console.log('storeReward ===> ', this.storeReward);
    }
 
