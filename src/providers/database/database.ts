@@ -545,6 +545,30 @@ export class DatabaseProvider {
                   });
                 }
 
+                 getDisplayByStoreType(storeTypeId) {
+                  return this.database.executeSql("SELECT * FROM DISPLAYs WHERE storeTypeIdDisplays = ?", [storeTypeId]).then((data) => {
+                    let results = [];
+                    if (data.rows.length > 0) {
+                      for (var i = 0; i < data.rows.length; i++) {
+                        results.push({
+                          id: data.rows.item(i).id,
+                          name: data.rows.item(i).name,
+                          points: data.rows.item(i).points,
+                          imageUrl: data.rows.item(i).imageUrl,
+                          status: data.rows.item(i).status,
+                          sku: data.rows.item(i).sku,
+                          displayTypeIdDisplays: data.rows.item(i).displayTypeIdDisplays,
+                          storeTypeIdDisplays: data.rows.item(i).storeTypeIdDisplays,
+                        });
+                      }
+                    }
+                    return results;
+                  }, err => {
+                    console.log('Error: ', err);
+                    return [];
+                  });
+                }
+
                 addDisplayType(id, name) {
                   let data = [id, name];
                   let updateData = [name, id];
@@ -586,6 +610,8 @@ export class DatabaseProvider {
                     return [];
                   });
                 }
+
+
 
                 addCondition(id, name, displayIdConditions) {
                   let data = [id, name, displayIdConditions];
@@ -676,6 +702,7 @@ export class DatabaseProvider {
                   return this.database.executeSql("SELECT * FROM STORE_TYPEs", []).then((data) => {
                     let results = [];
                     if (data.rows.length > 0) {
+                      
                       for (var i = 0; i < data.rows.length; i++) {
                         results.push({
                           id: data.rows.item(i).id,

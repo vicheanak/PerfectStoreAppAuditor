@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-// import {DatabaseProvider} from '../../providers/database/database';
-import {StoreTypesProvider} from '../../providers/store-types/store-types';
+import {DatabaseProvider} from '../../providers/database/database';
+// import {StoreTypesProvider} from '../../providers/store-types/store-types';
 
 
 @Component({
@@ -19,19 +19,19 @@ export class DisplayPage {
 
   constructor(
     public navCtrl: NavController,
-    // public databaseprovider: DatabaseProvider,
-    public storeTypesProvider: StoreTypesProvider
+    public databaseprovider: DatabaseProvider,
+    // public storeTypesProvider: StoreTypesProvider
     ) {
 
   }
 
   ionViewDidEnter(){
-    // this.databaseprovider.getAllStoreTypes().then(data => {
-    //   this.storeTypes = data;
-    // });
-    this.storeTypesProvider.allStoreTypes().subscribe((data) => {
+    this.databaseprovider.getAllStoreTypes().then(data => {
       this.storeTypes = data;
     });
+    // this.storeTypesProvider.allStoreTypes().subscribe((data) => {
+    //   this.storeTypes = data;
+    // });
 
   }
 

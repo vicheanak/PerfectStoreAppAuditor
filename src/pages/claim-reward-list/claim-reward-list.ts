@@ -33,6 +33,7 @@ import moment from 'moment';
 
    ionViewDidEnter(){
      this.store = this.navParams.get('store');
+     console.log("this.store", this.store);
      // this.store = {
      //   "id":"1db8bc1a-c118-11e7-abc4-cec278b6b50a",
      //   "name":"Store 1",
@@ -92,6 +93,7 @@ import moment from 'moment';
              data.rewardIdStoresRewards
              ).then((results) => {
                console.log(results);
+               this.navCtrl.pop();
              });
              // this.navCtrl.parent.select(1);
            }

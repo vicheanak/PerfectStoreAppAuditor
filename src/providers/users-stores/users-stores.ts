@@ -19,8 +19,11 @@ import {HostNameProvider} from '../../providers/host-name/host-name';
     }
 
     getUsersStores(id) {
-      this.getApiUrl = this.getApiUrl + id;
-      return  this.http.get(this.getApiUrl)
+      let getUrl = this.getApiUrl + id;
+      console.log("getUrl", getUrl);
+      
+
+      return  this.http.get(getUrl)
       .map((res : Response ) =>{
         console.log('get user store');
         let usersStores = res.json();

@@ -41,29 +41,29 @@ export class SettingPage {
 
 
   constructor(
-    public navCtrl: NavController,
-    public alertCtrl: AlertController,
-    public user: UserProvider,
-    private storage: Storage,
-    public conditionsProvider: ConditionsProvider,
-    public storeTypesProvider: StoreTypesProvider,
-    public displayTypesProvider: DisplayTypesProvider,
-    public displaysProvider: DisplaysProvider,
-    public usersStoresProvider: UsersStoresProvider,
-    public rewardsProvider: RewardServicesProvider,
-    public toastCtrl: ToastController,
-    public loadingCtrl: LoadingController,
-    public storesProvider: StoresProvider,
-    private databaseprovider: DatabaseProvider,
-    public regionProvider: RegionProvider,
-    private file: File,
-    private filePath: FilePath,
-    private transfer: Transfer,
-    private uploadProvider: UploadProvider,
-    private storeImagesProvider: StoreImagesProvider,
-    private storePointsProvider: StorePointServicesProvider,
-    private storeRewardsProvider: StoreRewardsProvider
-    ) {
+              public navCtrl: NavController,
+              public alertCtrl: AlertController,
+              public user: UserProvider,
+              private storage: Storage,
+              public conditionsProvider: ConditionsProvider,
+              public storeTypesProvider: StoreTypesProvider,
+              public displayTypesProvider: DisplayTypesProvider,
+              public displaysProvider: DisplaysProvider,
+              public usersStoresProvider: UsersStoresProvider,
+              public rewardsProvider: RewardServicesProvider,
+              public toastCtrl: ToastController,
+              public loadingCtrl: LoadingController,
+              public storesProvider: StoresProvider,
+              private databaseprovider: DatabaseProvider,
+              public regionProvider: RegionProvider,
+              private file: File,
+              private filePath: FilePath,
+              private transfer: Transfer,
+              private uploadProvider: UploadProvider,
+              private storeImagesProvider: StoreImagesProvider,
+              private storePointsProvider: StorePointServicesProvider,
+              private storeRewardsProvider: StoreRewardsProvider
+              ) {
     this.storage.get('userdata').then((userdata) => {
       if (userdata){
         this.userData = JSON.parse(userdata);
@@ -166,7 +166,7 @@ export class SettingPage {
 
 
     this.rewardsProvider.allRewards().subscribe((rewards) => {
-      console.log('1. REWARDS SERVER ===> ', rewards);
+      // console.log('1. REWARDS SERVER ===> ', rewards);
       let counter = 0;
       rewards.map((i) => {
 
@@ -199,7 +199,7 @@ export class SettingPage {
     });
 
     this.regionProvider.allRegions().subscribe((regions) => {
-      console.log('2. REGIONS SERVER ===> ', regions);
+      // console.log('2. REGIONS SERVER ===> ', regions);
       let counter = 0;
       regions.map((i) => {
         let id = i.id;
@@ -215,7 +215,7 @@ export class SettingPage {
     });
 
     this.displayTypesProvider.allDisplayTypes().subscribe((displayTypes) => {
-      console.log('3. DISPLAY_TYPE SERVER ===> ', displayTypes);
+      // console.log('3. DISPLAY_TYPE SERVER ===> ', displayTypes);
       this.storage.set('displayTypes', JSON.stringify(displayTypes));
       let counter = 0;
       displayTypes.map((i) => {
@@ -232,7 +232,7 @@ export class SettingPage {
     });
 
     this.storeTypesProvider.allStoreTypes().subscribe((storeTypes) => {
-      console.log('4. STORE TYPE SERVER ===> ', storeTypes);
+      // console.log('4. STORE TYPE SERVER ===> ', storeTypes);
       this.storage.set('storeTypes', JSON.stringify(storeTypes));
       let counter = 0;
       storeTypes.map((i) => {
@@ -253,7 +253,7 @@ export class SettingPage {
     });
 
     this.displaysProvider.allDisplays().subscribe((displays) => {
-      console.log('5. DISPLAYS SERVER ===> ', displays);
+      // console.log('5. DISPLAYS SERVER ===> ', displays);
       this.storage.set('displays', JSON.stringify(displays));
       let counter = 0;
       displays.map((i) => {
@@ -289,7 +289,7 @@ export class SettingPage {
     });
 
     this.conditionsProvider.all().subscribe((conditions) => {
-      console.log('6. CONDITIONS SERVER ===> ', conditions);
+      // console.log('6. CONDITIONS SERVER ===> ', conditions);
       let counter = 0;
       conditions.map((i) => {
         let id = i.id;
@@ -306,7 +306,8 @@ export class SettingPage {
     });
 
     this.usersStoresProvider.getUsersStores(this.userData.id).subscribe((usersStores) => {
-      console.log('7. USER STORE SERVER ===> ', usersStores);
+      console.log('7. USER STORE SERVER ===> ');
+      console.log(usersStores);
       this.storage.set('usersStores', JSON.stringify(usersStores)).then(()=>{
         let countArr = 0;
         usersStores.map(i => {
@@ -335,13 +336,13 @@ export class SettingPage {
 
     let checking = setInterval(()=>{
       if (conditionLoad &&
-        storeTypeLoad &&
-        displayLoad &&
-        displayTypeLoad &&
-        userStoreLoad &&
-        rewardLoad &&
-        userStoreLoad &&
-        conditionLoad){
+          storeTypeLoad &&
+          displayLoad &&
+          displayTypeLoad &&
+          userStoreLoad &&
+          rewardLoad &&
+          userStoreLoad &&
+          conditionLoad){
         clearInterval(checking);
       this.loading.dismissAll();
       this.presentToast('ទាញយកទិន្ន័យដោយជោគជ័យ');
@@ -355,27 +356,38 @@ export class SettingPage {
       content: 'បញ្ជូនទិន្ន័យ',
     });
 
-    this.loading.present();
+    
     this.databaseprovider.getUploadedStoreImages().then((storeImages) => {
-      let imageUrls = [];
-      storeImages.map(i => {
-        imageUrls.push(i.imageUrl);
-      });
-      this.uploadProvider.upload(imageUrls).subscribe((data) => {
-        this.createSI(storeImages);
-      }, (error) => {
-        if (error.http_status == 200){
+      console.log("storeImages #####", storeImages);
+      if (storeImages.length){
+        this.loading.present();
+        let imageUrls = [];
+        storeImages.map(i => {
+          imageUrls.push(i.imageUrl);
+        });
+        this.uploadProvider.upload(imageUrls).subscribe((data) => {
           this.createSI(storeImages);
-          console.log('SUCCESS UPLOAD CATCH ==>');
           this.loading.dismissAll();
           this.presentToast('បញ្ជូនទិន្ន័យដោយជោគជ័យ');
-        }
-      });
+        }, (error) => {
+          if (error.http_status == 200){
+            this.createSI(storeImages);
+            this.loading.dismissAll();
+            this.presentToast('បញ្ជូនទិន្ន័យដោយជោគជ័យ');
+          }
+        });
+      }
+      else{
+        this.presentToast('មិនមានទិន្ន័យថ្មីទេ');
+      }
+
+
     });
 
   }
 
   createSI(storeImages){
+    console.log("storeImages ---- ", storeImages);
     let counter = 0;
     storeImages.map(i => {
       this.storeImagesProvider.createStoreImage(i).subscribe((successStoreImages) => {
@@ -395,6 +407,7 @@ export class SettingPage {
       storePoints.map(j => {
         imageUrls.push(j.imageUrl);
       });
+      console.log("storePoints===>", storePoints);
       this.uploadProvider.upload(imageUrls).subscribe((data) => {
         this.createSP(storePoints);
       }, (error) => {
@@ -411,8 +424,7 @@ export class SettingPage {
     storePoints.map(i => {
       this.storePointsProvider.createStorePoints(i).subscribe((successStorePoint) => {
         counter ++;
-        console.log('COUNTER ==> ', counter, successStorePoint.length);
-
+        console.log('COUNTER storePoints ==> ', counter, storePoints.length);
         if (counter == storePoints.length){
           this.uploadSR();
         }
@@ -422,17 +434,23 @@ export class SettingPage {
 
   uploadSR(){
     this.databaseprovider.getUploadedStoreRewards().then((storeRewards) => {
-      let imageUrls = [];
-      storeRewards.map(j => {
-        imageUrls.push(j.imageUrl);
-      });
-      this.uploadProvider.upload(imageUrls).subscribe((data) => {
-        this.createSR(storeRewards);
-      }, (error) => {
-        if (error.http_status == 200){
+      console.log("storeRewards", storeRewards);
+      if (storeRewards.length){
+        let imageUrls = [];
+        storeRewards.map(j => {
+          imageUrls.push(j.imageUrl);
+        });
+        this.uploadProvider.upload(imageUrls).subscribe((data) => {
           this.createSR(storeRewards);
-        }
-      });
+        }, (error) => {
+          if (error.http_status == 200){
+            this.createSR(storeRewards);
+          }
+        });
+      }
+      else{
+        this.changeUploadedStatus();
+      }
     });
   }
 
@@ -442,7 +460,7 @@ export class SettingPage {
       this.storeRewardsProvider.createStoresRewards(i).subscribe((successStorePoint) => {
         counter ++;
         if (counter == storeRewards.length){
-          // this.changeUploadedStatus();
+          this.changeUploadedStatus();
         }
       });
     });

@@ -54,6 +54,7 @@ import moment from 'moment';
      // }
      this.imageUrl = null;
      this.store = this.navParams.get('store');
+     console.log("this.store", this.store);
 
      // this.store = {
      //   "id":"1db8bc1a-c118-11e7-abc4-cec278b6b50a",
@@ -95,6 +96,7 @@ import moment from 'moment';
        this.storeReward.rewardIdStoresRewards
        ).then((respond) => {
          console.log('UPDATE Deliver Reward ====> ', respond);
+         this.navCtrl.pop();
        });
 
 
